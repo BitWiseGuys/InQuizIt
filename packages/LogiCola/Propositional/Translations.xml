@@ -1,0 +1,12 @@
+<QuestionSet>
+    <Question>
+        <p>
+            If A=1 and B=1,<br/>
+            then "(A ⊃ B)" = 1?
+        </p>
+        <AnswerSet type="single-choice">
+            <AnswerChoice value="true" answer="true"/>
+            <AnswerChoice value="false"/>
+        </AnswerSet>
+    </Question>
+</QuestionSet>

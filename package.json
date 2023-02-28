@@ -1,0 +1,18 @@
+{
+  "name": "testing",
+  "version": "1.0.0",
+  "description": "Test",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Andrew Kerr",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^23.1.1"
+  },
+  "dependencies": {
+    "bootstrap-icons": "^1.10.3",
+    "vue-electron": "^1.0.6"
+  }
+}
