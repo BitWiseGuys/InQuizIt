@@ -30,24 +30,30 @@
 h1 {
     color: var(--text-color);
     font-family: "Secular One";
-    font-size: 40pt;
+    /* font-size: 900%; */
     text-align: center;
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    text-decoration-color: var(--main-border-color);
+    margin: 0;
+    /* text-decoration: underline;
+    text-underline-offset: 40px;
+    text-decoration-color: var(--main-border-color); */
+}
+
+hr {
+    border-color: var(--main-border-color);
+    border-width: 5px;
 }
 
 h2 {
     color: var(--text-color);
     font-family: "Secular One";
-    font-size: 24pt;
+    /* font-size: 333%; */
     text-align: center;
 }
 
 h3, h4, h5, h6 {
     color: var(--text-color);
     font-family: "Secular One";
-    font-size: 24pt;
+    /* font-size: 200%; */
     text-decoration: underline;
     text-underline-offset: 4px;
     text-decoration-color: var(--main-border-color);
@@ -57,7 +63,7 @@ h3, h4, h5, h6 {
 p {
     color: var(--text-color);
     font-family: "Lato Regular";
-    font-size: 22pt;
+    /* font-size: 125%; */
 }
 
 button {
@@ -70,7 +76,7 @@ button {
     margin-left: 5px;
     margin-right: 5px;
     font-family: "Lato Regular";
-    font-size: 22pt;
+    /* font-size: 125%; */
 }
 
 button.block {
@@ -165,7 +171,6 @@ nav > span {
 
 div#title {
     max-width:90%;
-    max-height:30%;
     position: absolute;
     left:50%;
     top:50%;
@@ -180,13 +185,14 @@ div#problemSet {
     height: 80%;
     transform: translate(-50%,-50%);
     overflow: hidden;
+    overflow-y: auto;
     background-color: var(--panel-bg-color);
     border: 1px transparent;
     border-radius: 25px;
 }
 
 div#problemSet > h2 {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -195,31 +201,24 @@ div#problemSet > h2 {
 }
 
 div#problemSetTable {
-    position: absolute;
-    top: 10%;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
     padding: 25px;
-    align-items: center;
-    overflow-x: auto;
 }
 
-div#problemSetTable > h3 {
+div#problemSetTable > div {
+    display: block;
+}
+
+/* div#problemSetTable > div > h3 {
     margin: 0px !important;
-}
+} */
 
-div#problemSetTable > * {
-    --problem-set-width: calc(100% / 5);
-    flex: 1 1 var(--problem-set-width);
-    /* max-width: var(--problem-set-width); */
-    min-width: var(--problem-set-width);
-    max-height: 50px;
+div#problemSetTable > div > * {
+    display: inline-block;
+    max-height: 30px;
+    min-width: 75px;
     margin-bottom: 5px;
 }
+
 
 div#question {
     position: absolute;
@@ -233,3 +232,7 @@ div#question {
     border: 1px transparent;
     border-radius: 25px;
 }
+/* 
+span.consume {
+    flex-basis: 100%;
+} */

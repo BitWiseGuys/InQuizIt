@@ -10,8 +10,11 @@ Vue.component("titleScreen", {
         <h1>
             InquizIt
         </h1>
-        <button>Assignments</button>
-        <button @click="$root.screenTransition('ProblemSet')">Problem Sets</button>
+        <hr/>
+        <div style="text-align:center;">
+            <button>Assignments</button>
+            <button @click="$root.screenTransition('ProblemSet')">Problem Sets</button>
+        </div>
     </div>
     `
 })
@@ -22,10 +25,12 @@ Vue.component("problemSetScreen", {
         <h2>{{$root.problemSetGroup.title}}</h2>
         <div id="problemSetTable">
             <template v-for="category, i in $root.problemSetGroup.categories">
-                <h3 style="text-align:center;">{{category.title}}</h3>
-                <template v-for="_, title in category.sets">
-                    <button @click="setActive(title, i)" :class="{'active' : (active_set == title && active_category == i)}">{{title}}</button>
-                </template>
+                <h3 style="text-align:left;">{{category.title}}</h3>
+                <div>
+                    <template v-for="_, title in category.sets">
+                        <button @click="setActive(title, i)" :class="{'active' : (active_set == title && active_category == i)}">{{title}}</button>
+                    </template>
+                </div>
             </template>
             <a :class="{'flow': true, 'active' : hasSelection}" @click="startQuestionSet()">Next >></a>
         </div>
