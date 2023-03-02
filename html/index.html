@@ -1,31 +1,37 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8" />
-		<meta
-		http-equiv="Content-Security-Policy"
-		content="default-src 'self'; script-src 'self' 'unsafe-eval'"
-		/>
-		<meta
-		http-equiv="X-Content-Security-Policy"
-		content="default-src 'self'; script-src 'self'"
-		/>
-		<title>Index</title>
-		<link rel="stylesheet" href="css/main.css">
-		<link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
-	</head>
-	<body>
-		<div id="MainLayout">
-			<nav>
-				<span><a class="bi bi-house-fill icon-larger" @click="returnHome()" v-show="!isTitleScreen"></a></span>
-				<span></span>
-				<span><a class="bi bi-gear-fill icon-larger"></a></span>
-			</nav>
-			<title-screen v-show="isTitleScreen"></title-screen>
-			<problem-set-screen v-show="isProblemSetScreen"></problem-set-screen>
-			<v-question ref="question" v-show="isQuestionScreen"></v-question>
-		</div>
-		<script src="./js/libraries/vue/vue-dev.js"></script>
-		<script src="./js/index.js" defer></script>
-	</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self' 'unsafe-eval'" />
+        <meta
+            http-equiv="X-Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'" />
+        <title>Index</title>
+        <link rel="stylesheet" href="css/main.css" />
+        <link
+            rel="stylesheet"
+            href="../node_modules/bootstrap-icons/font/bootstrap-icons.css" />
+    </head>
+    <body>
+        <div id="MainLayout">
+            <nav>
+                <span
+                    ><a
+                        class="bi bi-house-fill icon-larger"
+                        @click="returnHome()"
+                        v-show="!isTitleScreen"></a
+                ></span>
+                <span></span>
+                <span><a class="bi bi-gear-fill icon-larger"></a></span>
+            </nav>
+            <title-screen v-show="isTitleScreen"></title-screen>
+            <problem-set-screen
+                v-show="isProblemSetScreen"></problem-set-screen>
+            <v-question ref="question" v-show="isQuestionScreen"></v-question>
+        </div>
+        <script src="./js/libraries/vue/vue-dev.js"></script>
+        <script src="./js/index.js" defer></script>
+    </body>
 </html>
