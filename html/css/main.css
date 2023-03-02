@@ -1,29 +1,30 @@
 @import url("./fonts/SecularOne/SecularOne.css");
+@import url("./fonts/Lato/Lato.css");
 
 * {
     /*Main Screen Color's*/
-    --main-border-color: #FB9E05;
+    --main-border-color: #fb9e05;
     --main-bg-color: #083048;
-    --text-color: #FEFEFE;
+    --text-color: #fefefe;
     --text-color-inactive: #b0b0b0;
 
     /*Panel Color's*/
-    --panel-bg-color: #07263B;
+    --panel-bg-color: #07263b;
 
     /*Icon Color's*/
     --icon-bg-color: #164259;
-    --icon-fg-color: #FEFEFE;
+    --icon-fg-color: #fefefe;
     --icon-bd-color: transparent;
-    --icon-fg-color-hover: #FB9E05;
-    --icon-fg-color-click: #FB9E05;
+    --icon-fg-color-hover: #fb9e05;
+    --icon-fg-color-click: #fb9e05;
     --icon-bg-color-click: #022f48;
-    
+
     /*Button Color's*/
     --button-bg-color: #164259;
-    --button-fg-color: #FEFEFE;
+    --button-fg-color: #fefefe;
     --button-bd-color: transparent;
-    --button-fg-color-hover: #FB9E05;
-    --button-fg-color-click: #FB9E05;
+    --button-fg-color-hover: #fb9e05;
+    --button-fg-color-click: #fb9e05;
     --button-bg-color-click: #022f48;
 }
 
@@ -31,10 +32,11 @@ h1 {
     color: var(--text-color);
     font-family: "Secular One";
     /* font-size: 900%; */
+    font-size: 100pt;
     text-align: center;
     margin: 0;
     /* text-decoration: underline;
-    text-underline-offset: 40px;
+    text-underline-offset: 50px;
     text-decoration-color: var(--main-border-color); */
 }
 
@@ -48,14 +50,18 @@ h2 {
     font-family: "Secular One";
     /* font-size: 333%; */
     text-align: center;
+    margin-top: 10px;
 }
 
-h3, h4, h5, h6 {
+h3,
+h4,
+h5,
+h6 {
     color: var(--text-color);
     font-family: "Secular One";
     /* font-size: 200%; */
     text-decoration: underline;
-    text-underline-offset: 4px;
+    text-underline-offset: 5px;
     text-decoration-color: var(--main-border-color);
     font-weight: normal;
 }
@@ -87,7 +93,7 @@ button.block {
 
 button:hover {
     text-decoration: underline;
-    text-underline-offset: 4px;
+    text-underline-offset: 5px;
     text-decoration-color: var(--button-fg-color-hover);
 }
 
@@ -100,16 +106,16 @@ button:active {
     color: var(--button-fg-color-click);
     background-color: var(--button-bg-color-click);
     -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
-     -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
-          box-shadow: inset 0px 0px 5px #c1c1c1;
+    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+    box-shadow: inset 0px 0px 5px #c1c1c1;
 }
 
 a.bi:active {
     color: var(--icon-fg-color-click);
     background-color: var(--icon-bg-color-click);
     -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
-     -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
-          box-shadow: inset 0px 0px 5px #c1c1c1;
+    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+    box-shadow: inset 0px 0px 5px #c1c1c1;
 }
 
 a.bi:hover {
@@ -147,7 +153,7 @@ nav {
 
 nav > span {
     display: table-cell;
-    width:100%;
+    width: 100%;
 }
 
 #MainLayout {
@@ -172,8 +178,8 @@ nav > span {
 div#title {
     max-width:90%;
     position: absolute;
-    left:50%;
-    top:50%;
+    left: 50%;
+    top: 50%;
     transform: translate(-50%, -50%);
 }
 
@@ -183,12 +189,13 @@ div#problemSet {
     left: 50%;
     width: 70%;
     height: 80%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     overflow: hidden;
     overflow-y: auto;
     background-color: var(--panel-bg-color);
     border: 1px transparent;
     border-radius: 25px;
+    padding: 20px;
 }
 
 div#problemSet > h2 {
@@ -226,7 +233,7 @@ div#question {
     left: 50%;
     width: 70%;
     height: 80%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     overflow: hidden;
     background-color: var(--panel-bg-color);
     border: 1px transparent;

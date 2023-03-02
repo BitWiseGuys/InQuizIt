@@ -1,11 +1,11 @@
 const Screens = {
-	Title : 0,
-    ProblemSet : 1,
+    Title: 0,
+    ProblemSet: 1,
     Question: 2,
-}
+};
 
 Vue.component("titleScreen", {
-    template:`
+    template: `
     <div id="title">
         <h1>
             InquizIt
@@ -16,8 +16,8 @@ Vue.component("titleScreen", {
             <button @click="$root.screenTransition('ProblemSet')">Problem Sets</button>
         </div>
     </div>
-    `
-})
+    `,
+});
 
 Vue.component("problemSetScreen", {
     template: `
@@ -38,14 +38,14 @@ Vue.component("problemSetScreen", {
     `,
     data() {
         return {
-            active_set : "",
-            active_category : -1,
+            active_set: "",
+            active_category: -1,
         };
     },
     computed: {
         hasSelection() {
             return this.active_set.length > 0 && this.active_category != -1;
-        }
+        },
     },
     methods: {
         setActive(set, category) {
@@ -54,18 +54,24 @@ Vue.component("problemSetScreen", {
         },
         startQuestionSet() {
             // Prevent advancement without selected set.
-            if(!this.hasSelection) return;
+            if (!this.hasSelection) return;
             // Set our root information.
-            this.$root.selectedProblemSet.category = this.$root.problemSetGroup.categories[this.active_category].title;
+            this.$root.selectedProblemSet.category =
+                this.$root.problemSetGroup.categories[
+                    this.active_category
+                ].title;
             this.$root.selectedProblemSet.subCategory = this.active_set;
-            this.$root.selectedProblemSet.questions = this.$root.problemSetGroup.categories[this.active_category].sets[this.active_set];
+            this.$root.selectedProblemSet.questions =
+                this.$root.problemSetGroup.categories[
+                    this.active_category
+                ].sets[this.active_set];
             // Reset our local information for the next time around.
             this.active_category = -1;
             this.active_set = "";
             this.$root.screenTransition(Screens.Question);
-        }
-    }
-})
+        },
+    },
+});
 
 Vue.component("vQuestion", {
     template: `
@@ -79,28 +85,34 @@ Vue.component("vQuestion", {
     `,
     data() {
         return {
-            question : {}
-        }
+            question: {},
+        };
     },
     computed: {
         title() {
-            return this.$root.selectedProblemSet.category + " " + this.$root.selectedProblemSet.subCategory
-            + (this.$root.selectedProblemSet.title.length ? "; " + this.$root.selectedProblemSet.title : "");
-        }
+            return (
+                this.$root.selectedProblemSet.category +
+                " " +
+                this.$root.selectedProblemSet.subCategory +
+                (this.$root.selectedProblemSet.title.length
+                    ? "; " + this.$root.selectedProblemSet.title
+                    : "")
+            );
+        },
     },
-    methods : {
+    methods: {
         resetContent() {
             // TODO: Generate inner body.
             var temp = document.createElement("p");
             this.$refs.dynamicBody.append(temp);
             console.log(this.$refs.dynamicBody);
-        }
+        },
     },
     watch: {
-        "question"() {
+        question() {
             this.resetContent();
-        }
-    }
+        },
+    },
 });
 
 const app = new Vue({
@@ -109,26 +121,33 @@ const app = new Vue({
         screen: Screens.Title,
         problemSetGroup: {
             title: "",
-            categories: []
+            categories: [],
         },
-        selectedProblemSet : {
+        selectedProblemSet: {
             category: "",
-            subCategory : "",
+            subCategory: "",
             title: "",
-            questions : {},
+            questions: {},
         },
     },
     computed: {
-        isTitleScreen() { return this.screen == Screens.Title; },
-        isProblemSetScreen() { return this.screen == Screens.ProblemSet; },
-        isQuestionScreen() { return this.screen == Screens.Question; },
+        isTitleScreen() {
+            return this.screen == Screens.Title;
+        },
+        isProblemSetScreen() {
+            return this.screen == Screens.ProblemSet;
+        },
+        isQuestionScreen() {
+            return this.screen == Screens.Question;
+        },
     },
     methods: {
         screenTransition(screen) {
-            if(typeof(screen) == "string")
-                screen = Screens[screen];
-            if(typeof(screen) != "number") {
-                console.warn(`Invalid screen transition, must use either enum constant value from Screens constant, or a string that would be translated to one such constant.`);
+            if (typeof screen == "string") screen = Screens[screen];
+            if (typeof screen != "number") {
+                console.warn(
+                    `Invalid screen transition, must use either enum constant value from Screens constant, or a string that would be translated to one such constant.`
+                );
                 return;
             }
             this.screen = screen;
@@ -143,14 +162,16 @@ const app = new Vue({
         },
         changeProblemSet(package) {
             // Attempt to load the package on our "server" side first.
-            if(window.ProblemSets.load(package)) {
+            if (window.ProblemSets.load(package)) {
                 this.problemSetGroup.title = package;
-                this.problemSetGroup.categories = [...window.ProblemSets.categories()];
+                this.problemSetGroup.categories = [
+                    ...window.ProblemSets.categories(),
+                ];
             }
         },
     },
     watch: {
-        'selectedProblemSet.questions'(newValue) {
+        "selectedProblemSet.questions"(newValue) {
             // Select a random problem and pass it to the question screen.
             var i = Math.floor(Math.random() * newValue.length);
             this.$refs.question.question = newValue[i];
@@ -158,5 +179,5 @@ const app = new Vue({
     },
     created() {
         this.changeProblemSet("LogiCola");
-    }
+    },
 });
