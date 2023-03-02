@@ -27,7 +27,7 @@
                 <span><a class="bi bi-gear-fill icon-larger"></a></span>
             </nav>
             <title-screen v-show="isTitleScreen"></title-screen>
-            <problem-set-screen
+            <problem-set-screen ref="probleSets"
                 v-show="isProblemSetScreen"></problem-set-screen>
             <v-question ref="question" v-show="isQuestionScreen"></v-question>
         </div>

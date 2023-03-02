@@ -191,41 +191,39 @@ div#problemSet {
     height: 80%;
     transform: translate(-50%, -50%);
     overflow: hidden;
-    overflow-y: auto;
     background-color: var(--panel-bg-color);
     border: 1px transparent;
     border-radius: 25px;
-    padding: 20px;
 }
 
 div#problemSet > h2 {
-    position: fixed;
+    /* position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: fit-content;
-    max-height: 10%;
+    max-height: 10%; */
+    height: 10%;
 }
 
-div#problemSetTable {
-    padding: 25px;
+div#problemSet > div {
+    /* position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px; */
+    height: 80%;
+    /* display: table; */
 }
 
-div#problemSetTable > div {
-    display: block;
+div#problemSet > div > tr > td {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
-/* div#problemSetTable > div > h3 {
-    margin: 0px !important;
-} */
-
-div#problemSetTable > div > * {
-    display: inline-block;
-    max-height: 30px;
-    min-width: 75px;
-    margin-bottom: 5px;
+div#problemSet > div > tr > td > * {
+    margin: 0;
 }
-
 
 div#question {
     position: absolute;
@@ -239,7 +237,3 @@ div#question {
     border: 1px transparent;
     border-radius: 25px;
 }
-/* 
-span.consume {
-    flex-basis: 100%;
-} */
