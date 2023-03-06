@@ -4,7 +4,7 @@
  * Description: A collection of our hypertext link tags (in addition our icons are kept here).
  */
 
-a.bi:active {
+a.bi:active:not(.disabled) {
     color: var(--icon-fg-color-click);
     background-color: var(--icon-bg-color-click);
     -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
@@ -17,12 +17,17 @@ a.bi:hover {
     text-decoration: none;
 }
 
+a.bi.disabled {
+    color: var(--icon-fg-color-disabled);
+    text-decoration: none;
+    cursor: not-allowed;
+}
+
 a.bi {
     color: var(--icon-fg-color);
     background-color: var(--icon-bg-color);
     padding: 5px;
     border: 1px transparent solid;
-    border-radius: 50%;
 }
 
 a.flow {
@@ -37,6 +42,14 @@ a.flow.active {
     cursor: pointer;
 }
 
-.icon-larger {
+a.bi.icon-larger {
     font-size: x-large;
+}
+
+a.bi.icon-circle {
+    border-radius: 50%;
+}
+
+a.bi.icon-square {
+    border-radius: 5px;
 }

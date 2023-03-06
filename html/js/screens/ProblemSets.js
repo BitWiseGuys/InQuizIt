@@ -6,20 +6,26 @@ Vue.component("problemSetScreen", {
     template: `
     <div id="problemSet">
         <h2>{{$root.problemSetGroup.title}}</h2>
-        <v-grid-flexbox>
-            <template v-for="category in $root.problemSetGroup.categories">
-                <div><h3>{{category.title}}</h3></div>
-                <div v-for="_, name in category.sets">
-                    <button>{{name}}</button>
-                </div>
-            </template>
-        </v-grid-flexbox>
+        <div>
+            <v-grid-flexbox>
+                <template v-for="category in $root.problemSetGroup.categories">
+                    <div><h3>{{category.title}}</h3></div>
+                    <div v-for="_, name in category.sets">
+                        <button>{{name}}</button>
+                    </div>
+                </template>
+            </v-grid-flexbox>
+        </div>
     </div>
     `,
     data() {
         return {
             active_set: "",
             active_category: -1,
+            options: [
+                {icon: "card-list", title: "A list of options"},
+                {icon: "grid-1x2-fill", title: "A grid of options"},
+            ]
         };
     },
     computed: {

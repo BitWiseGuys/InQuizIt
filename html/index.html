@@ -16,7 +16,8 @@
     </head>
     <body>
         <div id="MainLayout">
-            <nav>
+            <v-icon-group :icons="mainIconGroup" class="right"></v-icon-group>
+            <!-- <nav>
                 <span>
                     <v-icon
                         icon="house-fill"
@@ -25,8 +26,13 @@
                     </v-icon>
                 </span>
                 <span></span>
-                <span><a class="bi bi-gear-fill icon-larger"></a></span>
-            </nav>
+                <span>
+                    <v-icon
+                        icon="gear-fill"
+                        @click="returnHome()">
+                    </v-icon>
+                </span>
+            </nav> -->
             <template v-show="isTitleScreen">
                 <div id="title">
                     <h1>
@@ -46,6 +52,7 @@
         <script src="./js/libraries/vue/vue-dev.js"></script>
         <script src="./js/components/grid.js"></script>
         <script src="./js/components/grid-flexbox.js"></script>
+        <script src="./js/components/icon-group.js"></script>
         <script src="./js/components/icon.js"></script>
         <script src="./js/screens/ProblemSets.js"></script>
         <script src="./js/screens/Question.js"></script>

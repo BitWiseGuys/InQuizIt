@@ -21,7 +21,11 @@ const app = new Vue({
         viewport : {
             width: 0,
             height: 0,
-        }
+        },
+        mainIconGroup : [
+            { icon: "house-fill", disabled: "$root.isTitleScreen", title: "Return to home screen." },
+            { icon: "gear-fill", title: "Go to the setting screen." },
+        ]
     },
     computed: {
         isTitleScreen() {
