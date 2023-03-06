@@ -43,23 +43,15 @@
     --button-bg-color-click: #022f48;
 }
 
+body {
+    overflow: hidden;
+    margin: 0;
+}
+
 /*===[ MISC STYLES ]========================================================================================================*/
 #MainLayout {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
+    width:100vw;
+    height:100vh;
     background-color: var(--main-bg-color);
-    padding: 25px;
     overflow: hidden;
-}
-
-nav {
-    display: table-row;
-}
-
-nav > span {
-    display: table-cell;
-    width: 100%;
 }

@@ -16,7 +16,7 @@
     </head>
     <body>
         <div id="MainLayout">
-            <v-icon-group :icons="mainIconGroup" class="right"></v-icon-group>
+            <v-icon-group id="navbar" :icons="mainIconGroup" class="down" @click="mainIconGroupClick"></v-icon-group>
             <!-- <nav>
                 <span>
                     <v-icon
@@ -33,21 +33,21 @@
                     </v-icon>
                 </span>
             </nav> -->
-            <template v-show="isTitleScreen">
-                <div id="title">
-                    <h1>
-                        InquizIt
-                    </h1>
+            <div id="title" v-show="isTitleScreen">
+                <h1>
+                    InquizIt
+                </h1>
+                <div>
                     <hr/>
-                    <div>
-                        <button>Assignments</button>
-                        <button @click="screenTransition('ProblemSet')">Problem Sets</button>
-                    </div>
+                    <button>Assignments</button>
+                    <button @click="screenTransition('ProblemSet')">Problem Sets</button>
                 </div>
-            </template>
-            <problem-set-screen ref="probleSets"
-                v-show="isProblemSetScreen"></problem-set-screen>
-            <v-question ref="question" v-show="isQuestionScreen"></v-question>
+            </div>
+            <div class="vcenter">
+                <problem-set-screen ref="probleSets"
+                    v-show="isProblemSetScreen"></problem-set-screen>
+                <v-question ref="question" v-show="isQuestionScreen"></v-question>
+            </div>
         </div>
         <script src="./js/libraries/vue/vue-dev.js"></script>
         <script src="./js/components/grid.js"></script>

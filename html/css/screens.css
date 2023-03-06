@@ -4,27 +4,52 @@
  * Description: A collection of screen specific stylings are kept here.
  */
 
+/*===[ NAVBAR/MISC ]==========================================================================================================*/
+div#navbar {
+    position: fixed;
+    right:5px;
+    top:10px;
+}
+
+div.vcenter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.vcenter {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 /*===[ TITLE SCREEN ]=========================================================================================================*/
 div#title {
-    max-width:90%;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 div#title > div {
     text-align: center;
 }
 
+div#title > div > hr {
+    max-width: 50%;
+    margin-bottom: 25px;   
+}
+
 /*===[ PROBLEM SET SCREEN ]===================================================================================================*/
 div#problemSet {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 70%;
-    height: 80%;
-    transform: translate(-50%, -50%);
+    margin-top: 15vh;
+    margin-bottom: 5vh;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    width: 90vw;
+    height: 70vh;
     overflow: hidden;
     background-color: var(--panel-bg-color);
     border: 1px transparent;
@@ -39,12 +64,12 @@ div#problemSet > div {
 
 /*===[ QUESTION SCREEN ]======================================================================================================*/
 div#question {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 70%;
-    height: 80%;
-    transform: translate(-50%, -50%);
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    width: 90vw;
+    height: 90vh;
     overflow: hidden;
     background-color: var(--panel-bg-color);
     border: 1px transparent;

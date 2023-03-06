@@ -3,6 +3,7 @@ const Screens = {
     ProblemSet: 1,
     Question: 2,
 };
+window.Screens = Screens;
 
 const app = new Vue({
     el: "#MainLayout",
@@ -23,8 +24,8 @@ const app = new Vue({
             height: 0,
         },
         mainIconGroup : [
-            { icon: "house-fill", disabled: "$root.isTitleScreen", title: "Return to home screen." },
-            { icon: "gear-fill", title: "Go to the setting screen." },
+            { icon: "house-fill", disabled: true, title: "Return to home screen.", value: "Title" },
+            { icon: "gear-fill", title: "Go to the setting screen.", value: "Settings" },
         ]
     },
     computed: {
@@ -39,6 +40,10 @@ const app = new Vue({
         },
     },
     methods: {
+        mainIconGroupClick({event, icon}) {
+            if(icon["value"] && !icon["disabled"])
+                this.screenTransition(icon["value"]);
+        },
         screenTransition(screen) {
             if (typeof screen == "string") screen = Screens[screen];
             if (typeof screen != "number") {
@@ -82,11 +87,10 @@ const app = new Vue({
             //this.$refs.probleSets.buildTable();
         },
         screen(newValue) {
-            if(newValue == Screens.ProblemSet) {
-                Vue.nextTick(()=>{
-                    //this.$refs.probleSets.buildTable();
-                }, this);
-            }
+            // Ensure we have our home screen button enabled/disabled based on the screen we are on.
+            if(newValue == Screens.Title) 
+                this.mainIconGroup[0].disabled = true;
+            else this.mainIconGroup[0].disabled = false;
         },
     },
     created() {
