@@ -23,6 +23,10 @@ div.list-grid-selector {
     float: right;
 }
 
+div.icon-group {
+    z-index: 10000000;
+}
+
 /* For first child we place a border curve on our left side. */
 div.icon-group:not(.down) > a.bi:first-child {
     border-radius: 5px 0px 0px 5px;
@@ -49,6 +53,11 @@ div.icon-group:not(.down) > a.bi:not(:first-child):not(:last-child):not(:only-ch
 /* Floats all of the icons to the right hand side (by default they start at the left). */
 div.icon-group.right {
     float:right;
+}
+
+/* Floats all of the icons to the right hand side (by default they start at the left). */
+div.icon-group.left {
+    float:left;
 }
 
 /* Allows items to begin growing downwards */

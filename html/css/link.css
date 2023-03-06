@@ -4,7 +4,7 @@
  * Description: A collection of our hypertext link tags (in addition our icons are kept here).
  */
 
-a.bi:active:not(.disabled) {
+ a.bi.icon-pressed:not(.disabled), a.bi:active:not(.disabled) {
     color: var(--icon-fg-color-click);
     background-color: var(--icon-bg-color-click);
     -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;

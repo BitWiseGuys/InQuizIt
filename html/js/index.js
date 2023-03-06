@@ -3,14 +3,21 @@ const Screens = {
     ProblemSet: 1,
     Question: 2,
     Assignments: 3,
-    Settings: 4,
+    SubScreen: 4,
 };
 window.Screens = Screens;
+const SubScreens = {
+    Settings: 0,
+    Results: 1,
+}
+window.SubScreens = SubScreens;
 
 const app = new Vue({
     el: "#MainLayout",
     data: {
         screen: Screens.Title,
+        previousScreen: -1,
+        subscreen: SubScreens.Settings,
         problemSetGroup: {
             title: "",
             categories: [],
@@ -28,7 +35,12 @@ const app = new Vue({
         mainIconGroup : [
             { icon: "house-fill", disabled: true, title: "Return to home screen.", value: "Title", options: {class:"icon-larger"} },
             { icon: "gear-fill", title: "Go to the setting screen.", value: "Settings", options:{class:"icon-larger"} },
-        ]
+        ],
+        subIconGroup : [
+            { icon : "arrow-left", title: "Return to previous screen.", value: "Back", options:{ class: "icon-larger" } },
+            { icon : "gear-fill", title: "Goto setting screen.", value: SubScreens.Settings, options:{ class: "icon-larger", sticky: true, } },
+            { icon : "clipboard", title: "Goto results screen.", value: SubScreens.Results, options:{ class: "icon-larger", sticky: true, } },
+        ],
     },
     computed: {
         isTitleScreen() {
@@ -40,13 +52,31 @@ const app = new Vue({
         isQuestionScreen() {
             return this.screen == Screens.Question;
         },
+        isSubScreen() {
+            return this.screen == Screens.SubScreen;
+        },
     },
     methods: {
-        mainIconGroupClick({event, icon}) {
-            if(icon["value"] && !icon["disabled"])
-                this.screenTransition(icon["value"]);
+        isThisSubScreen(name) {
+            if(SubScreens[name] == undefined) return false;
+            return (this.subscreen == SubScreens[name]);
         },
-        screenTransition(screen) {
+        mainIconGroupClick({event, icon}) {
+            if(!icon["disabled"]) {
+                if(icon["value"] == 'Title')
+                    this.screenTransition(icon["value"]);
+                else if(icon["value"] == 'Settings')
+                    this.screenTransition(Screens.SubScreen, SubScreens.Settings);
+            }
+        },
+        subIconGroupClick({event, icon}) {
+            if(icon["value"] == 'Back') 
+                this.screenTransition(this.previousScreen);
+            else if(typeof(icon["value"]) == "number")
+                this.subscreen = icon["value"];
+        },
+        screenTransition(screen, subscreen) {
+            // Ensure we have the right kind of input.
             if (typeof screen == "string") screen = Screens[screen];
             if (typeof screen != "number") {
                 console.warn(
@@ -54,7 +84,15 @@ const app = new Vue({
                 );
                 return;
             }
-            this.screen = screen;
+            if(typeof subscreen == "string") subscreen = SubScreens[subscreen];
+            // If we don't have a subscreen
+            if(screen != Screens.SubScreen)
+                this.screen = screen;
+            else if(typeof subscreen == "number") {
+                this.subscreen = subscreen;
+                this.screen = Screens.SubScreen;
+                this.$refs.subnavbar.setSelected(this.subscreen);
+            }
         },
         returnHome() {
             // Reset everything.
@@ -79,32 +117,35 @@ const app = new Vue({
             var i = Math.floor(Math.random() * newValue.length);
             this.$refs.Question.question = newValue[i];
         },
-        "problemSetGroup.categories"() {
-            console.log(this.$refs);
-            //this.$refs.probleSets.buildTable();
-        },
         screen(newValue, oldValue) {
             // Ensure we at the very least passed in a number (doesn't have to be valid).
             if(typeof(newValue) != "number") { this.screen = oldValue; return; }
+            // Can't do anything if we are just setting to the same value.
+            if(newValue == oldValue) return;
+            // Cache our previous screen so that we can return back one screen.
+            this.previousScreen = oldValue;
             // Ensure we have our home screen button enabled/disabled based on the screen we are on.
             if(newValue == Screens.Title) 
                 this.mainIconGroup[0].disabled = true;
             else this.mainIconGroup[0].disabled = false;
-            // Notify our old screen and our new screen of our transition.
-            for(const label in this.$refs) {
-                var id = Screens[label];
-                if(id != undefined) {
-                    // Check if we found our transition to.
-                    if(id == newValue) {
-                        var screen = this.$refs[label];
-                        if(screen.onTransitionIn) // Do we have a function to call?
-                            screen.onTransitionIn();
-                    }
-                    // Otherwise check if we found our transition away.
-                    else if(id == oldValue) {
-                        var screen = this.$refs[label];
-                        if(screen.onTransitionAway) // Do we have a function to call?
-                            screen.onTransitionAway();
+            // Subscreens don't act as transitions instead they act as substitutes that can be undone at any point.
+            if(newValue != Screens.SubScreen && oldValue != Screens.SubScreen) {
+                // Notify our old screen and our new screen of our transition.
+                for(const label in this.$refs) {
+                    var id = Screens[label];
+                    if(id != undefined) {
+                        // Check if we found our transition to.
+                        if(id == newValue) {
+                            var screen = this.$refs[label];
+                            if(screen.onTransitionIn) // Do we have a function to call?
+                                screen.onTransitionIn();
+                        }
+                        // Otherwise check if we found our transition away.
+                        else if(id == oldValue) {
+                            var screen = this.$refs[label];
+                            if(screen.onTransitionAway) // Do we have a function to call?
+                                screen.onTransitionAway();
+                        }
                     }
                 }
             }
