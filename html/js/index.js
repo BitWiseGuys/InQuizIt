@@ -2,6 +2,8 @@ const Screens = {
     Title: 0,
     ProblemSet: 1,
     Question: 2,
+    Assignments: 3,
+    Settings: 4,
 };
 window.Screens = Screens;
 
@@ -24,8 +26,8 @@ const app = new Vue({
             height: 0,
         },
         mainIconGroup : [
-            { icon: "house-fill", disabled: true, title: "Return to home screen.", value: "Title" },
-            { icon: "gear-fill", title: "Go to the setting screen.", value: "Settings" },
+            { icon: "house-fill", disabled: true, title: "Return to home screen.", value: "Title", options: {class:"icon-larger"} },
+            { icon: "gear-fill", title: "Go to the setting screen.", value: "Settings", options:{class:"icon-larger"} },
         ]
     },
     computed: {
@@ -60,7 +62,6 @@ const app = new Vue({
             this.selectedProblemSet.subCategory = "";
             this.selectedProblemSet.questions = {};
             this.screenTransition(Screens.Title);
-            this.screenTransition("test");
         },
         changeProblemSet(package) {
             // Attempt to load the package on our "server" side first.
@@ -70,10 +71,6 @@ const app = new Vue({
                     ...window.ProblemSets.categories(),
                 ];
             }
-        },
-        onResize() {
-            // if(this.$refs.probleSets)
-            //     this.$refs.probleSets.onResize();
         },
     },
     watch: {
@@ -86,18 +83,34 @@ const app = new Vue({
             console.log(this.$refs);
             //this.$refs.probleSets.buildTable();
         },
-        screen(newValue) {
+        screen(newValue, oldValue) {
+            // Ensure we at the very least passed in a number (doesn't have to be valid).
+            if(typeof(newValue) != "number") { this.screen = oldValue; return; }
             // Ensure we have our home screen button enabled/disabled based on the screen we are on.
             if(newValue == Screens.Title) 
                 this.mainIconGroup[0].disabled = true;
             else this.mainIconGroup[0].disabled = false;
+            // Notify our old screen and our new screen of our transition.
+            for(const label in this.$refs) {
+                var id = Screens[label];
+                if(id != undefined) {
+                    // Check if we found our transition to.
+                    if(id == newValue) {
+                        var screen = this.$refs[label];
+                        if(screen.onTransitionIn) // Do we have a function to call?
+                            screen.onTransitionIn();
+                    }
+                    // Otherwise check if we found our transition away.
+                    else if(id == oldValue) {
+                        var screen = this.$refs[label];
+                        if(screen.onTransitionAway) // Do we have a function to call?
+                            screen.onTransitionAway();
+                    }
+                }
+            }
         },
     },
     created() {
         this.changeProblemSet("LogiCola");
     },
-});
-
-window.addEventListener("resize", (event)=> {
-    app.onResize();
 });

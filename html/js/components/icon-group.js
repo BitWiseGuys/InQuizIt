@@ -3,13 +3,13 @@ Vue.component("vIconGroup", {
     template: `
     <div class="icon-group">
         <template v-for="icon in icons">
-            <v-icon :disabled="icon.disabled" :icon="icon.icon" :options="{shape: 'square'}" :title="icon.title" @click="$emit('click', {$event, icon})"></v-icon>
+            <v-icon ref="icon" :disabled="icon.disabled" :icon="icon.icon" :options="icon.options" :title="icon.title" @click="selected = icon; $emit('change', icon); $emit('click', {$event, icon});"></v-icon>
         </template>
     </div>
     `,
     data() {
         return {
-            selected : "",
-        };
+            selected: undefined,
+        }
     }
 })

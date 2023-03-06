@@ -34,7 +34,7 @@ a.flow {
     color: var(--text-color-inactive);
     cursor: not-allowed;
     font-family: "Lato Regular";
-    font-size: 44pt;
+    font-size: 22pt;
 }
 
 a.flow.active {
@@ -52,4 +52,9 @@ a.bi.icon-circle {
 
 a.bi.icon-square {
     border-radius: 5px;
+}
+
+a.bi.icon-blank {
+    border:none;
+    background: none;
 }

@@ -41,6 +41,12 @@
     --button-fg-color-hover: #fb9e05;
     --button-fg-color-click: #fb9e05;
     --button-bg-color-click: #022f48;
+
+    /*Scrollbar style*/
+    --scrollbar-width: 10px;
+    --scrollbar-bg-color: #022f48;
+    --scrollbar-fg-color:#164259;
+    --scrollbar-fg-color-hover:#fb9e05;
 }
 
 body {
@@ -54,4 +60,23 @@ body {
     height:100vh;
     background-color: var(--main-bg-color);
     overflow: hidden;
+}
+
+/*===[ SCROLLBAR STYLES ]===================================================================================================*/
+::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-bg-color); 
+    border-radius: calc(var(--scrollbar-width) / 2);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-fg-color); 
+    border-radius: calc(var(--scrollbar-width) / 2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-fg-color-hover); 
 }

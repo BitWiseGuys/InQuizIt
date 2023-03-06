@@ -54,12 +54,49 @@ div#problemSet {
     background-color: var(--panel-bg-color);
     border: 1px transparent;
     border-radius: 25px;
+    
+    display: flex;
+    flex-flow: column;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 10px;
 }
 
-div#problemSet > div {
-    height: 90%;
-    width: 100%;
-    overflow: hidden;
+div#problemSet > div:first-of-type {
+    padding-right: 25px;
+}
+
+div#problemSet > div > div.icon-group {
+    flex: 0 1 auto;
+}
+
+div#problemSet > div.list {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+div#problemSet > div.list > h3 {
+    flex-basis: 100%;
+}
+
+div#problemSet > div.grid {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    text-align: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 2px;
+}
+
+div#problemSet > div.grid > div.break {
+    flex-basis: 100%;
 }
 
 /*===[ QUESTION SCREEN ]======================================================================================================*/

@@ -40,3 +40,11 @@ hr {
     border-color: var(--main-border-color);
     border-width: 5px;
 }
+
+p.right, h1.right, h2.right, h3.right, h4.right, h5.right, h6.right, a.right {
+    text-align: right;
+}
+
+p.float-right, h1.float-right, h2.float-right, h3.float-right, h4.float-right, h5.float-right, h6.float-right, a.float-right {
+    float: right;
+}

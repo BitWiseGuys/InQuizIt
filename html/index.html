@@ -39,14 +39,17 @@
                 </h1>
                 <div>
                     <hr/>
-                    <button>Assignments</button>
+                    <button @click="screenTransition('Assignments')">Assignments</button>
                     <button @click="screenTransition('ProblemSet')">Problem Sets</button>
                 </div>
             </div>
             <div class="vcenter">
-                <problem-set-screen ref="probleSets"
-                    v-show="isProblemSetScreen"></problem-set-screen>
-                <v-question ref="question" v-show="isQuestionScreen"></v-question>
+                <problem-set-screen ref="ProblemSet"
+                    v-show="isProblemSetScreen">
+                </problem-set-screen>
+                <v-question ref="Question" 
+                    v-show="isQuestionScreen">
+                </v-question>
             </div>
         </div>
         <script src="./js/libraries/vue/vue-dev.js"></script>
