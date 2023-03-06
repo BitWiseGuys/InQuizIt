@@ -1,0 +1,42 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 03/05/2023
+ * Description: A collection of our hypertext link tags (in addition our icons are kept here).
+ */
+
+a.bi:active {
+    color: var(--icon-fg-color-click);
+    background-color: var(--icon-bg-color-click);
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+    box-shadow: inset 0px 0px 5px #c1c1c1;
+}
+
+a.bi:hover {
+    color: var(--icon-fg-color-hover);
+    text-decoration: none;
+}
+
+a.bi {
+    color: var(--icon-fg-color);
+    background-color: var(--icon-bg-color);
+    padding: 5px;
+    border: 1px transparent solid;
+    border-radius: 50%;
+}
+
+a.flow {
+    color: var(--text-color-inactive);
+    cursor: not-allowed;
+    font-family: "Lato Regular";
+    font-size: 44pt;
+}
+
+a.flow.active {
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.icon-larger {
+    font-size: x-large;
+}

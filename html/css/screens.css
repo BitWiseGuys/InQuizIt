@@ -1,0 +1,52 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 03/05/2023
+ * Description: A collection of screen specific stylings are kept here.
+ */
+
+/*===[ TITLE SCREEN ]=========================================================================================================*/
+div#title {
+    max-width:90%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+div#title > div {
+    text-align: center;
+}
+
+/*===[ PROBLEM SET SCREEN ]===================================================================================================*/
+div#problemSet {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    height: 80%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    background-color: var(--panel-bg-color);
+    border: 1px transparent;
+    border-radius: 25px;
+}
+
+div#problemSet > div {
+    height: 90%;
+    width: 100%;
+    overflow: hidden;
+}
+
+/*===[ QUESTION SCREEN ]======================================================================================================*/
+div#question {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    height: 80%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    background-color: var(--panel-bg-color);
+    border: 1px transparent;
+    border-radius: 25px;
+}

@@ -17,21 +17,38 @@
     <body>
         <div id="MainLayout">
             <nav>
-                <span
-                    ><a
-                        class="bi bi-house-fill icon-larger"
+                <span>
+                    <v-icon
+                        icon="house-fill"
                         @click="returnHome()"
-                        v-show="!isTitleScreen"></a
-                ></span>
+                        v-show="!isTitleScreen">
+                    </v-icon>
+                </span>
                 <span></span>
                 <span><a class="bi bi-gear-fill icon-larger"></a></span>
             </nav>
-            <title-screen v-show="isTitleScreen"></title-screen>
+            <template v-show="isTitleScreen">
+                <div id="title">
+                    <h1>
+                        InquizIt
+                    </h1>
+                    <hr/>
+                    <div>
+                        <button>Assignments</button>
+                        <button @click="screenTransition('ProblemSet')">Problem Sets</button>
+                    </div>
+                </div>
+            </template>
             <problem-set-screen ref="probleSets"
                 v-show="isProblemSetScreen"></problem-set-screen>
             <v-question ref="question" v-show="isQuestionScreen"></v-question>
         </div>
         <script src="./js/libraries/vue/vue-dev.js"></script>
+        <script src="./js/components/grid.js"></script>
+        <script src="./js/components/grid-flexbox.js"></script>
+        <script src="./js/components/icon.js"></script>
+        <script src="./js/screens/ProblemSets.js"></script>
+        <script src="./js/screens/Question.js"></script>
         <script src="./js/index.js" defer></script>
     </body>
 </html>

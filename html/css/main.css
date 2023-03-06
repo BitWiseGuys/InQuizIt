@@ -1,6 +1,20 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 03/05/2023
+ * Description: Our styling sheets that format our html page.
+ */
+
+/*===[ FONT/CSS IMPORTS ]=====================================================================================================*/
 @import url("./fonts/SecularOne/SecularOne.css");
 @import url("./fonts/Lato/Lato.css");
+@import url("components.css");
+@import url("screens.css");
+@import url("button.css");
+@import url("link.css");
+@import url("text.css");
 
+
+/*===[ THEME DATA ]==========================================================================================================*/
 * {
     /*Main Screen Color's*/
     --main-border-color: #fb9e05;
@@ -28,143 +42,8 @@
     --button-bg-color-click: #022f48;
 }
 
-h1 {
-    color: var(--text-color);
-    font-family: "Secular One";
-    /* font-size: 900%; */
-    font-size: 100pt;
-    text-align: center;
-    margin: 0;
-    /* text-decoration: underline;
-    text-underline-offset: 50px;
-    text-decoration-color: var(--main-border-color); */
-}
-
-hr {
-    border-color: var(--main-border-color);
-    border-width: 5px;
-}
-
-h2 {
-    color: var(--text-color);
-    font-family: "Secular One";
-    /* font-size: 333%; */
-    text-align: center;
-    margin-top: 10px;
-}
-
-h3,
-h4,
-h5,
-h6 {
-    color: var(--text-color);
-    font-family: "Secular One";
-    /* font-size: 200%; */
-    text-decoration: underline;
-    text-underline-offset: 5px;
-    text-decoration-color: var(--main-border-color);
-    font-weight: normal;
-}
-
-p {
-    color: var(--text-color);
-    font-family: "Lato Regular";
-    /* font-size: 125%; */
-}
-
-button {
-    padding: 5px 10px 5px 10px;
-    background-color: var(--button-bg-color);
-    color: var(--button-fg-color);
-    border: 1px solid;
-    border-color: var(--button-bd-color);
-    border-radius: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-    font-family: "Lato Regular";
-    /* font-size: 125%; */
-}
-
-button.block {
-    margin-bottom: 10px;
-    margin-top: 10px;
-    display: block;
-}
-
-button:hover {
-    text-decoration: underline;
-    text-underline-offset: 5px;
-    text-decoration-color: var(--button-fg-color-hover);
-}
-
-button.active {
-    color: var(--button-fg-color-click);
-    background-color: var(--button-bg-color-click);
-}
-
-button:active {
-    color: var(--button-fg-color-click);
-    background-color: var(--button-bg-color-click);
-    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
-    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
-    box-shadow: inset 0px 0px 5px #c1c1c1;
-}
-
-a.bi:active {
-    color: var(--icon-fg-color-click);
-    background-color: var(--icon-bg-color-click);
-    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
-    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
-    box-shadow: inset 0px 0px 5px #c1c1c1;
-}
-
-a.bi:hover {
-    color: var(--icon-fg-color-hover);
-    text-decoration: none;
-}
-
-a.bi {
-    color: var(--icon-fg-color);
-    background-color: var(--icon-bg-color);
-    padding: 5px;
-    border: 1px transparent solid;
-    border-radius: 50%;
-}
-
-a.flow {
-    color: var(--text-color-inactive);
-    cursor: not-allowed;
-    font-family: "Lato Regular";
-    font-size: 44pt;
-}
-
-a.flow.active {
-    color: var(--text-color);
-    cursor: pointer;
-}
-
-.icon-larger {
-    font-size: x-large;
-}
-
-nav {
-    display: table-row;
-}
-
-nav > span {
-    display: table-cell;
-    width: 100%;
-}
-
+/*===[ MISC STYLES ]========================================================================================================*/
 #MainLayout {
-    /* width: 80%;
-    height: 80%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); */
-    /* border:1px var(--main-border-color) solid;
-    border-radius: 25px; */
     position: absolute;
     top: 0px;
     left: 0px;
@@ -175,65 +54,11 @@ nav > span {
     overflow: hidden;
 }
 
-div#title {
-    max-width:90%;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+nav {
+    display: table-row;
 }
 
-div#problemSet {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 70%;
-    height: 80%;
-    transform: translate(-50%, -50%);
-    overflow: hidden;
-    background-color: var(--panel-bg-color);
-    border: 1px transparent;
-    border-radius: 25px;
-}
-
-div#problemSet > h2 {
-    /* position: fixed;
-    top: 0;
-    left: 0;
+nav > span {
+    display: table-cell;
     width: 100%;
-    height: fit-content;
-    max-height: 10%; */
-    height: 10%;
-}
-
-div#problemSet > div {
-    /* position: absolute;
-    top: 0px;
-    left: 0px;
-    bottom: 0px;
-    right: 0px; */
-    height: 80%;
-    /* display: table; */
-}
-
-div#problemSet > div > tr > td {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-div#problemSet > div > tr > td > * {
-    margin: 0;
-}
-
-div#question {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 70%;
-    height: 80%;
-    transform: translate(-50%, -50%);
-    overflow: hidden;
-    background-color: var(--panel-bg-color);
-    border: 1px transparent;
-    border-radius: 25px;
 }
