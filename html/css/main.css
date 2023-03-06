@@ -10,6 +10,7 @@
 @import url("components.css");
 @import url("screens.css");
 @import url("button.css");
+@import url("input.css");
 @import url("link.css");
 @import url("text.css");
 
@@ -41,6 +42,15 @@
     --button-fg-color-hover: #fb9e05;
     --button-fg-color-click: #fb9e05;
     --button-bg-color-click: #022f48;
+
+    /*Input Color's*/
+    --input-bg-color: #164259;
+    --input-fg-color: #fefefe;
+    --input-bd-color: transparent;
+    --input-fg-color-hover: #fb9e05;
+    --input-fg-color-active: #fb9e05;
+    --input-bg-color-active: #022f48;
+    --input-placeholder-color: #6f6f6f;
 
     /*Scrollbar style*/
     --scrollbar-width: 10px;

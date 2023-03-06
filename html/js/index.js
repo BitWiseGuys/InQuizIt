@@ -77,7 +77,7 @@ const app = new Vue({
         "selectedProblemSet.questions"(newValue) {
             // Select a random problem and pass it to the question screen.
             var i = Math.floor(Math.random() * newValue.length);
-            this.$refs.question.question = newValue[i];
+            this.$refs.Question.question = newValue[i];
         },
         "problemSetGroup.categories"() {
             console.log(this.$refs);

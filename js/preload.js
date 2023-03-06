@@ -11,8 +11,29 @@ var loadedProblemSets = [
     {
         title: "Syllogistic",
         sets: {
-            Translations: {},
-            Arguments: {},
+            Translations: [
+                {
+                    metadata: {
+                        number: [
+                            "range(1-15)",
+                            "range(5-10)",
+                        ],
+                        fruit: [
+                            "apples",
+                            "oranges",
+                            "pears",
+                        ]
+                    },
+                    body: [
+                        "If {person:0(first-name)} has {number:0} {fruit} and {person:1(first-name)} has {number:1} {fruit}.",
+                        "How many {fruit} does {person:0(first-name)} and {person:1(first-name)} have combined? <input></input>"
+                    ],
+                    answer: [
+                        "{number:1} + {number:2}"
+                    ]
+                }
+            ],
+            Arguments: [],
         },
     },
     {
