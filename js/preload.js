@@ -11,8 +11,8 @@ var loadedProblemSets = [
     {
         title: "Syllogistic",
         sets: {
-            Translations: {},
-            Arguments: {},
+            Translations: [],
+            Arguments: [],
         },
     },
     {

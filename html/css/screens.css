@@ -1,0 +1,179 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 03/05/2023
+ * Description: A collection of screen specific stylings are kept here.
+ */
+
+/*===[ NAVBAR/MISC ]==========================================================================================================*/
+div#navbar {
+    position: fixed;
+    right:5px;
+    top:10px;
+}
+
+div#subnavbar {
+    position: fixed;
+    left: 5px;
+    top: 10px;
+}
+
+div.vcenter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.vcenter {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/*===[ TITLE SCREEN ]=========================================================================================================*/
+div#title {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div#title > div {
+    text-align: center;
+}
+
+div#title > div > hr {
+    max-width: 50%;
+    margin-bottom: 25px;   
+}
+
+/*===[ PROBLEM SET SCREEN ]===================================================================================================*/
+div#problemSet {
+    margin-top: 15vh;
+    margin-bottom: 5vh;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    width: 90vw;
+    height: 70vh;
+    overflow: hidden;
+    background-color: var(--panel-bg-color);
+    border: 1px transparent;
+    border-radius: 25px;
+    
+    display: flex;
+    flex-flow: column;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 10px;
+}
+
+div#problemSet > div:first-of-type {
+    padding-right: 25px;
+}
+
+div#problemSet > div > div.icon-group {
+    flex: 0 1 auto;
+}
+
+div#problemSet > div.list {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+div#problemSet > div.list > h3 {
+    flex-basis: 100%;
+}
+
+div#problemSet > div.grid {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    text-align: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 2px;
+}
+
+div#problemSet > div.grid > div.break {
+    flex-basis: 100%;
+}
+
+/*===[ QUESTION SCREEN ]======================================================================================================*/
+div#question {
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    width: 90vw;
+    height: 90vh;
+    overflow: hidden;
+    background-color: var(--panel-bg-color);
+    border: 1px transparent;
+    border-radius: 25px;
+
+    display: flex;
+    flex-flow: column;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 10px;
+}
+
+div#question > div:first-of-type {
+    padding-right: 25px;
+}
+
+div#question > div > div.icon-group {
+    flex: 0 1 auto;
+}
+
+div#question > div:not(:first-of-type):not(:last-of-type) {
+    flex: 1 1 auto;
+}
+
+div#question > div:last-of-type {
+    padding-right: 25px;
+    padding-bottom: 15px;
+}
+
+/*===[ SETTINGS SCREEN ]====================================================================================================*/
+div#settings {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div#settings > h2 {
+    position: fixed;
+    top:0;
+    left:0;
+    right:0;
+    text-align: center;
+}
+
+div#settings > div {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+div#settings > div > div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+div#settings > div > div > h3 {
+    flex-basis: 100%;
+    text-align: center;
+}

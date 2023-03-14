@@ -17,7 +17,7 @@ const createWindow = () => {
   const primaryDisplay = screen.getPrimaryDisplay()
   const { width, height } = primaryDisplay.workAreaSize
 
-  win.setMinimumSize(width / 4, height / 4);
+  win.setMinimumSize(width / 2, height / 2);
   win.loadFile('html/index.html');
 };
 

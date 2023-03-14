@@ -1,0 +1,43 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 03/05/2023
+ * Description: A collection of our button tags.
+ */
+
+button {
+    padding: 5px 10px 5px 10px;
+    background-color: var(--button-bg-color);
+    color: var(--button-fg-color);
+    border: 1px solid;
+    border-color: var(--button-bd-color);
+    border-radius: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-family: "Lato Regular";
+    /* font-size: 125%; */
+}
+
+button.block {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    display: block;
+}
+
+button:hover {
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-color: var(--button-fg-color-hover);
+}
+
+button.active {
+    color: var(--button-fg-color-click);
+    background-color: var(--button-bg-color-click);
+}
+
+button:active {
+    color: var(--button-fg-color-click);
+    background-color: var(--button-bg-color-click);
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+    box-shadow: inset 0px 0px 5px #c1c1c1;
+}
