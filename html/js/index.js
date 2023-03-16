@@ -41,6 +41,12 @@ const app = new Vue({
             { icon : "gear-fill", title: "Goto setting screen.", value: SubScreens.Settings, options:{ class: "icon-larger", sticky: true, } },
             { icon : "clipboard", title: "Goto results screen.", value: SubScreens.Results, options:{ class: "icon-larger", sticky: true, } },
         ],
+        settings: {
+            Questions : {
+                "Progressbar Enabled"    : ["checkbox", true],
+                "Progressbar Percentage" : ["checkbox", false],
+            }
+        },
     },
     computed: {
         isTitleScreen() {

@@ -28,6 +28,8 @@ a.bi {
     background-color: var(--icon-bg-color);
     padding: 5px;
     border: 1px transparent solid;
+    font-family: "Lato Regular";
+    font-size: 11pt;
 }
 
 a.flow {

@@ -40,23 +40,16 @@
                 <div id="settings" v-show="isThisSubScreen('Settings')">
                     <h2>Settings</h2>
                     <div>
-                        <div>
-                            <h3>Setting #1</h3>
-                            <p>This is a test setting.</p>
-                            <input>
-                            <button>Test!</button>
-                        </div>
-                        <div>
-                            <h3>Setting #1</h3>
-                            <p>This is a test setting.</p>
-                            <input>
-                            <button>Test!</button>
-                        </div>
-                        <div>
-                            <h3>Setting #1</h3>
-                            <p>This is a test setting.</p>
-                            <input>
-                            <button>Test!</button>
+                        <div v-for="group, name in settings">
+                            <div>
+                                <h2>{{name}}</h2>
+                                <template v-for="value, setting in group">
+                                    <p>
+                                        {{setting}}
+                                        <input :type="value[0]" :name="name + ':' + setting" v-model="value[1]">
+                                    </p>
+                                </template>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -67,6 +60,7 @@
         <script src="./js/components/grid-flexbox.js"></script>
         <script src="./js/components/icon-group.js"></script>
         <script src="./js/components/metatag.js"></script>
+        <script src="./js/components/progressbar.js"></script>
         <script src="./js/components/icon.js"></script>
         <script src="./js/screens/ProblemSets.js"></script>
         <script src="./js/screens/Question.js"></script>

@@ -2,6 +2,7 @@ Vue.component("vIconGroup", {
     props: ["icons", "disabled"],
     template: `
     <div class="icon-group">
+        <slot name="prepend"></slot>
         <template v-for="icon in icons">
             <v-icon ref="icon" :disabled="icon.disabled || disabled" :icon="icon.icon" :options="icon.options" :title="icon.title" :pressed="selected == icon" @click="internalSelect($event, icon)"></v-icon>
         </template>

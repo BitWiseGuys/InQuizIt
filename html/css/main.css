@@ -57,6 +57,12 @@
     --scrollbar-bg-color: #022f48;
     --scrollbar-fg-color:#164259;
     --scrollbar-fg-color-hover:#fb9e05;
+
+    /*Progressbar style*/
+    --progressbar-height: 24px;
+    --progressbar-bg-color: #022f48;
+    --progressbar-fg-color:#164259;
+    --progressbar-bar-color:#fb9e05;
 }
 
 body {
