@@ -1,5 +1,12 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
+
+var knex = require("knex")({
+  client: "sqlite3",
+  connection: {
+    filename: "./databases/test.db"
+  }
+});
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -35,4 +42,10 @@ app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
     }
+});
+
+//database API Handlers
+ipcMain.handle('readTable', async (event, tableName)=> {
+  const res = await knex.select("*").from(tableName);
+  return res;
 });

@@ -1,4 +1,4 @@
-const { contextBridge } = require("electron");
+const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("versions", {
     node: () => process.versions.node,
@@ -80,4 +80,15 @@ contextBridge.exposeInMainWorld("ProblemSets", {
         loadedProblemSets = [];
     },
     reloadPackages: () => {},
+});
+
+//database API functions
+contextBridge.exposeInMainWorld('db', {
+  selectAllTable: async (tableName) => {
+    const res = await ipcRenderer.invoke('readTable', tableName);
+    console.log(res);
+    return res;
+  }
+
+
 });
