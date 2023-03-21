@@ -1,5 +1,8 @@
-const { app, BrowserWindow } = require("electron");
+const downloadsFolder = require("downloads-folder");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
+
+const downloadFolder = downloadsFolder();
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -22,6 +25,16 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
+    ipcMain.handle("openPackagesDir", async () => {
+        return dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+            properties: ["openFile", "multiSelections"],
+            filters: [
+                { name: "Packages", extensions: ["db"], }
+            ],
+            defaultPath: downloadFolder,
+        });
+    });
+
     createWindow();
 
     app.on("activate", () => {

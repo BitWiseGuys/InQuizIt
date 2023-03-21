@@ -4,7 +4,7 @@
  * Description: A collection of our hypertext link tags (in addition our icons are kept here).
  */
 
- a.bi.icon-pressed:not(.disabled), a.bi:active:not(.disabled) {
+a.bi.icon-pressed:not(.disabled), a.bi:active:not(.disabled) {
     color: var(--icon-fg-color-click);
     background-color: var(--icon-bg-color-click);
     -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
@@ -49,7 +49,7 @@ a.bi.icon-larger {
 }
 
 a.bi.icon-circle {
-    border-radius: 50%;
+    border-radius: 50px;
 }
 
 a.bi.icon-square {
@@ -59,4 +59,24 @@ a.bi.icon-square {
 a.bi.icon-blank {
     border:none;
     background: none;
+}
+
+a {
+    color: var(--icon-fg-color);
+    text-decoration: underline;
+}
+
+a.active:not(.disabled), a:active:not(.disabled) {
+    color: var(--icon-fg-color-click);
+}
+
+a:hover {
+    color: var(--icon-fg-color-hover);
+    text-decoration: none;
+}
+
+a.disabled {
+    color: var(--icon-fg-color-disabled);
+    text-decoration: none;
+    cursor: not-allowed;
 }

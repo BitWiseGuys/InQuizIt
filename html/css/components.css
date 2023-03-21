@@ -91,6 +91,15 @@ div.icon-group.down > *:not(:first-child):not(:last-child):not(:only-child) {
     border-radius: 0px 0px 0px 0px;
 }
 
+div.icon-group.inline {
+    display: inline-block;
+}
+
+div.icon-group.inline > * {
+    border: none;
+    background-color: transparent;
+}
+
 div.progressbar {
     height: var(--progressbar-height);
     background-color: var(--progressbar-fg-color);

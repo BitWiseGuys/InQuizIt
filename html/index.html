@@ -19,12 +19,25 @@
             <v-icon-group v-show="!isSubScreen" id="navbar" :icons="mainIconGroup" class="down" @click="mainIconGroupClick"></v-icon-group>
             <div id="title" v-show="!isSubScreen && isTitleScreen">
                 <h1>
-                    InquizIt
+                    {{appName}}
                 </h1>
                 <div>
                     <hr/>
                     <button @click="screenTransition('Assignments')">Assignments</button>
                     <button @click="screenTransition('ProblemSet')">Problem Sets</button>
+                    <br>
+                    <p>
+                        <span v-if="user">Welcome back:</span>
+                        <span v-if="!user">Login:</span>
+                        <input list="users" v-model="user">
+                        <datalist id="users">
+                            <option value="Add User"></option>
+                            <template v-for="name in users">
+                                <option :value="name"></option>
+                            </template>
+                            <option value="Guest"></option>
+                        </datalist>
+                    </p>
                 </div>
             </div>
             <div class="vcenter" v-show="!isSubScreen">
@@ -53,7 +66,33 @@
                         </div>
                     </div>
                 </div>
+                <v-user-subscreen v-show="isThisSubScreen('Users')"></v-user-subscreen>
             </div>
+            <v-popup-screen :visible="shouldShowWelcomeScreen" @close="hideWelcomeScreen = true;">
+                <template v-slot:header>
+                    Welcome to {{appName}}!
+                </template>
+                <template>
+                    <span v-if="isFirstTime == undefined">
+                        Is this your first time using {{appName}}?
+                        <v-icon-group class="inline" :icons="[{icon:'hand-thumbs-up', title:'Yes'}, {icon:'hand-thumbs-down', title:'No'}]" @click="({event, icon})=>{isFirstTime = icon['title'] != 'No';}"></v-icon-group>
+                    </span>
+                    <span v-if="isFirstTime != undefined">
+                        Welcome new user to {{appName}}, a multi-category quizing app.
+                        <ol type="1">
+                            <li>
+                                Click <a @click="openPackagesDir">here</a> to install a question set.
+                            </li>
+                            <li>
+                                Choose a unique username: 
+                                <v-popup>
+                                    <input>
+                                </v-popup>
+                            </li>
+                        </ol>
+                    </span>
+                </template>
+            </v-popup-screen>
         </div>
         <script src="./js/libraries/vue/vue-dev.js"></script>
         <script src="./js/components/grid.js"></script>
@@ -61,9 +100,11 @@
         <script src="./js/components/icon-group.js"></script>
         <script src="./js/components/metatag.js"></script>
         <script src="./js/components/progressbar.js"></script>
+        <script src="./js/components/popup.js"></script>
         <script src="./js/components/icon.js"></script>
         <script src="./js/screens/ProblemSets.js"></script>
         <script src="./js/screens/Question.js"></script>
+        <script src="./js/screens/SubScreens.js"></script>
         <script src="./js/index.js" defer></script>
     </body>
 </html>

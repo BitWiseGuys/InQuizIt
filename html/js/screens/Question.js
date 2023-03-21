@@ -25,7 +25,7 @@ Vue.component("vQuestion", {
     <div id="question">
         <h2>{{title}}</h2>
         <div>
-            <v-progressbar v-if="$root.settings.Questions['Progressbar Enabled'][1]" style="display:inline-block;width:75%;min-width:200px;" :value="50" :max="100" :labeled="$root.settings.Questions['Progressbar Percentage'][1]"></v-progressbar>
+            <v-progressbar v-if="$root.settings.Questions['Progressbar Enabled'][1]" style="display:inline-block;width:75%;min-width:200px;" :value="110" :max="100" :labeled="$root.settings.Questions['Progressbar Percentage'][1]"></v-progressbar>
             <v-icon-group ref="icons" :icons="toolbar" class="right"></v-icon-group>
         </div>
         <div>

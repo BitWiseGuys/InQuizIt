@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "bootstrap-icons": "^1.10.3",
+        "downloads-folder": "^3.0.3",
         "vue-electron": "^1.0.6"
     }
 }

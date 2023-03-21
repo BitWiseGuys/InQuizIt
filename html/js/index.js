@@ -9,12 +9,14 @@ window.Screens = Screens;
 const SubScreens = {
     Settings: 0,
     Results: 1,
+    Users: 2,
 }
 window.SubScreens = SubScreens;
 
 const app = new Vue({
     el: "#MainLayout",
     data: {
+        appName: "InquizIt",
         screen: Screens.Title,
         previousScreen: -1,
         subscreen: SubScreens.Settings,
@@ -40,6 +42,7 @@ const app = new Vue({
             { icon : "arrow-left", title: "Return to previous screen.", value: "Back", options:{ class: "icon-larger" } },
             { icon : "gear-fill", title: "Goto setting screen.", value: SubScreens.Settings, options:{ class: "icon-larger", sticky: true, } },
             { icon : "clipboard", title: "Goto results screen.", value: SubScreens.Results, options:{ class: "icon-larger", sticky: true, } },
+            { icon : "people-fill", title: "Goto users screen.", value: SubScreens.Users, options:{ class: "icon-larger", sticky: true, }},
         ],
         settings: {
             Questions : {
@@ -47,6 +50,10 @@ const app = new Vue({
                 "Progressbar Percentage" : ["checkbox", false],
             }
         },
+        users: [],
+        user: undefined,
+        isFirstTime : undefined,
+        hideWelcomeScreen : false,
     },
     computed: {
         isTitleScreen() {
@@ -61,6 +68,9 @@ const app = new Vue({
         isSubScreen() {
             return this.screen == Screens.SubScreen;
         },
+        shouldShowWelcomeScreen() {
+            return !this.hideWelcomeScreen && this.isFirstTime != false;
+        }
     },
     methods: {
         isThisSubScreen(name) {
@@ -116,12 +126,21 @@ const app = new Vue({
                 ];
             }
         },
+        openPackagesDir() {
+            window.dialog.openPackagesDir();
+        }
     },
     watch: {
         "selectedProblemSet.questions"(newValue) {
             // Select a random problem and pass it to the question screen.
             var i = Math.floor(Math.random() * newValue.length);
             this.$refs.Question.question = newValue[i];
+        },
+        user(newValue) {
+            if(newValue == "Add User") {
+                this.screenTransition(Screens.SubScreen, SubScreens.Users);
+                this.user = "";
+            }
         },
         screen(newValue, oldValue) {
             // Ensure we at the very least passed in a number (doesn't have to be valid).

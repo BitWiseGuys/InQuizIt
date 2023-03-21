@@ -3,15 +3,18 @@ Vue.component("vProgressbar", {
     template: `
     <div class="progressbar">
         <div :style="style">
-            <template v-if="labeled">
-                {{(value / max) * 100}}%
-            </template>
+            <p v-if="labeled" style="margin:0px;padding:0px;padding-right:5px;">
+                {{val}}%
+            </p>
         </div>
     </div>
     `,
     computed: {
+        val() {
+            return Math.round(Math.min((this.value / this.max) * 100, 100));
+        },
         style() {
-            return "width: " + ((this.value / this.max) * 100) + "%; text-align:right; padding-right:15px;";
+            return "width: " + this.val + "%; text-align:right; padding-right:15px;";
         }
     },
 });
