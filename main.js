@@ -1,8 +1,12 @@
-const downloadsFolder = require("downloads-folder");
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 
-const downloadFolder = downloadsFolder();
+var knex = require("knex")({
+  client: "sqlite3",
+  connection: {
+    filename: "./databases/InQuizIt.db"
+  }
+});
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -48,4 +52,13 @@ app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
     }
+
+});
+
+//database API Handlers
+
+//EXAMPLE SQL ASYNC HANDLER
+ipcMain.handle('readTable', async (event, tableName)=> {
+  const res = await knex.select("*").from(tableName);
+  return res;
 });
