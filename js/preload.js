@@ -84,6 +84,8 @@ contextBridge.exposeInMainWorld("ProblemSets", {
 
 //database API functions
 contextBridge.exposeInMainWorld('db', {
+
+  //EXAMPLE RENDERER FUNCTION FOR FRONT END CALL
   selectAllTable: async (tableName) => {
     const res = await ipcRenderer.invoke('readTable', tableName);
     console.log(res);

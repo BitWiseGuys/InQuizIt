@@ -4,7 +4,7 @@ const path = require("path");
 var knex = require("knex")({
   client: "sqlite3",
   connection: {
-    filename: "./databases/test.db"
+    filename: "./databases/InQuizIt.db"
   }
 });
 
@@ -45,6 +45,8 @@ app.on("window-all-closed", () => {
 });
 
 //database API Handlers
+
+//EXAMPLE SQL ASYNC HANDLER
 ipcMain.handle('readTable', async (event, tableName)=> {
   const res = await knex.select("*").from(tableName);
   return res;
