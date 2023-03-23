@@ -1,5 +1,5 @@
 {
-    "name": "testing",
+    "name": "InQuizIt",
     "version": "1.0.0",
     "description": "Test",
     "main": "main.js",
@@ -7,7 +7,7 @@
         "start": "electron .",
       "rebuild": "electron-rebuild -f -w sqlite3"
     },
-    "author": "Andrew Kerr",
+    "author": "BitWise-Guys",
     "license": "ISC",
     "devDependencies": {
         "electron": "^23.1.1",
