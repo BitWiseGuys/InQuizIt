@@ -4,15 +4,19 @@
     "description": "Test",
     "main": "main.js",
     "scripts": {
-        "start": "electron ."
+        "start": "electron .",
+      "rebuild": "electron-rebuild -f -w sqlite3"
     },
     "author": "Andrew Kerr",
     "license": "ISC",
     "devDependencies": {
-        "electron": "^23.1.1"
+        "electron": "^23.1.1",
+        "electron-rebuild": "^3.2.9"
     },
     "dependencies": {
         "bootstrap-icons": "^1.10.3",
+        "knex": "^2.4.2",
+        "sqlite3": "^5.1.6",
         "vue-electron": "^1.0.6"
     }
 }
