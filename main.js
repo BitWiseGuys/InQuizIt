@@ -29,6 +29,16 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
+    ipcMain.handle("openPackagesDir", async () => {
+        return dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+            properties: ["openFile", "multiSelections"],
+            filters: [
+                { name: "Packages", extensions: ["db"], }
+            ],
+            defaultPath: downloadFolder,
+        });
+    });
+
     createWindow();
 
     app.on("activate", () => {
@@ -42,6 +52,7 @@ app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
     }
+
 });
 
 //database API Handlers

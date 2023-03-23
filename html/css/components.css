@@ -25,20 +25,21 @@ div.list-grid-selector {
 
 div.icon-group {
     z-index: 10000000;
+    white-space: nowrap;
 }
 
 /* For first child we place a border curve on our left side. */
-div.icon-group:not(.down) > a.bi:first-child {
+div.icon-group:not(.down) > *:first-child {
     border-radius: 5px 0px 0px 5px;
 }
 
 /* For last child we place a border curve on our right side. */
-div.icon-group:not(.down) > a.bi:last-child {
+div.icon-group:not(.down) > *:last-child {
     border-radius: 0px 5px 5px 0px;
 }
 
 /* For only children we simply surround ourselves with a slight border. */
-div.icon-group:not(.down) > a.bi:only-child {
+div.icon-group:not(.down) > *:only-child {
     border-radius: 5px 5px 5px 5px;
 }
 
@@ -46,7 +47,7 @@ div.icon-group:not(.down) > a.bi:only-child {
  *  If we aren't the first, last, or only child (meaning we are a middle child) then 
  *    we need to remove our border.
  */
-div.icon-group:not(.down) > a.bi:not(:first-child):not(:last-child):not(:only-child) {
+div.icon-group:not(.down) > *:not(:first-child):not(:last-child):not(:only-child) {
     border-radius: 0px 0px 0px 0px;
 }
 
@@ -68,17 +69,17 @@ div.icon-group.down {
 }
 
 /* For first child we place a border curve on our left side. */
-div.icon-group.down > a.bi:first-child {
+div.icon-group.down > *:first-child {
     border-radius: 5px 5px 0px 0px;
 }
 
 /* For last child we place a border curve on our right side. */
-div.icon-group.down > a.bi:last-child {
+div.icon-group.down > *:last-child {
     border-radius: 0px 0px 5px 5px;
 }
 
 /* For only children we simply surround ourselves with a slight border. */
-div.icon-group.down > a.bi:only-child {
+div.icon-group.down > *:only-child {
     border-radius: 5px 5px 5px 5px;
 }
 
@@ -86,6 +87,30 @@ div.icon-group.down > a.bi:only-child {
  *  If we aren't the first, last, or only child (meaning we are a middle child) then 
  *    we need to remove our border.
  */
-div.icon-group.down > a.bi:not(:first-child):not(:last-child):not(:only-child) {
+div.icon-group.down > *:not(:first-child):not(:last-child):not(:only-child) {
     border-radius: 0px 0px 0px 0px;
+}
+
+div.icon-group.inline {
+    display: inline-block;
+}
+
+div.icon-group.inline > * {
+    border: none;
+    background-color: transparent;
+}
+
+div.progressbar {
+    height: var(--progressbar-height);
+    background-color: var(--progressbar-fg-color);
+    border: 1px var(--progressbar-bg-color) solid;
+    border-radius: calc(var(--progressbar-height) / 2);
+    overflow: hidden;
+}
+
+div.progressbar > div {
+    height: var(--progressbar-height);
+    background-color: var(--progressbar-bar-color);
+    border: 1px var(--progressbar-bg-color) solid;
+    border-radius: calc(var(--progressbar-height) / 2);
 }

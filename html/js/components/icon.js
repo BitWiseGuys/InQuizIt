@@ -7,7 +7,11 @@ window["icon"]["shapes"] = ["square", "circle"];
 
 Vue.component("vIcon", {
     props: ["icon", "options", "disabled", "pressed"],
-    template: `<a  :class="'bi bi-' + icon + ' ' + shape + ' ' + (disabled ? 'disabled' : '') + (options && options['class'] ? ' ' + options['class'] : '') + ((options && options['sticky'] && pressed) ? ' icon-pressed' : '')" @click="$emit('click',$event);"></a>`,
+    template: `
+        <a  :class="'bi bi-' + icon + ' ' + shape + ' ' + (disabled ? 'disabled' : '') + (options && options['class'] ? ' ' + options['class'] : '') + ((options && options['sticky'] && pressed) ? ' icon-pressed' : '')" @click="!disabled && $emit('click',$event);">
+            <slot></slot>
+        </a>
+    `,
     data() {
         return {
             shape : "icon-circle",

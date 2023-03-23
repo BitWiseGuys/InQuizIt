@@ -4,7 +4,7 @@
  * Description: A collection of our input tag.
  */
 
- input {
+input {
     padding: 5px 10px 5px 10px;
     background-color: var(--input-bg-color);
     color: var(--input-fg-color);
@@ -36,4 +36,9 @@ input:active {
     -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
     -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
     box-shadow: inset 0px 0px 5px #c1c1c1;
+}
+
+input.invalid {
+    border-color: var(--input-bd-color-invalid);
+    border-width: 2px;
 }

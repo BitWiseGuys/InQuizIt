@@ -10,6 +10,7 @@
 @import url("components.css");
 @import url("screens.css");
 @import url("button.css");
+@import url("popup.css");
 @import url("input.css");
 @import url("link.css");
 @import url("text.css");
@@ -47,6 +48,7 @@
     --input-bg-color: #164259;
     --input-fg-color: #fefefe;
     --input-bd-color: transparent;
+    --input-bd-color-invalid: #CD4631;
     --input-fg-color-hover: #fb9e05;
     --input-fg-color-active: #fb9e05;
     --input-bg-color-active: #022f48;
@@ -57,6 +59,20 @@
     --scrollbar-bg-color: #022f48;
     --scrollbar-fg-color:#164259;
     --scrollbar-fg-color-hover:#fb9e05;
+
+    /*Progressbar style*/
+    --progressbar-height: 24px;
+    --progressbar-bg-color: #022f48;
+    --progressbar-fg-color:#164259;
+    --progressbar-bar-color:#fb9e05;
+
+    /*Popup style*/
+    --popup-bd-color: #fb9e05;
+    --popup-bg-color: #164259;
+    --popup-fg-color: #fefefe;
+    --popup-bd-color-invalid: #CD4631;
+    --popup-bg-color-invalid: #164259;
+    --popup-fg-color-invalid: #fefefe;
 }
 
 body {

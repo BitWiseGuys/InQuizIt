@@ -1,0 +1,158 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 3/21/2023
+ * Description: The CSS file for our popups in the main app.
+ */
+
+.popup {
+    position: relative;
+}
+
+.popup:after {
+    content: attr(popup-text);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left:100%;
+    margin-left: 15px;
+    width: 200px;
+    padding: 10px;
+    border: 1px var(--popup-bd-color) solid;
+    border-radius: 10px;
+    background-color: var(--popup-bg-color);
+    color: var(--popup-fg-color);
+    text-align: center;
+    display: none;
+}
+
+.popup:before {
+    content: "";
+    position:absolute;
+    left:100%;
+    margin-left:-5px;
+    top:50%;
+    transform:translateY(-50%);
+    border:10px solid #000;
+    border-color: transparent var(--popup-bd-color) transparent transparent;
+    display:none;
+}
+
+.popup.below:after {
+    left:50%;
+    transform: translateX(-50%);
+    margin-left: 0px;
+    top: 100%;
+    margin-top: 10px;
+}
+
+.popup.below:before {
+    border-color: transparent transparent var(--popup-bd-color) transparent;
+    margin: initial;
+    left:50%;
+    transform: translateY(-50%);
+    top:100%;
+    margin-top: 5px;
+}
+
+.popup.above:after {
+    margin: initial;
+    margin-bottom: 10px;
+    left:50%;
+    top: 0%;
+    transform: translate(-50%,-150%);
+}
+
+.popup.above:before {
+    border-color: var(--popup-bd-color) transparent transparent transparent;
+    margin: initial;
+    left:50%;
+    transform: translate(-50%,-100%);
+    top:0%;
+    margin-bottom: 10px;
+}
+
+.popup.above.invalid:before {
+    border-color: var(--popup-bd-color-invalid) transparent transparent transparent;
+}
+
+.popup.invalid:after {
+    border-color: var(--popup-bd-color-invalid);
+    background-color: var(--popup-bg-color-invalid);
+    color: var(--popup-fg-color-invalid);
+}
+
+.popup.invalid:not(.below):not(.above):before {
+    border-color: transparent var(--popup-bd-color-invalid) transparent transparent;
+}
+
+.popup.below.invalid:before {
+    border-color: transparent transparent var(--popup-bd-color-invalid) transparent;
+}
+
+.popup.show:before, .popup.show:after {
+    display: block;
+}
+
+.popup-screen {
+    visibility: hidden;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: #0005;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-screen.show {
+    visibility: visible;
+}
+
+.popup-screen > div {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    background-color: var(--popup-bg-color);
+    width: 60%;
+    max-width: 450px;
+    border-radius: 10px;
+}
+
+.popup-screen > div > div.header {
+    flex: 0 1 auto;
+    border-bottom: 1px var(--popup-bd-color) solid;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: var(--popup-fg-color);
+}
+
+.popup-screen > div > div.header > span {
+    display: inline-block;
+    padding: 5px;
+}
+
+.popup-screen > div > div.header > a.bi {
+    float:right;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.popup-screen > div > div.section {
+    flex: 1 1 auto;
+    padding-top: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+    color: var(--popup-fg-color);
+}
+
+.popup-screen > div > div.footer {
+    flex: 0 1 auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 5px;
+    color: var(--popup-fg-color);
+}

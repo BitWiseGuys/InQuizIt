@@ -21,7 +21,7 @@ Vue.component("problemSetScreen", {
         <div><v-icon-group ref="icons" :icons="options" @change="setMode" class="right"></v-icon-group></div>
         <div :class="mode">
             <template v-for="category, i in $root.problemSetGroup.categories">
-                <h3><v-icon v-if="mode=='list'" class='icon-blank' :icon="isCollapsed(category.title) ? 'caret-right-fill' : 'caret-down'" @click="collapse(category.title)"></v-icon>{{category.title}}</h3>
+                <h3 @click="collapse(category.title)"><v-icon v-if="mode=='list'" class='icon-blank' :icon="isCollapsed(category.title) ? 'caret-right-fill' : 'caret-down'"></v-icon>{{category.title}}</h3>
                 <div v-if="mode != 'list' || !isCollapsed(category.title)" v-for="_, name in category.sets">
                     <button :class="{active : (active_set == name && active_category == i)}" @click="setActive(name, i)">{{name}}</button>
                 </div>
