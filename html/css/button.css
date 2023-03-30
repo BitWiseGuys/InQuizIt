@@ -8,7 +8,7 @@ button {
     padding: 5px 10px 5px 10px;
     background-color: var(--button-bg-color);
     color: var(--button-fg-color);
-    border: 1px solid;
+    border: 2px solid;
     border-color: var(--button-bd-color);
     border-radius: 5px;
     margin-left: 5px;

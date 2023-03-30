@@ -35,7 +35,6 @@ app.whenReady().then(() => {
             filters: [
                 { name: "Packages", extensions: ["db"], }
             ],
-            defaultPath: downloadFolder,
         });
     });
 

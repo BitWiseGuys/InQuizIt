@@ -52,8 +52,6 @@ const app = new Vue({
         },
         users: [],
         user: undefined,
-        isFirstTime : undefined,
-        hideWelcomeScreen : false,
     },
     computed: {
         isTitleScreen() {
@@ -68,9 +66,6 @@ const app = new Vue({
         isSubScreen() {
             return this.screen == Screens.SubScreen;
         },
-        shouldShowWelcomeScreen() {
-            return !this.hideWelcomeScreen && this.isFirstTime != false;
-        }
     },
     methods: {
         isThisSubScreen(name) {
@@ -126,9 +121,6 @@ const app = new Vue({
                 ];
             }
         },
-        openPackagesDir() {
-            window.dialog.openPackagesDir();
-        }
     },
     watch: {
         "selectedProblemSet.questions"(newValue) {

@@ -27,6 +27,7 @@
                     <button @click="screenTransition('ProblemSet')">Problem Sets</button>
                     <br>
                     <p>
+                        
                         <span v-if="user">Welcome back:</span>
                         <span v-if="!user">Login:</span>
                         <input list="users" v-model="user">
@@ -68,31 +69,17 @@
                 </div>
                 <v-user-subscreen v-show="isThisSubScreen('Users')"></v-user-subscreen>
             </div>
-            <v-popup-screen :visible="shouldShowWelcomeScreen" @close="hideWelcomeScreen = true;">
+            <!-- <v-popup-screen :visible="true">
                 <template v-slot:header>
-                    Welcome to {{appName}}!
+                    Title here
                 </template>
                 <template>
-                    <span v-if="isFirstTime == undefined">
-                        Is this your first time using {{appName}}?
-                        <v-icon-group class="inline" :icons="[{icon:'hand-thumbs-up', title:'Yes'}, {icon:'hand-thumbs-down', title:'No'}]" @click="({event, icon})=>{isFirstTime = icon['title'] != 'No';}"></v-icon-group>
-                    </span>
-                    <span v-if="isFirstTime != undefined">
-                        Welcome new user to {{appName}}, a multi-category quizing app.
-                        <ol type="1">
-                            <li>
-                                Click <a @click="openPackagesDir">here</a> to install a question set.
-                            </li>
-                            <li>
-                                Choose a unique username: 
-                                <v-popup>
-                                    <input>
-                                </v-popup>
-                            </li>
-                        </ol>
-                    </span>
+                    This is a test body...
                 </template>
-            </v-popup-screen>
+                <template v-slot:footer>
+                    Footer here
+                </template>
+            </v-popup-screen> -->
         </div>
         <script src="./js/libraries/vue/vue-dev.js"></script>
         <script src="./js/components/grid.js"></script>

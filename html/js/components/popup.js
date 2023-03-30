@@ -8,13 +8,13 @@ Vue.component("vPopup", {
 });
 
 Vue.component("vPopupScreen", {
-    props: ["visible", "type"],
+    props: ["visible", "type", "closeable"],
     template: `
     <div :class="'popup-screen ' + type + ' ' + (visible ? 'show' : '')">
         <div>
             <div class="header">
                 <span><slot name="header"></slot></span>
-                <v-icon icon="x-circle-fill" @click="$emit('close');"> Close</v-icon>
+                <v-icon v-if="closeable == undefined || closeable" icon="x-circle-fill" @click="$emit('close');"> Close</v-icon>
             </div>
             <div class="section">
                 <span><slot></slot></span>
