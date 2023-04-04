@@ -1,0 +1,59 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 4/04/2023
+ */
+
+div.icons {
+    display: inline-block;
+    padding: 0;
+    margin: auto;
+    height: 100%;
+    width: 100%;
+}
+
+*.group-vertical div.icons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+a.icon {
+    /* Display modifications */
+    display: inline;
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;
+    margin: auto;
+    width: fit-content;
+
+    /* Border Style */
+    border: 1px transparent solid;
+    border-radius: 5px;
+    
+    /* Font Style */
+    font-family: "Lato Regular";
+    font-size: 15pt;
+
+    /* Theme Style */
+    color: var(--icon-fg-color);
+    background-color: var(--icon-bg-color);
+}
+
+a.icon-pressed:not(.disabled), a.icon.clickable:active:not(.disabled) {
+    color: var(--icon-fg-color-click);
+    background-color: var(--icon-bg-color-click);
+    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+    box-shadow: inset 0px 0px 5px #c1c1c1;
+}
+
+a.icon.clickable:hover {
+    color: var(--icon-fg-color-hover);
+    text-decoration: none;
+}
+
+a.icon.disabled {
+    color: var(--icon-fg-color-disabled);
+    text-decoration: none;
+    cursor: not-allowed;
+}

@@ -16,82 +16,44 @@
     </head>
     <body>
         <div id="MainLayout">
-            <v-icon-group v-show="!isSubScreen" id="navbar" :icons="mainIconGroup" class="down" @click="mainIconGroupClick"></v-icon-group>
-            <div id="title" v-show="!isSubScreen && isTitleScreen">
-                <h1>
-                    {{appName}}
-                </h1>
-                <div>
-                    <hr/>
-                    <button @click="screenTransition('Assignments')">Assignments</button>
-                    <button @click="screenTransition('ProblemSet')">Problem Sets</button>
-                    <br>
-                    <p>
-                        
-                        <span v-if="user">Welcome back:</span>
-                        <span v-if="!user">Login:</span>
-                        <input list="users" v-model="user">
+            <v-overlay name="default">
+                <v-group :direction="'horizontal'">
+                    <v-group-cell>
+                        <v-icons mode="select">
+                            <v-icon icon="house-fill"></v-icon>
+                            <v-icon icon="gear-fill"></v-icon>
+                        </v-icons>
+                    </v-group-cell>
+                    <v-group-cell>
+                        <v-icon icon="gear" :clickable="false" @click="clicked($event)"></v-icon>
+                    </v-group-cell>
+                    <v-group-cell style="width:200px">
+                        <v-progressbar :max="100" :value="50" :labeled="true"></v-progressbar>
+                    </v-group-cell>
+                    <v-group-cell>
+                        <input type="text" placeholder="Username" list="users">
                         <datalist id="users">
-                            <option value="Add User"></option>
-                            <template v-for="name in users">
-                                <option :value="name"></option>
+                            <template v-for="user in users">
+                                <option :value="user"></option>
                             </template>
-                            <option value="Guest"></option>
                         </datalist>
-                    </p>
+                        <button>Sign In</button>
+                    </v-group-cell>
+                </v-group>
+            </v-overlay>
+            <v-screen name="default">
+                <h1>{{appName}}</h1>
+                <div>
+                    <hr>
+                    <button>Hello World</button>
                 </div>
-            </div>
-            <div class="vcenter" v-show="!isSubScreen">
-                <problem-set-screen ref="ProblemSet"
-                    v-show="isProblemSetScreen">
-                </problem-set-screen>
-                <v-question ref="Question" 
-                    v-show="isQuestionScreen">
-                </v-question>
-            </div>
-            <div v-show="isSubScreen" class="vcenter">
-                <v-icon-group ref="subnavbar" id="subnavbar" :icons="subIconGroup" @click="subIconGroupClick"></v-icon-group>
-                <div id="settings" v-show="isThisSubScreen('Settings')">
-                    <h2>Settings</h2>
-                    <div>
-                        <div v-for="group, name in settings">
-                            <div>
-                                <h2>{{name}}</h2>
-                                <template v-for="value, setting in group">
-                                    <p>
-                                        {{setting}}
-                                        <input :type="value[0]" :name="name + ':' + setting" v-model="value[1]">
-                                    </p>
-                                </template>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <v-user-subscreen v-show="isThisSubScreen('Users')"></v-user-subscreen>
-            </div>
-            <!-- <v-popup-screen :visible="true">
-                <template v-slot:header>
-                    Title here
-                </template>
-                <template>
-                    This is a test body...
-                </template>
-                <template v-slot:footer>
-                    Footer here
-                </template>
-            </v-popup-screen> -->
+            </v-screen>
         </div>
         <script src="./js/libraries/vue/vue-dev.js"></script>
-        <script src="./js/components/grid.js"></script>
-        <script src="./js/components/grid-flexbox.js"></script>
-        <script src="./js/components/icon-group.js"></script>
-        <script src="./js/components/metatag.js"></script>
         <script src="./js/components/progressbar.js"></script>
-        <script src="./js/components/popup.js"></script>
+        <script src="./js/components/screen.js"></script>
+        <script src="./js/components/group.js"></script>
         <script src="./js/components/icon.js"></script>
-        <script src="./js/screens/ProblemSets.js"></script>
-        <script src="./js/screens/Question.js"></script>
-        <script src="./js/screens/SubScreens.js"></script>
         <script src="./js/index.js" defer></script>
     </body>
 </html>
