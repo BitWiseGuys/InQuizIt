@@ -51,7 +51,6 @@ app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
     }
-
 });
 
 //database API Handlers
@@ -59,5 +58,25 @@ app.on("window-all-closed", () => {
 //EXAMPLE SQL ASYNC HANDLER
 ipcMain.handle('readTable', async (event, tableName)=> {
   const res = await knex.select("*").from(tableName);
+  return res;
+});
+
+ipcMain.handle('getQuestionSets', async (event) => {
+  const res = await knex.select("*").from("QuestionSets_T");
+  return res;
+})
+
+ipcMain.handle('getQuestionSet', async (event, setName, setOptions) => {
+  const res = await knex.select("*").from("QuestionSets_T").where({SetName : setName, SetOptions : setOptions});
+  return res;
+});
+
+ipcMain.handle('getQuestionsFromSet', async (event, setName) => {
+  const res = await knex.select("*").from("Questions_T").where({SetName : setName, SetOptions : setOptions});
+  return res;
+});
+
+ipcMain.handle('getAnswersToQuestion', async (event, questionId) => {
+  const res = await knex.select("*").from("Answers_T").where({QuestionID: questionId});
   return res;
 });

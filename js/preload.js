@@ -91,7 +91,30 @@ contextBridge.exposeInMainWorld('db', {
     const res = await ipcRenderer.invoke('readTable', tableName);
     console.log(res);
     return res;
-  }
+  },
 
+  getQuestionSets : async () => {
+    const res = await ipcRenderer.invoke('getQuestionSets');
+    console.log(res);
+    return res;
+  },
+
+  getQuestionSet : async (setName, setOptions) => {
+    const res = await ipcRenderer.invoke('getQuestionSet', setName, setOptions);
+    console.log(res);
+    return res;
+  },
+
+  getQuestionsFromSet : async (setName, setOptions) => {
+    const res = await ipcRenderer.invoke('getAllQuestionsFromSet', setName, setOptions);
+    console.log(res);
+    return res;
+  },
+
+  getAnswersToQuestion : async (questionId) => {
+    const res = await ipcRenderer.invoke('getAnswerstoQuestion', questionId);
+    console.log(res);
+    return res;
+  }
 
 });
