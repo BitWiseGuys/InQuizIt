@@ -91,6 +91,25 @@ contextBridge.exposeInMainWorld('db', {
     const res = await ipcRenderer.invoke('readTable', tableName);
     console.log(res);
     return res;
+  },
+
+
+  //DATABASE INSERTION MAIN INVOKERS
+
+  //CREATES NEW QUESTIONSET DATA ROW GIVEN CATAGORY, NAME, SUBOPTIONS
+  //window.db.newQuestionSet(Catagory,Name,Options);
+  newQuestionSet: async (Catagory, Name, Options) => {
+    const res = await ipcRenderer.invoke('newQuestionSet', Catagory, Name, Options);
+    console.log(res);
+    return res;
+  },
+
+  //CREATES NEW QUESTION DATA ROW GIVEN CATAGORY, NAME, SUBOPTIONS, QUESTIONTYPE, QUESTIONCONTENT
+  //window.db.newQuestion(Catagory,Name,Options,Type, Question);
+  newQuestion: async (Catagory, Name, Options, Type, Question) => {
+    const res = await ipcRenderer.invoke('newQuestion', Catagory, Name, Options, Type, Question);
+    console.log(res);
+    return res;
   }
 
 
