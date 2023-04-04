@@ -110,6 +110,24 @@ contextBridge.exposeInMainWorld('db', {
     const res = await ipcRenderer.invoke('newQuestion', Catagory, Name, Options, Type, Question);
     console.log(res);
     return res;
+  },
+
+  //CREATE NEW ANSWER FOR AN ALREADY EXISTING QUESTION
+  //window.db.newAnswer(Catagory,Name,Options,Type,Question,Ans);
+  newAnswer: async (Catagory, Name, Options, Type, Question, Ans) => {
+    const res = await ipcRenderer.invoke('newAnswer', Catagory, Name, Options, Type, Question,Ans);
+    console.log(res);
+    return res;
+  },
+
+  //CREATE NEW ANSWER AND A NEW QUESTION
+  //window.db.newQuestionWithAnswer(Catagory,Name,Options,Type,Question,Ans);
+  newQuestionWithAnswer: async (Catagory, Name, Options, Type, Question, Ans) => {
+    const res1 = await ipcRenderer.invoke('newQuestion', Catagory, Name, Options, Type, Question);
+    console.log(res1);
+    const res2 = await ipcRenderer.invoke('newAnswer', Catagory, Name, Options, Type, Question,Ans);
+    console.log(res2);
+    return res2;
   }
 
 
