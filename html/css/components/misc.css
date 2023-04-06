@@ -1,0 +1,127 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 04/06/2023
+ */
+
+div.users {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: left;
+    color: var(--theme-color-foreground-primary);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+div.table {
+    display: flex;
+}
+
+div.table.table-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: left;
+}
+
+div.table.table-grid {
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+div.children-blocks > * {
+    display: block;
+    margin: 5px;
+}
+
+*.flex-expand {
+    flex: 1 1 auto;
+}
+
+*.flex-fit-content {
+    flex: 0 1 auto;
+}
+
+*.float-right {
+    float: right;
+}
+
+*.padding-15 {
+    padding: 15px;
+}
+
+*.margin-5 {
+    margin: 5px;
+}
+
+*.margin-top-none {
+    margin-top: 0px;
+}
+
+div.tabs {
+    padding-left: 15px;
+}
+
+button.tab {
+    margin: 0;
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: var(--theme-color-background-primary);
+    border: 1px solid;
+    border-radius: 5px 5px 0px 0px;
+    border-color: var(--theme-color-foreground-primary);
+    border-bottom: none;
+    color: var(--theme-color-foreground-primary);
+    width:fit-content;
+    display: inline-block;
+}
+
+button.tab.active {
+    border-color: var(--theme-color-accent-normal);
+    background-color: var(--theme-color-background-secondary);
+    text-decoration: underline;
+    text-decoration-color: var(--theme-color-accent-normal);
+}
+
+button.tab:hover:not(:disabled) {
+    border-color: var(--theme-color-accent-normal);
+    background-color: var(--theme-color-background-secondary);
+    text-decoration: underline;
+    text-decoration-color: var(--theme-color-accent-normal);
+}
+
+div.tabbed {
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: var(--theme-color-background-primary);
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: var(--theme-color-accent-normal);
+    color: var(--theme-color-foreground-primary);
+}
+
+*.border-top-accent {
+    border-top: 1px var(--theme-color-accent-normal) solid;
+}
+
+*.text-nowrap {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+table {
+    border: 1px var(--theme-color-accent-normal) solid;
+    border-radius: 5px;
+    margin: auto;
+    width: 100%;
+}
+
+.hoverable:hover {
+    border-color: var(--theme-color-accent-normal);
+    background-color: var(--theme-color-background-secondary);
+    text-decoration: underline;
+    text-decoration-color: var(--theme-color-accent-normal);
+    cursor: default;
+}

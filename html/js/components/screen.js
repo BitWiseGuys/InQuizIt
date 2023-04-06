@@ -18,9 +18,9 @@ Vue.component("vScreen", {
 });
 
 Vue.component("vOverlay", {
-    props: ["name"],
+    props: ["name", "type"],
     template: `
-    <div v-show="shouldShow" class="overlay">
+    <div v-show="shouldShow" :class="'overlay overlay-' + (type ? type : 'normal')">
         <slot></slot>
     </div>
     `,
@@ -30,3 +30,21 @@ Vue.component("vOverlay", {
         },
     },
 })
+
+Vue.component("vFrame", {
+    props: ["closeable"],
+    template: `
+    <div class="frame">
+        <div class="header">
+            <span><slot name="header"></slot></span>
+            <v-icon v-if="closeable != undefined && closeable" icon="x-circle-fill" @click="$emit('close');"> Close</v-icon>
+        </div>
+        <div class="section">
+            <slot></slot>
+        </div>
+        <div class="footer">
+            <slot name="footer"></slot>
+        </div>
+    </div>
+    `
+});

@@ -11,6 +11,7 @@
 @import url("./components/screen.css");
 @import url("./components/group.css");
 @import url("./components/icons.css");
+@import url("./components/misc.css");
 @import url("button.css");
 @import url("input.css");
 @import url("text.css");
@@ -38,7 +39,9 @@
     --text-color: var(--theme-color-foreground-primary);
     --text-color-inactive: var(--theme-color-foreground-secondary);
 
-    /*Panel Color's*/
+    /*Frame Color's*/
+    --frame-bg-color: var(--theme-color-background-primary);
+    --frame-bd-color: var(--theme-color-accent-normal);
     --panel-bg-color: var(--theme-color-background-quaternary);
 
     /*Icon Color's*/
@@ -56,7 +59,10 @@
     --button-bd-color: transparent;
     --button-fg-color-hover: var(--theme-color-accent-normal);
     --button-fg-color-click: var(--theme-color-accent-normal);
-    --button-bg-color-click: var(--theme-color-background-secondary);
+    --button-bg-color-click: var(--theme-color-background-quaternary);
+    --button-bd-color-click: var(--theme-color-background-secondary);
+    --button-fg-color-disabled: var(--theme-color-foreground-secondary);
+    --button-bg-color-disabled: var(--theme-color-background-tertiary);
 
     /*Input Color's*/
     --input-bg-color: var(--theme-color-background-tertiary);
