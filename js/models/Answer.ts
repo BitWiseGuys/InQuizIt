@@ -1,4 +1,9 @@
 export interface Answer {
-    questionId: number;
-    answer:     string;
+    packageName     : string;
+    setCatagory     : string;
+    setName         : string;
+    setOptions      : string;
+    QuestionType    : string;
+    questionContent : string;
+    answer          : string;
 }

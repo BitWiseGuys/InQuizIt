@@ -1,5 +1,4 @@
 export interface Question {
-    questionID      : number;
     packageName     : string;
     setCategory     : string;
     setName         : string;

@@ -66,17 +66,25 @@ ipcMain.handle('getQuestionSets', async (event) => {
   return res;
 })
 
-ipcMain.handle('getQuestionSet', async (event, setName, setOptions) => {
-  const res = await knex.select("*").from("QuestionSets_T").where({SetName : setName, SetOptions : setOptions});
+ipcMain.handle('getQuestionSet', async (event, setName, setOptions, setCategory) => {
+  const res = await knex.select("*").from("QuestionSets_T").where({SetName     : setName, 
+                                                                   SetOptions  : setOptions, 
+                                                                   SetCategory : setCategory});
   return res;
 });
 
-ipcMain.handle('getQuestionsFromSet', async (event, setName) => {
-  const res = await knex.select("*").from("Questions_T").where({SetName : setName, SetOptions : setOptions});
+ipcMain.handle('getQuestionsFromSet', async (event, setName, setOptions, setCategory) => {
+  const res = await knex.select("*").from("Questions_T").where({SetName     : setName, 
+                                                                SetOptions  : setOptions, 
+                                                                SetCategory : setCategory});
   return res;
 });
 
-ipcMain.handle('getAnswersToQuestion', async (event, questionId) => {
-  const res = await knex.select("*").from("Answers_T").where({QuestionID: questionId});
+ipcMain.handle('getAnswersToQuestion', async (event, setName, setOptions, setCategory, questionContent, questionType) => {
+  const res = await knex.select("*").from("Answers_T").where({SetName         : setName, 
+                                                              SetOptions      : setOptions,
+                                                              SetCategory     : setCategory,
+                                                              QuestionType    : questionType,
+                                                              QuestionContent : questionContent});
   return res;
 });
