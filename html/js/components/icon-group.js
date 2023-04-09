@@ -1,3 +1,17 @@
+/**
+ * Author: Andrew Kerr
+ * Data: 3/23/2023
+ * Description: Defines an HTML/VueJS element, v-icon-group used to display multiple icon's within a group.
+ */
+
+/** DEPRECATED
+ * HTML Tag: <v-icon-group :icons=array :disabled=boolean></v-icon-group>
+ * HTML Attributes:
+ *  icons[array]      : An array of objects of which each object defines an icon, its options and an optional title.
+ *  disabled[boolean] : A boolean value that indicates if the icon group is disabled or not.
+ * Vue Slot: <template v-slot:'slot name'> | <template #'slot name'>
+ *  prepend: Prepends the given elements to the icon group.
+ */
 Vue.component("vIconGroup", {
     props: ["icons", "disabled"],
     template: `

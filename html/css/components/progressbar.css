@@ -1,0 +1,58 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 4/04/2023
+ * Description:
+ */
+
+div.progressbar {
+    width: 100%;
+    height: var(--progressbar-size);
+    background-color: var(--progressbar-bg-color);
+    display: inline-flex;
+    vertical-align: bottom;
+    padding: 0px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+    text-align: left;
+    overflow: hidden;
+}
+
+div.progressbar > div {
+    width: var(--progress);
+    height: var(--progressbar-size);
+    background-color: var(--progressbar-bar-color);
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    border-radius: 5px;
+    text-align: right;
+}
+
+div.progressbar > div > p {
+    margin: 0;
+    height: 100%;
+    padding-right: 5px;
+}
+
+*.group-vertical div.progressbar {
+    max-width: var(--progressbar-size);
+    flex-direction: column-reverse;
+    height: 100%;
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+*.group-vertical div.progressbar > div {
+    height: var(--progress);
+    width: var(--progressbar-size);
+}
+
+*.group-vertical div.progressbar > div > p {
+    padding-right: 0;
+    text-align: center;
+    height:initial;
+    width:100%;
+    padding-top: 5px;
+}

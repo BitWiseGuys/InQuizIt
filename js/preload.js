@@ -83,8 +83,7 @@ contextBridge.exposeInMainWorld("ProblemSets", {
 });
 
 
-//database API functions
-contextBridge.exposeInMainWorld('db', {
+
 
 
 //Data Retrieval Calls
@@ -157,3 +156,4 @@ contextBridge.exposeInMainWorld('db', {
 
  
 });
+

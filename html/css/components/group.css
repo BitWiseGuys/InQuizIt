@@ -1,0 +1,96 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 4/04/2023
+ * Description: Defines the CSS properties for the HTML/VueJS v-group tag.
+ */
+
+/* For the group itself, we need it to be placed above almost everything with no wrapping allowed. */
+div.group:not(.group-vertical) {
+    z-index: 10000000;
+    white-space: nowrap;
+    font-size: 0;
+    height: 40px;
+}
+
+div.group.group-vertical {
+    z-index: 10000000;
+    white-space: nowrap;
+    font-size: 0;
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* For all children we need to remove our margin/padding. */
+div.group:not(.group-vertical) > *.group-cell {
+    margin: 0;
+    display: inline-flex;
+    max-height: 100%;
+    min-height: 100%;
+    vertical-align: bottom;
+    background-color: var(--input-bg-color);
+    border-color: var(--input-bd-color);
+}
+
+div.group:not(.group-vertical) > *.group-cell > div {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    max-height: 100%;
+    min-height: 100%;
+    width: 100%;
+    font-size: initial;
+}
+
+div.group.group-vertical > *.group-cell {
+    margin: 0;
+    min-width: 100%;
+    max-width: 100%;
+    background-color: var(--input-bg-color);
+    border-color: var(--input-bd-color);
+}
+
+div.group.group-vertical > *.group-cell > div {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    min-width: 100%;
+    max-width: 100%;
+    height:100%;
+    font-size: initial;
+}
+
+/**
+ *  If we aren't the first, last, or only child (meaning we are a middle child) then 
+ *    we need to remove our border curve.
+ */
+div.group > *.group-cell:not(:first-child):not(:last-child):not(:only-child) {
+    border-radius: 0px 0px 0px 0px;
+}
+
+/* For first child, we place a border curve on our left side. */
+div.group:not(.group-vertical) > *.group-cell:first-child {
+    border-radius: 5px 0px 0px 5px;
+}
+
+div.group.group-vertical > *.group-cell:first-child {
+    border-radius: 5px 5px 0px 0px;
+}
+
+/* For last child, we place a border curve on our right side. */
+div.group:not(.group-vertical) > *.group-cell:last-child {
+    border-radius: 0px 5px 5px 0px;
+}
+
+div.group.group-vertical > *.group-cell:last-child {
+    border-radius: 0px 0px 5px 5px;
+}
+
+/* For only children, we simply surround ourselves with a slight border curve. */
+div.group:not(.group-vertical) > *.group-cell:only-child {
+    border-radius: 5px 5px 5px 5px;
+}
+
+div.group > *.group-cell > div {
+    margin: auto;
+}

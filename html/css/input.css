@@ -16,7 +16,6 @@ input {
     margin-left: 5px;
     margin-right: 5px;
     font-family: "Lato Regular";
-    /* font-size: 125%; */
 }
 
 input::placeholder {
@@ -33,12 +32,17 @@ input:hover {
 input:active {
     color: var(--input-fg-color-active);
     background-color: var(--input-bg-color-active);
-    -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
-    -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
-    box-shadow: inset 0px 0px 5px #c1c1c1;
+    -webkit-box-shadow: inset 0px 0px 5px var(--input-bg-color-active);
+    -moz-box-shadow: inset 0px 0px 5px var(--input-bg-color-active);
+    box-shadow: inset 0px 0px 5px var(--input-bg-color-active);
 }
 
 input.invalid {
     border-color: var(--input-bd-color-invalid);
     border-width: 2px;
+}
+
+*.group input {
+    /* --input-bd-color: var(--theme-color-background-quaternary); */
+    --input-bg-color: var(--theme-color-background-secondary);
 }

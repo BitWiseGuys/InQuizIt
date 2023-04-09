@@ -1,8 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 
-const dbMngr = require('./dbManager');
 
+const dbMngr = require('./dbManager');
 
 
 const createWindow = () => {
@@ -65,6 +65,7 @@ ipcMain.handle('newQuestionSet', async (event, Category, Name, Options)=> {
   return res;
 });
 
+
 ipcMain.handle('newQuestion', async (event, Category, Name, Options, Type, Question)=> {
   const res = await dbMngr.newQuestion(Category, Name, Options, Type, Question);
   return res;
@@ -97,4 +98,5 @@ ipcMain.handle('getAllAnswers', async (event,  setCategory, setName, setOptions,
   const res = await dbMngr.getAllAnswers(setCategory, setName, setOptions, questionContent, questionType);
   return res;
 });
+
 
