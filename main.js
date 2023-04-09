@@ -1,12 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 
-var knex = require("knex")({
-  client: "sqlite3",
-  connection: {
-    filename: "./databases/InQuizIt.db"
-  }
-});
+const dbInsert = require('./dbInserter');
+
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -53,14 +49,27 @@ app.on("window-all-closed", () => {
     }
 });
 
-//database API Handlers
 
-//EXAMPLE SQL ASYNC HANDLER
-ipcMain.handle('readTable', async (event, tableName)=> {
-  const res = await knex.select("*").from(tableName);
+//ELECTRON MAIN HANDLERS FOR DATA INSERTIONS
+ipcMain.handle('newQuestionSet', async (event, Catagory, Name, Options)=> {
+  const res = await dbInsert.newQuestionSet(Catagory, Name, Options);
   return res;
 });
 
+ipcMain.handle('newQuestion', async (event, Catagory, Name, Options, Type, Question)=> {
+  const res = await dbInsert.newQuestion(Catagory, Name, Options, Type, Question);
+  return res;
+});
+
+ipcMain.handle('newAnswer', async (event, Catagory, Name, Options, Type, Question,Ans)=> {
+  const res = await dbInsert.newAnswer(Catagory, Name, Options, Type, Question,Ans);
+  return res;
+});
+
+
+
+
+//EDDIE'S ELECTRON HANDLERS
 ipcMain.handle('getQuestionSets', async (event) => {
   const res = await knex.select("*").from("QuestionSets_T");
   return res;
@@ -88,3 +97,4 @@ ipcMain.handle('getAnswersToQuestion', async (event, setName, setOptions, setCat
                                                               QuestionContent : questionContent});
   return res;
 });
+
