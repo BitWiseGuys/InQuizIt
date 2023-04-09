@@ -84,7 +84,8 @@ contextBridge.exposeInMainWorld("ProblemSets", {
 
 
 
-
+//dbManager Calls For Front end
+contextBridge.exposeInMainWorld("db", {
 
 //Data Retrieval Calls
  getAllQuestionSets : async () => {
@@ -151,8 +152,6 @@ contextBridge.exposeInMainWorld("ProblemSets", {
     console.log(res2);
     return res2;
   }
-  
-  
 
  
 });
