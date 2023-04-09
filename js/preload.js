@@ -86,34 +86,28 @@ contextBridge.exposeInMainWorld("ProblemSets", {
 //database API functions
 contextBridge.exposeInMainWorld('db', {
 
-  //EXAMPLE RENDERER FUNCTION FOR FRONT END CALL
-  selectAllTable: async (tableName) => {
-    const res = await ipcRenderer.invoke('readTable', tableName);
-    console.log(res);
-    return res;
-  },
 
-
- getQuestionSets : async () => {
-    const res = await ipcRenderer.invoke('getQuestionSets');
+//Data Retrieval Calls
+ getAllQuestionSets : async () => {
+    const res = await ipcRenderer.invoke('getAllQuestionSets');
     console.log(res);
     return res;
   },
   
-   getQuestionSet : async (setName, setOptions, setCategory) => {
-    const res = await ipcRenderer.invoke('getQuestionSet', setName, setOptions, setCategory);
+   getQuestionSet : async (setCategory, setName, setOptions) => {
+    const res = await ipcRenderer.invoke('getQuestionSet', setCategory, setName, setOptions);
     console.log(res);
     return res;
   },
 
-   getQuestionsFromSet : async (setName, setOptions, setCategory) => {
-    const res = await ipcRenderer.invoke('getAllQuestionsFromSet', setName, setOptions, setCategory);
+   getAllQuestions : async (setCategory, setName, setOptions) => {
+    const res = await ipcRenderer.invoke('getAllQuestions', setCategory, setName, setOptions);
     console.log(res);
     return res;
   },
 
-  getAnswersToQuestion : async (setName, setOptions, setCategory, questionContent, questionType) => {
-    const res = await ipcRenderer.invoke('getAnswerstoQuestion', setName, setOptions, setCategory, questionContent, questionType);
+  getAllAnswers : async (setCategory, setName, setOptions, questionContent, questionType) => {
+    const res = await ipcRenderer.invoke('getAllAnswers', setCategory, setName, setOptions, questionContent, questionType);
     console.log(res);
     return res;
   },
@@ -124,37 +118,37 @@ contextBridge.exposeInMainWorld('db', {
 
   //DATABASE INSERTION MAIN INVOKERS
 
-  //CREATES NEW QUESTIONSET DATA ROW GIVEN CATAGORY, NAME, SUBOPTIONS
-  //window.db.newQuestionSet(Catagory,Name,Options);
-  newQuestionSet: async (Catagory, Name, Options) => {
-    const res = await ipcRenderer.invoke('newQuestionSet', Catagory, Name, Options);
+  //CREATES NEW QUESTIONSET DATA ROW GIVEN Category, NAME, SUBOPTIONS
+  //window.db.newQuestionSet(Category,Name,Options);
+  newQuestionSet: async (Category, Name, Options) => {
+    const res = await ipcRenderer.invoke('newQuestionSet', Category, Name, Options);
     console.log(res);
     return res;
   },
  
 
-  //CREATES NEW QUESTION DATA ROW GIVEN CATAGORY, NAME, SUBOPTIONS, QUESTIONTYPE, QUESTIONCONTENT
-  //window.db.newQuestion(Catagory,Name,Options,Type, Question);
-  newQuestion: async (Catagory, Name, Options, Type, Question) => {
-    const res = await ipcRenderer.invoke('newQuestion', Catagory, Name, Options, Type, Question);
+  //CREATES NEW QUESTION DATA ROW GIVEN Category, NAME, SUBOPTIONS, QUESTIONTYPE, QUESTIONCONTENT
+  //window.db.newQuestion(Category,Name,Options,Type, Question);
+  newQuestion: async (Category, Name, Options, Type, Question) => {
+    const res = await ipcRenderer.invoke('newQuestion', Category, Name, Options, Type, Question);
     console.log(res);
     return res;
   },
 
   //CREATE NEW ANSWER FOR AN ALREADY EXISTING QUESTION
-  //window.db.newAnswer(Catagory,Name,Options,Type,Question,Ans);
-  newAnswer: async (Catagory, Name, Options, Type, Question, Ans) => {
-    const res = await ipcRenderer.invoke('newAnswer', Catagory, Name, Options, Type, Question,Ans);
+  //window.db.newAnswer(Category,Name,Options,Type,Question,Ans);
+  newAnswer: async (Category, Name, Options, Type, Question, Ans) => {
+    const res = await ipcRenderer.invoke('newAnswer', Category, Name, Options, Type, Question,Ans);
     console.log(res);
     return res;
   },
 
   //CREATE NEW ANSWER AND A NEW QUESTION
-  //window.db.newQuestionWithAnswer(Catagory,Name,Options,Type,Question,Ans);
-  newQuestionWithAnswer: async (Catagory, Name, Options, Type, Question, Ans) => {
-    const res1 = await ipcRenderer.invoke('newQuestion', Catagory, Name, Options, Type, Question);
+  //window.db.newQuestionWithAnswer(Category,Name,Options,Type,Question,Ans);
+  newQuestionWithAnswer: async (Category, Name, Options, Type, Question, Ans) => {
+    const res1 = await ipcRenderer.invoke('newQuestion', Category, Name, Options, Type, Question);
     console.log(res1);
-    const res2 = await ipcRenderer.invoke('newAnswer', Catagory, Name, Options, Type, Question,Ans);
+    const res2 = await ipcRenderer.invoke('newAnswer', Category, Name, Options, Type, Question,Ans);
     console.log(res2);
     return res2;
   }

@@ -1,7 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 
-const dbInsert = require('./dbInserter');
+const dbMngr = require('./dbManager');
+
 
 
 const createWindow = () => {
@@ -50,51 +51,50 @@ app.on("window-all-closed", () => {
 });
 
 
-//ELECTRON MAIN HANDLERS FOR DATA INSERTIONS
-ipcMain.handle('newQuestionSet', async (event, Catagory, Name, Options)=> {
-  const res = await dbInsert.newQuestionSet(Catagory, Name, Options);
+
+/********************************************************
+ * 
+ * ELECTRON MAIN HANDLERS FOR KNEX DB CALL
+ * 
+ *******************************************************/
+
+
+//data insertion
+ipcMain.handle('newQuestionSet', async (event, Category, Name, Options)=> {
+  const res = await dbMngr.newQuestionSet(Category, Name, Options);
   return res;
 });
 
-ipcMain.handle('newQuestion', async (event, Catagory, Name, Options, Type, Question)=> {
-  const res = await dbInsert.newQuestion(Catagory, Name, Options, Type, Question);
+ipcMain.handle('newQuestion', async (event, Category, Name, Options, Type, Question)=> {
+  const res = await dbMngr.newQuestion(Category, Name, Options, Type, Question);
   return res;
 });
 
-ipcMain.handle('newAnswer', async (event, Catagory, Name, Options, Type, Question,Ans)=> {
-  const res = await dbInsert.newAnswer(Catagory, Name, Options, Type, Question,Ans);
+ipcMain.handle('newAnswer', async (event, Category, Name, Options, Type, Question,Ans)=> {
+  const res = await dbMngr.newAnswer(Category, Name, Options, Type, Question,Ans);
   return res;
 });
 
 
 
-
-//EDDIE'S ELECTRON HANDLERS
-ipcMain.handle('getQuestionSets', async (event) => {
-  const res = await knex.select("*").from("QuestionSets_T");
-  return res;
-})
-
-ipcMain.handle('getQuestionSet', async (event, setName, setOptions, setCategory) => {
-  const res = await knex.select("*").from("QuestionSets_T").where({SetName     : setName, 
-                                                                   SetOptions  : setOptions, 
-                                                                   SetCategory : setCategory});
+//data retrieval
+ipcMain.handle('getAllQuestionSets', async (event) => {
+  const res = await dbMngr.getAllQuestionSets();
   return res;
 });
 
-ipcMain.handle('getQuestionsFromSet', async (event, setName, setOptions, setCategory) => {
-  const res = await knex.select("*").from("Questions_T").where({SetName     : setName, 
-                                                                SetOptions  : setOptions, 
-                                                                SetCategory : setCategory});
+ipcMain.handle('getQuestionSet', async (event,setCategory, setName, setOptions) => {
+  const res = await dbMngr.getQuestionSet(setCategory, setName, setOptions);
   return res;
 });
 
-ipcMain.handle('getAnswersToQuestion', async (event, setName, setOptions, setCategory, questionContent, questionType) => {
-  const res = await knex.select("*").from("Answers_T").where({SetName         : setName, 
-                                                              SetOptions      : setOptions,
-                                                              SetCategory     : setCategory,
-                                                              QuestionType    : questionType,
-                                                              QuestionContent : questionContent});
+ipcMain.handle('getAllQuestions', async (event, setCategory, setName, setOptions) => {
+  const res = await dbMngr.getAllQuestions(setCategory, setName, setOptions);
+  return res;
+});
+
+ipcMain.handle('getAllAnswers', async (event,  setCategory, setName, setOptions, questionContent, questionType) => {
+  const res = await dbMngr.getAllAnswers(setCategory, setName, setOptions, questionContent, questionType);
   return res;
 });
 
