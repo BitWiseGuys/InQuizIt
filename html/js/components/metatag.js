@@ -1,5 +1,14 @@
-// Parses the given string into an array of string's/objects' (the strings are raw text 
-//   and objects are made up of tags, an optional identifier and an optional attribute).
+/**
+ * Author: Andrew Kerr
+ * Date: 3/06/2023
+ * Description: Defines a HTML/Vue tag, v-metatag, that parses an encoded string, formats it and displays the formatted string.
+ */
+
+/**
+ * Parses the given string into an array of string's/objects' (the strings are raw text and objects are made up of tags, an optional identifier and an optional attribute).
+ * @param {String} text
+ * @returns 
+ */
 function Parse(text) {
     var result = [];
     var string = "";

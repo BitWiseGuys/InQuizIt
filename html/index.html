@@ -16,82 +16,120 @@
     </head>
     <body>
         <div id="MainLayout">
-            <v-icon-group v-show="!isSubScreen" id="navbar" :icons="mainIconGroup" class="down" @click="mainIconGroupClick"></v-icon-group>
-            <div id="title" v-show="!isSubScreen && isTitleScreen">
-                <h1>
-                    {{appName}}
-                </h1>
-                <div>
-                    <hr/>
-                    <button @click="screenTransition('Assignments')">Assignments</button>
-                    <button @click="screenTransition('ProblemSet')">Problem Sets</button>
-                    <br>
-                    <p>
-                        
-                        <span v-if="user">Welcome back:</span>
-                        <span v-if="!user">Login:</span>
-                        <input list="users" v-model="user">
-                        <datalist id="users">
-                            <option value="Add User"></option>
-                            <template v-for="name in users">
-                                <option :value="name"></option>
+            <v-overlay name="default" class="padding-15">
+                <v-group :direction="'horizontal'">
+                    <v-group-cell>
+                        <v-icons>
+                            <v-icon icon="house-fill" @click="screen = 'default';" title="Return Home" :disabled="screen == 'default'"></v-icon>
+                            <v-icon icon="gear-fill" @click="overlay='settings';" title="Change Settings"></v-icon>
+                            <v-icon icon="database-fill-gear" @click="screen = 'database editor'" title="Database Editor"></v-icon>
+                        </v-icons>
+                    </v-group-cell>
+                    <v-group-cell v-show="screen == 'questions'">
+                        <v-progressbar :max="100" :value="50" :labeled="true" :style="'width:400px;'"></v-progressbar>
+                    </v-group-cell>
+                    <v-group-cell>
+                        <v-icon icon="person" @click="overlay='login';" :disabled="screen != 'default'" title="Login/Logout">
+                            {{user ? (user.first + '&nbsp;' + user.last) : 'Login'}}
+                        </v-icon>
+                    </v-group-cell>
+                </v-group>
+            </v-overlay>
+            <v-overlay name="login" type="popup">
+                <v-frame>
+                    <template #header>
+                        <h2>Login</h2>
+                    </template>
+                    <template #default>
+                        <h3>Existing Users:</h3>
+                        <div class="users">
+                            <template v-for="user in users">
+                                <span @click="login_firstname = user.first; login_lastname = user.last;">
+                                    {{user.first}}&nbsp;{{user.last}}
+                                </span>
                             </template>
-                            <option value="Guest"></option>
-                        </datalist>
+                        </div>
+                    </template>
+                    <template #footer>
+                        <p>
+                            Firstname: <input type="text" v-model="login_firstname">
+                            Lastname: <input type="text" v-model="login_lastname">
+                            <v-icon icon="person" @click="login">Login</v-icon>
+                            <v-icon icon="trash" @click="removeUser"></v-icon>
+                        </p>
+                    </template>
+                </v-frame>
+            </v-overlay>
+            <v-overlay name="settings" type="popup">
+                <v-frame :closeable="true" @close="overlay='default';">
+                    <template #header>
+                        <h2>Settings</h2>
+                    </template>
+                    <template #default>
+                        
+                    </template>
+                    <template #footer>
+                        
+                    </template>
+                </v-frame>
+            </v-overlay>
+            <v-screen name="default">
+                <h1>{{appName}}</h1>
+                <div>
+                    <hr><br>
+                    <v-icon icon="list-check" @click="screen = 'assignments'" :disabled="user == undefined">Assignments</v-icon>
+                    &nbsp;&nbsp;
+                    <v-icon icon="list-task" @click="screen = 'problem sets'" :disabled="user == undefined">Problem&nbsp;Sets</v-icon>
+                    <p v-if="user == undefined">
+                        Please Login to Continue.
+                    </p>
+                    <p v-if="user != undefined">
+                        Welcome back: {{user.first}} {{user.last}}!
                     </p>
                 </div>
-            </div>
-            <div class="vcenter" v-show="!isSubScreen">
-                <problem-set-screen ref="ProblemSet"
-                    v-show="isProblemSetScreen">
-                </problem-set-screen>
-                <v-question ref="Question" 
-                    v-show="isQuestionScreen">
-                </v-question>
-            </div>
-            <div v-show="isSubScreen" class="vcenter">
-                <v-icon-group ref="subnavbar" id="subnavbar" :icons="subIconGroup" @click="subIconGroupClick"></v-icon-group>
-                <div id="settings" v-show="isThisSubScreen('Settings')">
-                    <h2>Settings</h2>
-                    <div>
-                        <div v-for="group, name in settings">
-                            <div>
-                                <h2>{{name}}</h2>
-                                <template v-for="value, setting in group">
-                                    <p>
-                                        {{setting}}
-                                        <input :type="value[0]" :name="name + ':' + setting" v-model="value[1]">
-                                    </p>
-                                </template>
-                            </div>
-                        </div>
+            </v-screen>
+            <v-overlay name="question settings" type="popup">
+                <v-frame :closeable="true" @close="overlay='default';">
+                    <template #header>
+                        <h2>{{selected_set[0]}} {{selected_set[1]}} Settings</h2>
+                    </template>
+                    <template>
+                        
+                    </template>
+                </v-frame>
+            </v-overlay>
+            <v-screen name="problem sets" class="no-center">
+                <h2>{{package.title}}</h2>
+                <div :class="'table table-grid'" class="flex-expand">
+                    <div v-for="set, set_name in package.sets" class="children-blocks align-center">
+                        <h3>{{set_name}}</h3>
+                        <template v-for="name in set">
+                            <button @click="selected_set = [set_name, name];" :class="{'active' : (selected_set.length && set_name == selected_set[0] && name == selected_set[1])}">{{name}}</button>
+                        </template>
                     </div>
                 </div>
-                <v-user-subscreen v-show="isThisSubScreen('Users')"></v-user-subscreen>
-            </div>
-            <!-- <v-popup-screen :visible="true">
-                <template v-slot:header>
-                    Title here
-                </template>
-                <template>
-                    This is a test body...
-                </template>
-                <template v-slot:footer>
-                    Footer here
-                </template>
-            </v-popup-screen> -->
+                <br>
+                <div class="flex-fit-content padding-15">
+                    <button class="float-right" :disabled="selected_set.length == 0" @click="screen = 'questions';">
+                        Start &gt;&gt;
+                    </button>
+                    <button class="float-right" :disabled="selected_set.length == 0" @click="overlay='question settings';">
+                        <span class="bi bi-gear-fill"></span> Options
+                    </button>
+                </div>
+            </v-screen>
+            <v-screen name="questions" class="no-center">
+
+            </v-screen>
+            <v-database-editor></v-database-editor>
         </div>
         <script src="./js/libraries/vue/vue-dev.js"></script>
-        <script src="./js/components/grid.js"></script>
-        <script src="./js/components/grid-flexbox.js"></script>
-        <script src="./js/components/icon-group.js"></script>
-        <script src="./js/components/metatag.js"></script>
         <script src="./js/components/progressbar.js"></script>
-        <script src="./js/components/popup.js"></script>
+        <script src="./js/components/metatag.js"></script>
+        <script src="./js/components/screen.js"></script>
+        <script src="./js/components/group.js"></script>
         <script src="./js/components/icon.js"></script>
-        <script src="./js/screens/ProblemSets.js"></script>
-        <script src="./js/screens/Question.js"></script>
-        <script src="./js/screens/SubScreens.js"></script>
+        <script src="./js/database.js"></script>
         <script src="./js/index.js" defer></script>
     </body>
 </html>
