@@ -47,7 +47,6 @@ app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
     }
-
 });
 
 
@@ -64,6 +63,38 @@ ipcMain.handle('newQuestion', async (event, Catagory, Name, Options, Type, Quest
 
 ipcMain.handle('newAnswer', async (event, Catagory, Name, Options, Type, Question,Ans)=> {
   const res = await dbInsert.newAnswer(Catagory, Name, Options, Type, Question,Ans);
+  return res;
+});
+
+
+
+
+//EDDIE'S ELECTRON HANDLERS
+ipcMain.handle('getQuestionSets', async (event) => {
+  const res = await knex.select("*").from("QuestionSets_T");
+  return res;
+})
+
+ipcMain.handle('getQuestionSet', async (event, setName, setOptions, setCategory) => {
+  const res = await knex.select("*").from("QuestionSets_T").where({SetName     : setName, 
+                                                                   SetOptions  : setOptions, 
+                                                                   SetCategory : setCategory});
+  return res;
+});
+
+ipcMain.handle('getQuestionsFromSet', async (event, setName, setOptions, setCategory) => {
+  const res = await knex.select("*").from("Questions_T").where({SetName     : setName, 
+                                                                SetOptions  : setOptions, 
+                                                                SetCategory : setCategory});
+  return res;
+});
+
+ipcMain.handle('getAnswersToQuestion', async (event, setName, setOptions, setCategory, questionContent, questionType) => {
+  const res = await knex.select("*").from("Answers_T").where({SetName         : setName, 
+                                                              SetOptions      : setOptions,
+                                                              SetCategory     : setCategory,
+                                                              QuestionType    : questionType,
+                                                              QuestionContent : questionContent});
   return res;
 });
 

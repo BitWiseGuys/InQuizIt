@@ -94,6 +94,34 @@ contextBridge.exposeInMainWorld('db', {
   },
 
 
+ getQuestionSets : async () => {
+    const res = await ipcRenderer.invoke('getQuestionSets');
+    console.log(res);
+    return res;
+  },
+  
+   getQuestionSet : async (setName, setOptions, setCategory) => {
+    const res = await ipcRenderer.invoke('getQuestionSet', setName, setOptions, setCategory);
+    console.log(res);
+    return res;
+  },
+
+   getQuestionsFromSet : async (setName, setOptions, setCategory) => {
+    const res = await ipcRenderer.invoke('getAllQuestionsFromSet', setName, setOptions, setCategory);
+    console.log(res);
+    return res;
+  },
+
+  getAnswersToQuestion : async (setName, setOptions, setCategory, questionContent, questionType) => {
+    const res = await ipcRenderer.invoke('getAnswerstoQuestion', setName, setOptions, setCategory, questionContent, questionType);
+    console.log(res);
+    return res;
+  },
+
+
+
+
+
   //DATABASE INSERTION MAIN INVOKERS
 
   //CREATES NEW QUESTIONSET DATA ROW GIVEN CATAGORY, NAME, SUBOPTIONS
@@ -103,6 +131,7 @@ contextBridge.exposeInMainWorld('db', {
     console.log(res);
     return res;
   },
+ 
 
   //CREATES NEW QUESTION DATA ROW GIVEN CATAGORY, NAME, SUBOPTIONS, QUESTIONTYPE, QUESTIONCONTENT
   //window.db.newQuestion(Catagory,Name,Options,Type, Question);
@@ -129,6 +158,8 @@ contextBridge.exposeInMainWorld('db', {
     console.log(res2);
     return res2;
   }
+  
+  
 
-
+ 
 });
