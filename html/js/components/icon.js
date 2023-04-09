@@ -14,7 +14,7 @@
  *  default: Appends the given elements after the displayed icon.
  */
 Vue.component("vIcon", {
-    props: ["icon", "disabled", "clickable", "pressed"],
+    props: ["icon", "disabled", "clickable", "pressed", "value"],
     template: `
         <a  :class="'icon bi bi-' + icon + ' icon-square ' + (disabled ? 'disabled' : '') + (isSelected ? ' icon-pressed' : '') + (canClick ? ' clickable' : '')" @click="click($event);">
             <slot></slot>
@@ -23,7 +23,7 @@ Vue.component("vIcon", {
     computed: {
         isSelected() {
             if(this.$parent.mode == "select")
-                return this.$parent.selected == this;
+                return this.$parent.selected == this.value;
             if(this.$parent.mode == "toggle")
                 return this.toggled;
             return this.pressed;
@@ -37,8 +37,10 @@ Vue.component("vIcon", {
             // Check if we can even be clicked.
             if(!this.canClick) return;
             // Handle select and toggle modes.
-            if(this.$parent.mode == "select")
-                this.$parent.selected = this;
+            if(this.$parent.mode == "select") {
+                this.$parent.selected = this.value;
+                this.$parent.$emit("change", this.value);
+            }
             if(this.$parent.mode == "toggle")
                 this.toggled = !this.toggled;
             // Call an outside function to inform them of a click.

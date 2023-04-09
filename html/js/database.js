@@ -49,8 +49,14 @@ Vue.component("vDatabaseEditor", {
                 </table>
             </div>
             <div v-show="tab == 'question'" v-if="question">
-                <h3>Question Content</h3>
-                <div>
+                <h3 class="inline">
+                    Question Content
+                </h3>&nbsp;
+                <v-icons mode="select" @change="(val)=>{ display_format = val; }" class="inline">
+                    <v-icon icon="card-text" value="formatted" title="Render Question"></v-icon>
+                    <v-icon icon="body-text" value="text" title="Edit Question"></v-icon>
+                </v-icons>
+                <div v-if="display_format == 'text'" class="margin-10">
                     <textarea v-model="question.content" rows="20" cols="100" :style="'width:100%;resize:none;'"></textarea>
                     <div :style="'width:100%;border: 1px var(--theme-color-accent-normal) solid;border-radius:5px;'">
                         <h3>Content Formatter</h3>
@@ -79,6 +85,9 @@ Vue.component("vDatabaseEditor", {
                         <br>
                     </div>
                 </div>
+                <div v-if="display_format == 'formatted'" class="margin-10">
+                    <v-metatag :context="{}" :text="question.content"></v-metatag>
+                </div>
             </div>
         </div>
     </v-screen>
@@ -97,6 +106,7 @@ Vue.component("vDatabaseEditor", {
                 "noun" : { attributes: false, cacheable: true },
                 "adjective" : { attributes: false, cacheable: true },
             },
+            display_format: undefined,
         }
     },
     methods: {
