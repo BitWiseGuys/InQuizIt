@@ -20,7 +20,6 @@ var knex = require("knex")({
  * 
  *************************************************/
 
-
 //knex insert given row object and table name
 async function insertToTable(row,table) {
   try {
@@ -60,6 +59,12 @@ async function newAnswer(Category,Name,Options,Type,Question,Ans, Package = 'Log
   return res;
 };
 
+async function newUser(FirstName, LastName) {
+  const row = {FirstName: FirstName, LastName: LastName};
+  const table = "Users_T";
+  const res = await insertToTable(row, table);
+  return res;
+}
 
 
 /*************************************************
@@ -68,6 +73,11 @@ async function newAnswer(Category,Name,Options,Type,Question,Ans, Package = 'Log
  * Written by: Eddie Stillman
  * 
  *************************************************/
+
+async function getUsers() {
+  const res = await knex.select("*").from("Users_T");
+  return res;
+}
 
 //returns all available question sets 
 async function getAllQuestionSets() {
