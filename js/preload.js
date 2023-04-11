@@ -93,7 +93,14 @@ contextBridge.exposeInMainWorld("db", {
     console.log(res);
     return res;
   },
+
   
+  getAllCategories : async () => {
+  const res = await ipcRenderer.invoke('getAllCategories');
+  console.log(res);
+  return res;
+  },
+
    getQuestionSet : async (setCategory, setName, setOptions) => {
     const res = await ipcRenderer.invoke('getQuestionSet', setCategory, setName, setOptions);
     console.log(res);
