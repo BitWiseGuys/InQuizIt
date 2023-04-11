@@ -84,6 +84,12 @@ ipcMain.handle('getAllQuestionSets', async (event) => {
   return res;
 });
 
+
+ipcMain.handle('getAllCategories', async (event) => {
+  const res = await dbMngr.getAllCategories();
+  return res;
+});
+
 ipcMain.handle('getQuestionSet', async (event,setCategory, setName, setOptions) => {
   const res = await dbMngr.getQuestionSet(setCategory, setName, setOptions);
   return res;

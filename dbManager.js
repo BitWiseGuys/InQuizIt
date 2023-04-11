@@ -75,6 +75,12 @@ async function getAllQuestionSets() {
   return res;
 };
 
+//returns all available question sets 
+async function getAllCategories() {
+  const res = await knex.select(knex.raw('distinct "SetCategory"')).from("QuestionSets_T");
+  return res;
+};
+
 //return one question set given the (category, name, option)
 async function getQuestionSet(setCategory, setName, setOptions) {
   const res = await knex.select("*").from("QuestionSets_T").where({SetName     : setName, 
@@ -111,6 +117,7 @@ exports.newQuestion = newQuestion;
 exports.newAnswer = newAnswer;
 
 exports.getAllQuestionSets = getAllQuestionSets;
+exports.getAllCategories = getAllCategories;
 exports.getQuestionSet = getQuestionSet;
 exports.getAllQuestions = getAllQuestions;
 exports.getAllAnswers = getAllAnswers;
