@@ -158,7 +158,21 @@ contextBridge.exposeInMainWorld("db", {
     const res2 = await ipcRenderer.invoke('newAnswer', Category, Name, Options, Type, Question,Ans);
     console.log(res2);
     return res2;
+  },
+
+
+  //DELETION FUNCTIONS
+
+  //DELETE GIVEN QUESTION AND ALL REFERENCES TO THIS
+  // 
+  delQuestion: async (Category, Name, Options, Type, Question) => {
+    const res = await ipcRenderer.invoke('delQuestion', Category, Name, Options, Type, Question);
+    console.log(res);
+    return res;
   }
+
+
+
 
  
 });
