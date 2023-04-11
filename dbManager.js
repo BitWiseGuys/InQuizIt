@@ -70,7 +70,7 @@ async function newUser(FirstName, LastName) {
 /*************************************************
  * 
  * Database Retrieval Functions
- * Written by: Eddie Stillman
+ * Written by: Eddie Stillman & Connor Marshall
  * 
  *************************************************/
 
@@ -116,6 +116,32 @@ return res;
 };
 
 
+/*************************************************
+ * 
+ * Database Deletion Functions
+ * Written by: Connor Marshall
+ * 
+ * 
+ *************************************************/
+async function deleteQuestion(setCategory, setName, setOptions, questionContent, questionType) {
+  const res = await knex.del('*').from("Answers_T")
+  .where({SetName         : setName, 
+          SetOptions      : setOptions,
+          SetCategory     : setCategory,
+          QuestionType    : questionType,
+          QuestionContent : questionContent});
+
+  const res2 = await knex.del('*').from("Questions_T")
+  .where({SetName         : setName, 
+          SetOptions      : setOptions,
+          SetCategory     : setCategory,
+          QuestionType    : questionType,
+          QuestionContent : questionContent});
+
+  return res2;
+};
+
+
 
 
 
@@ -131,6 +157,8 @@ exports.getAllCategories = getAllCategories;
 exports.getQuestionSet = getQuestionSet;
 exports.getAllQuestions = getAllQuestions;
 exports.getAllAnswers = getAllAnswers;
+
+exports.deleteQuestion = deleteQuestion;
 
 
 
