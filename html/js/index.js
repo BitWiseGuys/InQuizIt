@@ -11,6 +11,7 @@ const app = new Vue({
         package: { title: "", sets: {} },
         selected_set: [],
         set_options: [],
+        databases: {},
     },
     computed: {
         
@@ -72,14 +73,8 @@ const app = new Vue({
             { first: 'Andrew', last: 'Kerr' },
             { first: 'Grant', last: 'Duchars' },
         ];
-        this.package = {
-            title: "LogiCola",
-            sets: {
-                "Syllogistic": [ 
-                    "Translations", 
-                    "Arguments"
-                ],
-            }
-        };
     },
 });
+
+window.context.root = app;
+window.reloadDatabases();

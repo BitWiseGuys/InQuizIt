@@ -13,6 +13,7 @@
 @import url("./components/icons.css");
 @import url("./components/misc.css");
 @import url("button.css");
+@import url("tables.css");
 @import url("input.css");
 @import url("text.css");
 
@@ -43,6 +44,13 @@
     --frame-bg-color: var(--theme-color-background-primary);
     --frame-bd-color: var(--theme-color-accent-normal);
     --panel-bg-color: var(--theme-color-background-quaternary);
+
+    /*Table Color's*/
+    --table-bg-color-header: var(--theme-color-background-tertiary);
+    --table-bg-color-body: var(--theme-color-background-tertiary);
+    --table-fg-color-header: var(--theme-color-accent-normal);
+    --table-fg-color-body: var(--theme-color-foreground-primary);
+    --table-bd-color: var(--theme-color-accent-normal);
 
     /*Icon Color's*/
     --icon-bg-color: var(--theme-color-background-tertiary);

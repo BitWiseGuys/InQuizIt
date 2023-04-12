@@ -8,213 +8,169 @@ Vue.component("vDatabaseEditor", {
     <v-screen name="database editor" class="no-center">
         <h2>Database Editor</h2>
         <div class="flex-fit-content tabs">
-            <button :class="'tab '+(tab == 'default' ? 'active' : '')" @click="tab = 'default';">Databases</button>
-            <button :class="'tab '+(tab == 'sets' ? 'active' : '')" @click="tab = 'sets';" :disabled="database == undefined || database.sets == undefined">Sets</button>
-            <button :class="'tab '+(tab == 'question' ? 'active' : '')" @click="tab = 'question';" :disabled="question == undefined">Question</button>
-            <button :class="'tab '+(tab == 'answers' ? 'active' : '')" @click="tab = 'answers';" :disabled="question == undefined">Answers</button>
+            <button :class="'tab '+(tab == 'default' ? 'active' : '')" @click="tab = 'default';">Sets</button>
+            <button :class="'tab '+(tab == 'questions' ? 'active' : '')" @click="tab = 'questions';">Questions</button>
+            <button :class="'tab '+(tab == 'question' ? 'active' : '')" @click="tab = 'question';">Question</button>
         </div>
         <div class="flex-expand margin-5 margin-top-none tabbed">
-            <div v-show="tab == 'default'">
-                <h3>Choose Database</h3>
-                <button v-for="db in databases" @click="loadDB(db)" :class="{'active' : (database && database.title == db)}">
-                    {{db}}
-                </button>
-            </div>
-            <div v-show="tab == 'sets'" v-if="database != undefined">
-                <template v-for="sets, category in database.sets">
-                    <h4>{{category}}</h4>
-                    <template v-for="set in sets">
-                        <button @click="loadSet(category, set)" :class="{'active' : (database_set && database_set.category == category && database_set.set == set)}">
-                            {{set.SetName}}-{{set.SetOptions}}
-                        </button>
-                    </template>
-                </template>
-                <h3>Create Set</h3>
-                <input ref="nQuestionCategory" placeholder="Question Category" list="QCategory">
-                <datalist id="QCategory">
-                    <template v-for="_, category in database.sets">
-                        <option :value="category"></option>
-                    </template>
-                </datalist>
-                <input ref="nQuestionSetName" placeholder="Question Set Name">
-                <input ref="nQuestionOptions" placeholder="Question Options">
-                <button @click="addSet">Create Set</button>
-            </div>
-            <br>
-            <div v-show="tab == 'sets'" v-if="database_set != undefined" class="border-top-accent">
-                <h3>{{database_set.category}} {{database_set.set.SetName}}-{{database_set.set.SetOptions}}</h3>
+            <template v-if="tab == 'default'">
                 <table>
                     <tr>
-                        <th>Question Type</th>
-                        <th>Question Content</th>
-                        <th>&nbsp;</th>
+                        <th colspan="5">
+                            <input v-model="filters.SelectionTable" placeholder="Filter">
+                            <button @click="fields.SelectionTable.visible = true"><span class="bi bi-plus"></span>&nbsp;Create Entry</button>
+                        </th>
                     </tr>
-                    <tr v-for="question in database_set.questions">
-                        <td>{{question.QuestionType}}</td>
-                        <td class="text-nowrap">{{question.QuestionContent.substring(0, 100)}}</td>
-                        <td>
-                            <a class="hoverable bi bi-pencil" @click="editQuestion(question)">&nbsp;Edit</a>
-                            <a class="hoverable bi bi-trash">&nbsp;Delete</a>
-                        </td>
+                    <tr>
+                        <th>Package</th>
+                        <th>Category</th>
+                        <th>Set</th>
+                        <th>Options</th>
+                        <th></th>
                     </tr>
+                    <tbody v-show="fields.SelectionTable.visible">
+                        <tr>
+                            <td><input v-model="fields.SelectionTable.package" placeholder="Package" value="Logicola"></td>
+                            <td><input v-model="fields.SelectionTable.category" placeholder="Category" ></td>
+                            <td><input v-model="fields.SelectionTable.set" placeholder="Set" ></td>
+                            <td><input v-model="fields.SelectionTable.options" placeholder="Options" ></td>
+                            <td>
+                                <button @click="closeSelectionTable(true)"><span class="bi bi-plus"></span>&nbsp;Add</button>
+                                <button @click="closeSelectionTable(false)"><span class="bi bi-x"></span>&nbsp;Cancel</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody v-for="categories, package in $root.databases">
+                        <template v-for="sets, category in categories">
+                            <template v-for="options, set in sets">
+                                <tr v-for="opt in options" v-show="(package.indexOf(filters.SelectionTable) != -1) || (category.indexOf(filters.SelectionTable) != -1) || (set.indexOf(filters.SelectionTable) != -1) || (opt.indexOf(filters.SelectionTable) != -1)">
+                                    <td>{{package}}</td>
+                                    <td>{{category}}</td>
+                                    <td>{{set}}</td>
+                                    <td>{{opt}}</td>
+                                    <td>
+                                        <button @click="editSet(package, category, set, options)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
+                                        <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </tbody>
                 </table>
-                <h3>Create Question</h3>
-                <input ref="nQuestionType" list="QTypes" placeholder="Question Type">
+            </template>
+            <template v-if="tab == 'questions'">
+                <h3>{{editor.package}} {{editor.category}} {{editor.set}}-{{editor.options.join("")}}</h3>
+                <table>
+                    <tr>
+                        <th colspan="5">
+                            <input v-model="filters.QuestionTable" placeholder="Filter">
+                            <button @click="setupCreateQuestion();"><span class="bi bi-plus"></span>&nbsp;Create Entry</button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Type</th>
+                        <th>Content (max 100 chars)</th>
+                        <th></th>
+                    </tr>
+                    <tbody v-for="question in editor.questions">
+                        <tr>
+                            <td>{{question.type}}</td>
+                            <td>{{question.content.substring(0,100)}}</td>
+                            <td>
+                                <button disabled="true"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
+                                <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </template>
+            <template v-if="tab == 'question'">
+                <input list="QTypes" placeholder="Question Type" v-model="fields.Question.type">
                 <datalist id="QTypes">
                     <option value="MC">Multiple Choice</option>
-                    <option value="TB">Textbox</option>
+                    <option value="TB">Textbox Answer</option>
                 </datalist>
-                <button @click="addQuestion">Create Question</button>
-            </div>
-            <div v-show="tab == 'question'" v-if="question">
-                <h3 class="inline">
-                    Question Content
-                </h3>&nbsp;
-                <v-icons mode="select" @change="(val)=>{ display_format = val; }" class="inline">
-                    <v-icon icon="card-text" value="formatted" title="Render Question"></v-icon>
-                    <v-icon icon="body-text" value="text" title="Edit Question"></v-icon>
-                </v-icons>
-                <div v-if="display_format == 'text'" class="margin-10">
-                    <textarea v-model="question.QuestionContent" rows="20" cols="100" :style="'width:100%;resize:none;'"></textarea>
-                    <div :style="'width:100%;border: 1px var(--theme-color-accent-normal) solid;border-radius:5px;'">
-                        <h3>Content Formatter</h3>
-                        <div>
-                            <select v-model="insert_format">
-                                <option value="default">Regular Text</option>
-                                <option value="selectable-text">Selectable Text</option>
-                                <option value="generator">Content Generator</option>
-                            </select>
-                            <template v-if="insert_format == 'selectable-text' || insert_format == 'default'">
-                                <input type="text" ref="text" placeholder="Text here">
-                                <span v-if="insert_format == 'selectable-text'"><input type="checkbox" ref="answer">Is Answer?</span>
-                            </template>
-                            <template v-if="insert_format == 'generator'">
-                                <input type="text" ref="gen" list="generators" placeholder="Generator Name" v-model="generator">
-                                <datalist id="generators">
-                                    <option v-for="_, gen in generators" :value="gen"></option>
-                                </datalist>
-                                <input type="text" ref="id" placeholder="Cache Identifier" v-if="$refs.gen && generators[$refs.gen.value].cacheable">
-                                <select v-if="$refs.gen && generators[$refs.gen.value].attributes" ref="attr" placeholder="Attribute">
-                                    <option value="">Stringify</option>
-                                    <option v-for="attr in generators[$refs.gen.value].attributes" :value="attr">{{attr}}</option>
-                                </select>
-                            </template>
-                            <button @click="insertFormatted">Add</button>
+                <div :style="'width:100%;display:flex;'">
+                    <textarea v-model="fields.Question.content" rows="20" cols="100" :style="'resize:none;'" placeholder="Content (use side-panel for special inputs)"></textarea>
+                    <div style="margin-left:4px;">
+                        <h4 :style="'text-align:center;'">Special Inline-Content Tags</h4>
+                        <label>Content Type:</label>
+                        <select v-model="fields.Question.special.type">
+                            <option value=""></option>
+                            <option value="ST">Selectable Text</option>
+                            <option value="GEN">Content Generator</option>
+                        </select>
+                        <div v-if="fields.Question.special.type == 'ST'">
+                            <label>Selectable Text:</label>
+                            <input ref="selectableText" placeholder="Input Selectable Text">
                         </div>
-                        <br>
                     </div>
                 </div>
-                <div v-if="display_format == 'formatted'" class="margin-10">
-                    <v-metatag :context="display_context" :text="question.QuestionContent"></v-metatag>
-                    <v-metatag :context="display_context" :text="question.Answers"></v-metatag>
-                </div>
-            </div>
-            <div v-show="tab == 'answers'" v-if="question">
-                <h3>Answers</h3>
-                <template v-for="answer in question.answers">
-                    <textarea v-model="answer.Answer" rows="1" cols="100" :style="'width:100%;resize:none;'"></textarea>
-                </template>
-            </div>
-            <button v-show="tab == 'question' || tab == 'answers'" @click="saveQuestion">Save Question</button>
+                <textarea v-model="fields.Question.answers" rows="4" cols="100" :style="'width:100%;resize:none;'" placeholder="Answers (seperated by a newline)"></textarea>
+            </template>
         </div>
     </v-screen>
     `,
     data() {
         return {
-            tab: 'default',
-            databases: [],
-            database: undefined,
-            database_set: undefined,
-            question: undefined,
-            insert_format: "default",
-            generator: undefined,
-            generators: {
-                "person" : { attributes: [ "first-name", "last-name" ], cacheable: true },
-                "noun" : { attributes: false, cacheable: true },
-                "adjective" : { attributes: false, cacheable: true },
+            tab: "default",
+            filters: {
+                SelectionTable : "",
+                QuestionTable: "",
             },
-            display_format: undefined,
-            display_context: {},
+            fields: {
+                SelectionTable : {
+                    visible : false, package : "", category : "", set : "", options: "",
+                },
+                Question: {
+                    content: "", type: "", answers: "",
+                    special: {
+                        type: "",
+                    },
+                },
+            },
+            editor: {
+                package : "", category : "", set : "", options: "", questions: [],
+            },
         }
     },
     methods: {
-        loadDB(db) {
-            var promise = window.db.getAllCategories();
-            promise.then((res)=>{
-                console.log(res);
-                this.database = { title : db, sets : {
-                    "A" : [
-                        {
-                            SetName: "A",
-                            SetOptions: "A",
-                        }
-                    ],
-                }};
-            });
-        },
-        loadSet(category, set) {
-            let self = this;
-            var promise = window.db.getAllQuestions(category, set.SetName, set.SetOptions);
-            promise.then((res)=>{
-                self.database_set = {
-                    category: category,
-                    set: set,
-                    questions: res
-                };
-            });
-        },
-        editQuestion(question) {
-            let self = this;
-            var promise = window.db.getAllAnswers(question.SetCategory, question.SetName, question.SetOptions, question.QuestionContent, question.QuestionType);
-            promise.then((res)=>{
-                self.question = question;
-                self.question.answers = res;
-            });
-        },
-        sanitize(str) {
-            var result = str;
-            result = result.replaceAll("[", "\\[");
-            result = result.replaceAll("]", "\\]");
-            result = result.replaceAll("{", "\\{");
-            result = result.replaceAll("}", "\\}");
-            return result;
-        },
-        insertFormatted() {
-            if(this.insert_format == "default")
-                this.question.QuestionContent += this.sanitize(this.$refs["text"].value);
-            else if(this.insert_format == "selectable-text")
-                this.question.QuestionContent += "["+this.sanitize(this.$refs["text"].value)+"]";
-            else if(this.insert_format == "generator") {
-                var result = this.$refs.gen.value;
-                if(this.generators[this.$refs.gen.value].cacheable)
-                    result += ":" + this.sanitize(this.$refs.id.value);
-                if(this.generators[this.$refs.gen.value].attributes && this.$refs.attr.value.length)
-                    result += "(" + this.$refs.attr.value + ")";
-                this.question.QuestionContent += "{"+result+"}";
+        async closeSelectionTable(add) {
+            // Are we actually adding the new info?
+            if(add) {
+                try {
+                    await window.addCategory(this.fields.SelectionTable.package, this.fields.SelectionTable.category, this.fields.SelectionTable.set, this.fields.SelectionTable.options);
+                    await window.reloadDatabases();
+                }
+                catch(err) {
+                    console.error(err);
+                    return;
+                }
             }
+            this.fields.SelectionTable.visible = false;
+            this.fields.SelectionTable.package = "";
+            this.fields.SelectionTable.category = "";
+            this.fields.SelectionTable.set = "";
+            this.fields.SelectionTable.options = "";
         },
-        saveQuestion() {
-
-        },
-        addQuestion() {
-
-        },
-        addSet() {
-            let self = this;
-            window.db.newQuestionSet(this.$refs.nQuestionCategory.value, this.$refs.nQuestionSetName.value, this.$refs.nQuestionOptions.value)
-            .then(()=>{
-                self.loadDB();
+        editSet(package, category, set, options) {
+            this.editor = { package, category, set, options };
+            window.loadQuestionSet(package, category, set);
+            var opts = options;
+            for(var i in opts)
+                window.addOption(opts[i]);
+            window.loadQuestions().then(()=>{
+                this.editor.questions = window.context.questions;
             });
+        },
+        setupCreateQuestion() {
+            this.fields.Question = {
+                content: "", type: "", answers: [],
+            };
+            this.tab = "question";
         }
     },
     created() {
-        let self = this;
-        var promise = window.db.getAllQuestionSets();
-        promise.then((_dbs) => {
-            var dbs = {};
-            for(var i in _dbs)
-                dbs[_dbs[i].PackageName] = true;
-            self.databases = Object.keys(dbs);
-        });
+        
     }
 })

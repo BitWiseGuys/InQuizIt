@@ -1,0 +1,25 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 04/11/2023
+ * Description: A collection of table specific stylings are kept here.
+ */
+
+table {
+    row-gap: 0;
+    column-gap: 0;
+    border-spacing: 0;
+}
+
+table > tr > th, table > thead > tr > th {
+    color: var(--table-fg-color-header);
+    background-color: var(--table-bg-color-header);
+    border: 1px solid;
+    border-color: var(--table-bd-color);
+}
+
+table > tr > td, table > tbody > tr > td {
+    color: var(--table-fg-color-body);
+    background-color: var(--table-bg-color-body);
+    border: 1px solid;
+    border-color: var(--table-bd-color);
+}
