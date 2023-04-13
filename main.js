@@ -76,6 +76,20 @@ ipcMain.handle('newAnswer', async (event, Category, Name, Options, Type, Questio
 });
 
 
+//user insertion
+ipcMain.handle('newUser', async (event, FirstName, LastName)=> {
+  const res = await dbMngr.newUser(FirstName, LastName);
+  return res;
+});
+
+
+
+//user retrieval
+ipcMain.handle('getAllUsers', async (event) => {
+  const res = await dbMngr.getAllUsers();
+  return res;
+});
+
 
 //Question data retrieval
 ipcMain.handle('getAllQuestionSets', async (event) => {
@@ -107,6 +121,16 @@ ipcMain.handle('getAllAnswers', async (event,  setCategory, setName, setOptions,
 //Deletion
 ipcMain.handle('delQuestion', async (event,  setCategory, setName, setOptions, questionContent, questionType) => {
   const res = await dbMngr.deleteQuestion(setCategory, setName, setOptions, questionContent, questionType);
+  return res;
+});
+
+ipcMain.handle('delQuestionSet', async (event,  setCategory, setName, setOptions) => {
+  const res = await dbMngr.deleteQuestionSet(setCategory, setName, setOptions);
+  return res;
+});
+
+ipcMain.handle('delUser', async (event,  firstName, lastName) => {
+  const res = await dbMngr.deleteUser(firstName, lastName);
   return res;
 });
 
