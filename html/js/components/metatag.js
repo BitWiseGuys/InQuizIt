@@ -184,12 +184,15 @@ function FormatText(text, ctx) {
                     }
                     else {
                         var obj = ctx.cached[part['tag']][part['identifier']];
-                        if(typeof(obj.stringify) == 'function')
-                            result += obj.stringify();
-                        else {
-                            console.warn("Metatag is showing cached object to the end-user, should either have attribute or stringify function.", part, obj);
-                            result += "<"+part['tag']+":"+part['identifier']+">";
+                        if(typeof(obj) == "object") {
+                            if(typeof(obj.stringify) == 'function')
+                                result += obj.stringify();
+                            else {
+                                console.warn("Metatag is showing cached object to the end-user, should either have attribute or stringify function.", part, obj);
+                                result += "<"+part['tag']+":"+part['identifier']+">";
+                            }
                         }
+                        else result += obj;
                     }
                 }
                 // Otherwise we will have to generate it.
@@ -210,12 +213,15 @@ function FormatText(text, ctx) {
                                 }
                                 else {
                                     let obj = content;
-                                    if(typeof(obj.stringify) == 'function')
-                                        result += obj.stringify();
-                                    else {
-                                        console.warn("Metatag is showing recent cached object to the end-user, should either have attribute or stringify function.", part, obj);
-                                        result += "<"+part['tag']+":"+part['identifier']+">";
+                                    if(typeof(obj) == "object") {
+                                        if(typeof(obj.stringify) == 'function')
+                                            result += obj.stringify();
+                                        else {
+                                            console.warn("Metatag is showing recent cached object to the end-user, should either have attribute or stringify function.", part, obj);
+                                            result += "<"+part['tag']+":"+part['identifier']+">";
+                                        }
                                     }
+                                    else result += obj;
                                 }
                             }
                         });
@@ -264,6 +270,11 @@ Vue.component("vMetatag", {
     watch: {
         text(newValue) {
             this.formatted = FormatText(newValue, this.context);
+        }
+    },
+    methods: {
+        refresh() {
+            this.formatted = FormatText(this.text, this.context);
         }
     }
 })

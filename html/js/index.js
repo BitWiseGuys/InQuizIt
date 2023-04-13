@@ -1,7 +1,7 @@
 const app = new Vue({
     el: "#MainLayout",
     data: {
-        appName: "InquizIt",
+        appName: "Logicola",
         screen: "default",
         overlay: "default",
         users: [],
@@ -15,6 +15,7 @@ const app = new Vue({
         questionContext: {},
         questionContent: "",
         questionProgress: 0,
+        questionAnswerInput: "",
     },
     computed: {
         
@@ -79,10 +80,12 @@ const app = new Vue({
             if(!q) return;
             // Temporary override for demo
             if(lvl == 4)
-                this.questionContent = "This is a test question that take advantage of the [selectable] text feature along with the ability to generate content {gen-person:1(firstname)}";
+                this.questionContent = "This is a test question that take advantage of the [selectable] text feature along with the ability to generate content\n{gen-UniqueLetter:1}, {gen-UniqueLetter:2}, {gen-UniqueLetter:3}, {gen-UniqueLetter:4}";
             else
                 this.questionContent = q.content;
             this.questionContext = {};
+            this.questionAnswerInput = "";
+            this.$refs.question.refresh();
             this.questionProgress++;
         }
     },

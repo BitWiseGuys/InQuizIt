@@ -80,8 +80,12 @@
                     <v-icon icon="list-check" @click="screen = 'assignments'" :disabled="user == undefined">Assignments</v-icon>
                     &nbsp;&nbsp;
                     <v-icon icon="list-task" @click="screen = 'problem sets'" :disabled="user == undefined">Problem&nbsp;Sets</v-icon>
-                    <p v-if="user == undefined">
-                        Please Login to Continue.
+                    <p v-if="user == undefined" class="smaller-icons">
+                        Please 
+                        <a @click="overlay='login';$event.preventDefault();" href="#">
+                            Login
+                        </a> 
+                        to Continue.
                     </p>
                     <p v-if="user != undefined">
                         Welcome back: {{user.first}} {{user.last}}!
@@ -124,16 +128,17 @@
                 <div class="main panel flex vertical">
                     <div class="flex-stretch">
                         <p>
-                            <v-metatag :context="questionContext" :text="questionContent"></v-metatag>
+                            <v-metatag :context="questionContext" :text="questionContent" ref="question"></v-metatag>
                         </p>
                     </div>
-                    <div class="flex-no-stretch">
-                        <v-group :direction="'horizontal'" class="float-right margin-5">
+                    <div class="flex-no-stretch flex margin-5">
+                        <input type="text" class="flex-stretch" placeholder="Enter answer here" v-model="questionAnswerInput">
+                        <v-group :direction="'horizontal'" class="flex-no-stretch">
                             <v-group-cell>
                                 <v-icons class="smaller-icons">
-                                    <v-icon icon="emoji-frown" title="Not confident" @click="nextQuestion(0)"></v-icon>
-                                    <v-icon icon="emoji-neutral" title="Somewhat confident" @click="nextQuestion(1)"></v-icon>
-                                    <v-icon icon="emoji-smile" title="Confident" @click="nextQuestion(2)"></v-icon>
+                                    <v-icon icon="emoji-frown" title="Not confident" @click="nextQuestion(0)" :disabled="questionAnswerInput.length == 0"></v-icon>
+                                    <v-icon icon="emoji-neutral" title="Somewhat confident" @click="nextQuestion(1)" :disabled="questionAnswerInput.length == 0"></v-icon>
+                                    <v-icon icon="emoji-smile" title="Confident" @click="nextQuestion(2)" :disabled="questionAnswerInput.length == 0"></v-icon>
                                 </v-icons>
                             </v-group-cell>
                         </v-group>

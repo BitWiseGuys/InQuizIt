@@ -88,18 +88,18 @@ div.frame > div.footer {
     padding-right: 10px;
 }
 
-div.flex {
+*.flex {
     display: flex;
 }
 
-div.flex.vertical {
+*.flex.vertical {
     flex-direction: column;
 }
 
-div.flex > div.flex-no-stretch {
+*.flex > *.flex-no-stretch {
     flex: 0 1 auto;
 }
 
-div.flex > div.flex-stretch {
+*.flex > *.flex-stretch {
     flex: 1 1 auto;
 }
