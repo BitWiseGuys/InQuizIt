@@ -107,7 +107,7 @@
             <v-screen name="problem sets" class="no-center">
                 <h2>{{package.title}}</h2>
                 <div :class="'table table-grid'" class="flex-expand">
-                    <div v-for="set, set_name in package.sets" class="children-blocks align-center">
+                    <div v-for="set, set_name in package.sets" class="children-blocks text-center">
                         <h3>{{set_name}}</h3>
                         <template v-for="opts, name in set">
                             <button @click="selected_set = [set_name, name, opts];" :class="{'active' : (selected_set.length && set_name == selected_set[0] && name == selected_set[1])}">{{name}}</button>

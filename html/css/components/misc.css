@@ -27,6 +27,7 @@ div.table.table-grid {
     flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
 }
 
 div.children-blocks > * {
@@ -48,6 +49,10 @@ div.children-blocks > * {
 
 *.float-right {
     float: right;
+}
+
+*.text-center {
+    text-align: center;
 }
 
 *.padding-15 {
