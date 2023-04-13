@@ -74,7 +74,7 @@ async function newUser(FirstName, LastName) {
  * 
  *************************************************/
 
-async function getUsers() {
+async function getAllUsers() {
   const res = await knex.select("*").from("Users_T");
   return res;
 }
@@ -141,6 +141,31 @@ async function deleteQuestion(setCategory, setName, setOptions, questionContent,
   return res2;
 };
 
+async function deleteQuestionSet(setCategory, setName, setOptions) {
+  const res = await knex.del('*').from("Questions_T")
+  .where({SetName         : setName, 
+          SetOptions      : setOptions,
+          SetCategory     : setCategory});
+
+  const res2 = await knex.del('*').from("QestionSets_T")
+  .where({SetName         : setName, 
+          SetOptions      : setOptions,
+          SetCategory     : setCategory});
+
+  return res2;
+};
+
+async function deleteUser(firstName, lastName) {
+  const res = await knex.del('*').from("Scores_T")
+  .where({FirstName         : firstName, 
+          LastName      : lastName});
+
+  const res2 = await knex.del('*').from("Users_T")
+          .where({FirstName      : firstName, 
+                  LastName      : lastName});
+  return res2;
+};
+
 
 
 
@@ -151,7 +176,9 @@ async function deleteQuestion(setCategory, setName, setOptions, questionContent,
 exports.newQuestionSet = newQuestionSet;
 exports.newQuestion = newQuestion;
 exports.newAnswer = newAnswer;
+exports.newUser = newUser;
 
+exports.getAllUsers = getAllUsers;
 exports.getAllQuestionSets = getAllQuestionSets;
 exports.getAllCategories = getAllCategories;
 exports.getQuestionSet = getQuestionSet;
@@ -159,7 +186,6 @@ exports.getAllQuestions = getAllQuestions;
 exports.getAllAnswers = getAllAnswers;
 
 exports.deleteQuestion = deleteQuestion;
-
-
-
+exports.deleteQuestionSet = deleteQuestionSet;
+exports.deleteUser = deleteUser;
 
