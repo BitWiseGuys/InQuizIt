@@ -11,6 +11,10 @@ div.icons {
     width: 100%;
 }
 
+div.icons.smaller-icons > a.icon {
+    font-size: 13pt !important;
+}
+
 *.group-vertical div.icons {
     display: flex;
     flex-wrap: wrap;

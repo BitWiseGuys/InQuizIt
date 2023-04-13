@@ -133,3 +133,16 @@ table {
     text-decoration-color: var(--theme-color-accent-normal);
     cursor: default;
 }
+
+div.main.panel {
+    width: 80vw;
+    height: 80vh;
+    margin: 10vh 10vw;
+}
+
+div.panel {
+    background-color: var(--theme-color-background-quaternary);
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: var(--theme-color-accent-normal);
+}

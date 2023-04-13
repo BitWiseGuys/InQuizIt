@@ -12,6 +12,9 @@ const app = new Vue({
         selected_set: [],
         set_options: [],
         databases: {},
+        questionContext: {},
+        questionContent: "",
+        questionProgress: 0,
     },
     computed: {
         
@@ -51,20 +54,41 @@ const app = new Vue({
                     return;
                 }
             }
+        },
+        selectPackage(name) {
+            this.package.title = name;
+            this.refreshProblemSets();
+        },
+        refreshProblemSets() {
+            if(this.package.title in this.databases)
+                this.package.sets = this.databases[this.package.title];
+            else this.package.sets = {};
+        },
+        selectQuestionSet() {
+            let self = this;
+            window.loadQuestionSet(this.package.title, this.selected_set[0], this.selected_set[1]);
+            window.addOption(this.selected_set[2][0]);
+            console.log(window.loadQuestions().then(()=>{
+                self.questionProgress = -1;
+                self.nextQuestion(-1);
+                self.$forceUpdate();
+            }));
+        },
+        nextQuestion(lvl) {
+            var q = window.selectNextQuestion();
+            if(!q) return;
+            // Temporary override for demo
+            if(lvl == 4)
+                this.questionContent = "This is a test question that take advantage of the [selectable] text feature along with the ability to generate content {gen-person:1(firstname)}";
+            else
+                this.questionContent = q.content;
+            this.questionContext = {};
+            this.questionProgress++;
         }
     },
     watch: {
-        selected_set(newValue) {
-            //TODO: Need to aquire set options.
-            this.set_options = [
-                {
-                    "M" : "Multiple Choice", 
-                    "T" : "Text entry"
-                },
-                {
-                    "A" : "Test Option",
-                }
-            ];
+        databases(newValue) {
+            this.refreshProblemSets();
         },
     },
     created() {
@@ -73,6 +97,7 @@ const app = new Vue({
             { first: 'Andrew', last: 'Kerr' },
             { first: 'Grant', last: 'Duchars' },
         ];
+        this.selectPackage("Logicola");
     },
 });
 
