@@ -166,6 +166,7 @@ Vue.component("vDatabaseEditor", {
         setupCreateQuestion() {
             this.fields.Question = {
                 content: "", type: "", answers: [],
+                special: { type: "", },
             };
             this.tab = "question";
         }

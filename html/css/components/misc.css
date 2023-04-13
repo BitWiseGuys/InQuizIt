@@ -47,6 +47,10 @@ div.children-blocks > * {
     display: inline !important;
 }
 
+*.inline-block {
+    display: inline-block !important;
+}
+
 *.float-right {
     float: right;
 }

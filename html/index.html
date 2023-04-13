@@ -98,8 +98,10 @@
                         <h2>{{selected_set[0]}} {{selected_set[1]}} Settings</h2>
                     </template>
                     <template>
-                        <p v-for="opt in selected_set[2]">
-                            <input type="radio" name="option">&nbsp;{{opt}}
+                        <p v-for="options, i in selected_set[2]">
+                            <template v-for="option in options">
+                                <input type="radio" :name="'option-'+i">&nbsp;{{option}}
+                            </template>
                         </p>
                     </template>
                 </v-frame>
@@ -107,7 +109,7 @@
             <v-screen name="problem sets" class="no-center">
                 <h2>{{package.title}}</h2>
                 <div :class="'table table-grid'" class="flex-expand">
-                    <div v-for="set, set_name in package.sets" class="children-blocks text-center">
+                    <div v-for="set, set_name in package.sets" class="children-blocks text-center flex vertical">
                         <h3>{{set_name}}</h3>
                         <template v-for="opts, name in set">
                             <button @click="selected_set = [set_name, name, opts];" :class="{'active' : (selected_set.length && set_name == selected_set[0] && name == selected_set[1])}">{{name}}</button>

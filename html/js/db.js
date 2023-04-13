@@ -34,18 +34,18 @@ window.reloadDatabases = ()=> {
                 if(cat in cats) {
                     let sets = cats[cat];
                     if(set in sets)
-                        sets[set].push(pkg.SetOptions);
-                    else sets[set] = [pkg.SetOptions];
+                        sets[set].push(pkg.SetOptions.split(","));
+                    else sets[set] = [ pkg.SetOptions.split(",") ];
                 }
                 else {
                     cats[cat] = {};
-                    cats[cat][set] = [pkg.SetOptions];
+                    cats[cat][set] = [ pkg.SetOptions.split(",") ];
                 }
             }
             else {
                 dbs[name] = {};
                 dbs[name][cat] = {};
-                dbs[name][cat][set] = [ pkg.SetOptions ];
+                dbs[name][cat][set] = [ pkg.SetOptions.split(",") ];
             }
         }
         window.databases = dbs;
