@@ -103,10 +103,12 @@ Vue.component("vDatabaseEditor", {
                         <div v-if="fields.Question.special.type == 'ST'">
                             <label>Selectable Text:</label>
                             <input ref="selectableText" placeholder="Input Selectable Text">
+                            <button @click="catSpecialContentToContent">Add to Content</button>
                         </div>
                     </div>
                 </div>
                 <textarea v-model="fields.Question.answers" rows="4" cols="100" :style="'width:100%;resize:none;'" placeholder="Answers (seperated by a newline)"></textarea>
+                <button @click="commitQuestionToDatabase">Commit to DB</button>
             </template>
         </div>
     </v-screen>
@@ -169,6 +171,16 @@ Vue.component("vDatabaseEditor", {
                 special: { type: "", },
             };
             this.tab = "question";
+        },
+        commitQuestionToDatabase() {
+            window.addQuestion(
+                this.fields.Question.type,
+                this.fields.Question.content,
+                this.fields.Question.answers
+            );
+        },
+        catSpecialContentToContent() {
+            this.fields.Question.content += this.$refs.selectableText.value;
         }
     },
     created() {
