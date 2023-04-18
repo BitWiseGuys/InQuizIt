@@ -103,7 +103,8 @@ Vue.component("vDatabaseEditor", {
                         <div v-if="fields.Question.special.type == 'ST'">
                             <label>Selectable Text:</label>
                             <input ref="selectableText" placeholder="Input Selectable Text">
-                            <button @click="catSpecialContentToContent">Add to Content</button>
+                            <button @click="catSelectAnswerToContent">Add as Answer</button>
+                            <button @click="catSelectOtherToContent">Add as Other</button>
                         </div>
                     </div>
                 </div>
@@ -178,9 +179,17 @@ Vue.component("vDatabaseEditor", {
                 this.fields.Question.content,
                 this.fields.Question.answers
             );
+            this.fields.Question = {
+                content: "", type: "", answers: [],
+                special: { type: this.fields.Question.special.type, },
+            };
+            this.tab = "question";
         },
-        catSpecialContentToContent() {
-            this.fields.Question.content += this.$refs.selectableText.value;
+        catSelectAnswerToContent() {
+            this.fields.Question.content += "*[" + this.$refs.selectableText.value + "] ";
+        },
+        catSelectOtherToContent() {
+            this.fields.Question.content += "[" + this.$refs.selectableText.value + "] ";
         }
     },
     created() {
