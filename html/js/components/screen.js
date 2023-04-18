@@ -6,7 +6,7 @@
 Vue.component("vScreen", {
     props: ["name"],
     template: `
-    <div v-show="shouldShow" class="screen">
+    <div v-if="shouldShow" class="screen">
         <slot></slot>
     </div>
     `,
@@ -20,7 +20,7 @@ Vue.component("vScreen", {
 Vue.component("vOverlay", {
     props: ["name", "type"],
     template: `
-    <div v-show="shouldShow" :class="'overlay overlay-' + (type ? type : 'normal')">
+    <div v-if="shouldShow" :class="'overlay overlay-' + (type ? type : 'normal')">
         <slot></slot>
     </div>
     `,
