@@ -77,8 +77,8 @@ Vue.component("vDatabaseEditor", {
                             <td>{{question.type}}</td>
                             <td>{{question.content.substring(0,100)}}</td>
                             <td>
-                                <button @click="editQuestion(editor.package, editor.category, editor.set, editor.options, quetion.type, question.content)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
-                                <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
+                                <button @click="editQuestion(question.type, question.content, question.answers)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
+                                <button @click="deleteThisQuestion(question.type, question.content)"><span class="bi bi-trash"></span>&nbsp;Delete</button>
                             </td>
                         </tr>
                     </tbody>
@@ -193,6 +193,18 @@ Vue.component("vDatabaseEditor", {
         },
         catSelectOtherToContent() {
             this.fields.Question.content += "[" + this.$refs.selectableText.value + "] ";
+        },
+        cancelAddQuestion() {
+            // ! THIS SHOULD ALSO ROLLBACK THE CURRENT TRANSACTION
+            this.fields.Question = {
+                content: "", type: "", answers: [],
+                special: { type: "", },
+            };
+            this.tab = "questions";
+        },
+        deleteThisQuestion(type, content) {
+            window.deleteQuestion(type, content);
+            this.$forceRerender();
         }
     },
 })

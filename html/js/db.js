@@ -113,7 +113,7 @@ window.loadQuestions = () => {
     return new Promise((resolve, reject) => {
         // Check if we have loaded a valid question set.
         if(context.package.length && context.category.length && context.set.length && context.options.length) {
-            window.db.getAllQuestions(context.category, context.set, context.options.join(""))
+            window.db.getAllQuestions(context.category, context.set, context.options.join(","))
             .then((res)=>{
                 context.questions = [];
                 res.forEach(async (val)=>{
@@ -154,10 +154,10 @@ window.addQuestion = (type, content, answers) => {
         // Check if we have loaded into a valid question set.
         if(context.package.length && context.category.length && context.set.length && context.options.length) {
             // Add in the new question.
-            window.db.newQuestion(context.category, context.set, context.options.join(""), type, content)
+            window.db.newQuestion(context.category, context.set, context.options.join(","), type, content)
             .then(async (res) => {
                 for(var i in answers)
-                    await window.db.newAnswer(context.category, context.set, context.options.join(""), type, content, answers[i]);
+                    await window.db.newAnswer(context.category, context.set, context.options.join(","), type, content, answers[i]);
                 // Reload the question set.
                 window.loadQuestions().then(()=>{resolve(res)}).catch((err)=>{reject(err)});
             }).catch((err) => {
