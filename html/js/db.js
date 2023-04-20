@@ -177,7 +177,7 @@ window.deleteQuestion = (type, content) => {
         if(typeof(type) != "string" || !type.length) return reject("Parameter 'type' needs to be a non-empty string.");
         if(typeof(content) != "string" || !content.length) return reject("Parameter 'content' needs to be a non-empty string.");
         if(context.package.length && context.category.length && context.set.length && context.options.length) {
-            window.db.deleteQuestion(context.category, context.set, context.options.join(""), type, content)
+            window.db.delQuestion(context.category, context.set, context.options.join(""), type, content)
             .then((res) => {
                 window.loadQuestions().then(()=>{resolve(res)}).catch((err)=>{reject(err)});
             }).catch((err) => {

@@ -208,7 +208,7 @@ Vue.component("vDatabaseEditor", {
         },
         deleteThisQuestion(type, content) {
             window.deleteQuestion(type, content);
-            this.$forceRerender();
+            window.loadQuestionSet(context.package, context.category, context.set)
         }
     },
 })
