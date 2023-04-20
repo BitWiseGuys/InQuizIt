@@ -4,6 +4,8 @@
  * Description: Defines a HTML/Vue tag, v-metatag, that parses an encoded string, formats it and displays the formatted string.
  */
 
+window.diagrams = window.diagrams ? window.diagrams : {};
+
 /**
  * Parses the given string into an array of string's/objects' (the strings are raw text and objects are made up of tags, an optional identifier and an optional attribute).
  * @param {String} text
@@ -51,9 +53,19 @@ function Parse(text) {
                     console.error("Transitioning from tag to identifier without providing a tag name.");
                     return [undefined, i];
                 }
-                // Transition into our identifier mode.
-                mode = 2;
-                object['tag'] = string;
+                // Transition into our identifier mode (if applicable).
+                if(string.indexOf("gen-") == 0) {
+                    mode = 2;
+                    object['tag'] = string;
+                }
+                else if(string.indexOf("image") == 0) {
+                    mode = 6;
+                    object['type'] = "image";
+                }
+                else if(string.indexOf("diagram") == 0) {
+                    mode = 6;
+                    object['type'] = "diagram";
+                }
                 string = "";
             }
             // Check if we have completed our tag.
@@ -66,7 +78,7 @@ function Parse(text) {
                 // Switch back to the raw text mode and store our object.
                 mode = 0;
                 object['tag'] = string;
-                result.push(object);
+                result.push({ type: "generator", content: object });
                 string = "";
             }
             // Otherwise we add our character to our 'attribute' string.
@@ -99,7 +111,7 @@ function Parse(text) {
                 mode = 0;
                 object['identifier'] = string;
                 string = "";
-                result.push(object);
+                result.push({ type: "generator", content: object });
             }
             // Otherwise append character to attribute string.
             else string += c;
@@ -130,7 +142,7 @@ function Parse(text) {
                 // Store any trailing info so that we can use it for further parsing if necessary.
                 if(string.length) object['trailing'] = string;
                 string = "";
-                result.push(object);
+                result.push({ type: "generator", content: object });
             }
             else string += c;
         }
@@ -140,7 +152,18 @@ function Parse(text) {
                 // Transition into our raw text mode.
                 mode = 0;
                 // Store our string as an array.
-                if(string.length) result.push([string]);
+                if(string.length) result.push({ type: "selectable", content: string});
+                string = "";
+            }
+            else string += c;
+        }
+        else if(mode == 6) {
+            // Check to see if we have found our ending tag.
+            if(c == '}') {
+                // Transition into our raw text mode.
+                mode = 0;
+                // Store our string as an array.
+                if(string.length) result.push({ type: object['type'], data: string});
                 string = "";
             }
             else string += c;
@@ -158,7 +181,8 @@ function Parse(text) {
 //   formatted string. The basic structure is {tag:id(attr)} where: tag is any kind of
 //   tag; id is an optional identifier (for multiple elements of this tag); and attr
 //   is an optional attribute of the tag represented by the identifier.
-function FormatText(text, ctx) {
+function FormatText(text, ctx, root, onClick) {
+    root.innerHTML = "";
     // We can only format the text if we have a way of creating/modifying/using persistant data.
     if(typeof(ctx) != 'object') return text;
     // Parse the text and give us some data to work with.
@@ -168,75 +192,106 @@ function FormatText(text, ctx) {
         console.error(`Failed to parse '${text}' into a valid metatag structure, error at index: ${error}.`);
         return undefined;
     }
-    // Finally we need to resolve our parts back into a string.
-    var result = "";
+    // Finally we need to resolve our parts into elements.
+    var element = undefined;
     for(var i in parts) {
         var part = parts[i];
         if(typeof(part) == 'object') {
-            // Ensure we have a cache to work with.
-            if(!ctx.cached) ctx.cached = {};
-            // Check to see if we have an identifier.
-            if(part['identifier'] != undefined) {
-                // Check if we already have this info cached.
-                if(ctx.cached[part['tag']] && ctx.cached[part['tag']][part['identifier']]) {
-                    if(part['attribute']) {
-                        result += ctx.cached[part['tag']][part['identifier']][part['attribute']];
-                    }
-                    else {
-                        var obj = ctx.cached[part['tag']][part['identifier']];
-                        if(typeof(obj) == "object") {
-                            if(typeof(obj.stringify) == 'function')
-                                result += obj.stringify();
-                            else {
-                                console.warn("Metatag is showing cached object to the end-user, should either have attribute or stringify function.", part, obj);
-                                result += "<"+part['tag']+":"+part['identifier']+">";
-                            }
+            // Are we working with selectable text?
+            if(part.type == "selectable") {
+                part = part.content;
+                // Ensure we have an element to work with.
+                element = root.appendChild(document.createElement("button"));
+                element.addEventListener("click",onClick);
+                FormatText(part,ctx,element);
+                element = undefined;
+            }
+            else if(part.type == "image") {
+                // Ensure we have an element to work with.
+                element = root.appendChild(document.createElement("img"));
+                element.src = part.data;
+                element = undefined;
+            }
+            else if(part.type == "diagram") {
+                // Ensure we have an element to work with.
+                element = root.appendChild(document.createElement("canvas"));
+                element.routine = window.diagrams[part.data];
+                if(element.routine) element.routine(element, { action: "init" });
+                element = undefined;
+            }
+            // Are we working with a generator?
+            else if(part.type == "generator") {
+                part = part.content;
+                // Ensure we have an element to work with.
+                if(!element) element = root.appendChild(document.createElement("span"));
+                // Ensure we have a cache to work with.
+                if(!ctx.cached) ctx.cached = {};
+                if(!ctx.images) ctx.images = {};
+                // Check to see if we have an identifier.
+                if(part['identifier'] != undefined) {
+                    // Check if we already have this info cached.
+                    if(ctx.cached[part['tag']] && ctx.cached[part['tag']][part['identifier']]) {
+                        if(part['attribute']) {
+                            element.innerHTML += ctx.cached[part['tag']][part['identifier']][part['attribute']];
                         }
-                        else result += obj;
-                    }
-                }
-                // Otherwise we will have to generate it.
-                else {
-                    // Ensure we have a cache for this data.
-                    if(!ctx.cached[part['tag']]) ctx.cached[part['tag']] = {};
-                    // Do we have generators?
-                    if(window.generators) {
-                        // Check for a generator and generate the content.
-                        window.generators.forEach((generator) => {
-                            if(generator.name == part['tag']) {
-                                // Generate our content.
-                                var content = generator.generate(ctx.cached[part['tag']], generator.param);
-                                ctx.cached[part['tag']][part['identifier']] = content;
-                                // Append to the end of our result.
-                                if(part['attribute']) {
-                                    result += content[part['attribute']];
-                                }
+                        else {
+                            var obj = ctx.cached[part['tag']][part['identifier']];
+                            if(typeof(obj) == "object") {
+                                if(typeof(obj.stringify) == 'function')
+                                    element.innerHTML += obj.stringify();
                                 else {
-                                    let obj = content;
-                                    if(typeof(obj) == "object") {
-                                        if(typeof(obj.stringify) == 'function')
-                                            result += obj.stringify();
-                                        else {
-                                            console.warn("Metatag is showing recent cached object to the end-user, should either have attribute or stringify function.", part, obj);
-                                            result += "<"+part['tag']+":"+part['identifier']+">";
-                                        }
-                                    }
-                                    else result += obj;
+                                    console.warn("Metatag is showing cached object to the end-user, should either have attribute or stringify function.", part, obj);
+                                    element.innerHTML += "<"+part['tag']+":"+part['identifier']+">";
                                 }
                             }
-                        });
+                            else element.innerHTML += obj;
+                        }
                     }
-                    // Did we fail to generate the content.
-                    if(!ctx.cached[part['tag']][part['identifier']]) {
-                        console.warn("Metatag is showing unresolved part to end-user, missing a generator for our content.", part);
-                        result += "<"+part['tag']+":"+part['identifier']+">";
+                    // Otherwise we will have to generate it.
+                    else {
+                        // Ensure we have a cache for this data.
+                        if(!ctx.cached[part['tag']]) ctx.cached[part['tag']] = {};
+                        // Do we have generators?
+                        if(window.generators) {
+                            // Check for a generator and generate the content.
+                            window.generators.forEach((generator) => {
+                                if(generator.name == part['tag']) {
+                                    // Generate our content.
+                                    var content = generator.generate(ctx.cached[part['tag']], generator.param);
+                                    ctx.cached[part['tag']][part['identifier']] = content;
+                                    // Append to the end of our result.
+                                    if(part['attribute']) {
+                                        element.innerHTML += content[part['attribute']];
+                                    }
+                                    else {
+                                        let obj = content;
+                                        if(typeof(obj) == "object") {
+                                            if(typeof(obj.stringify) == 'function')
+                                                element.innerHTML += obj.stringify();
+                                            else {
+                                                console.warn("Metatag is showing recent cached object to the end-user, should either have attribute or stringify function.", part, obj);
+                                                element.innerHTML += "<"+part['tag']+":"+part['identifier']+">";
+                                            }
+                                        }
+                                        else element.innerHTML += obj;
+                                    }
+                                }
+                            });
+                        }
+                        // Did we fail to generate the content.
+                        if(!ctx.cached[part['tag']][part['identifier']]) {
+                            console.warn("Metatag is showing unresolved part to end-user, missing a generator for our content.", part);
+                            element.innerHTML += "&lt;"+part['tag']+":"+part['identifier']+"&gt;";
+                        }
                     }
                 }
             }
         }
-        else result += part;
+        else {
+            if(!element) element = root.appendChild(document.createElement("span"));
+            element.innerHTML += part;
+        }
     }
-    return result;
 }
 
 // When called will create a content generator (a content generator is
@@ -260,21 +315,25 @@ window.CreateContentGenerator = CreateContentGenerator;
 Vue.component("vMetatag", {
     props: ["text", "context"],
     template:`
-    <span>{{formatted}}</span>
+    <span ref="content"></span>
     `,
-    data() {
-        return {
-            formatted: FormatText(this.text, this.context),
-        };
-    },
     watch: {
         text(newValue) {
-            this.formatted = FormatText(newValue, this.context);
+            // Reset our context.
+            for(var i in this.context)
+                delete this.context[i];
+            FormatText(newValue, this.context, this.$refs.content, this.clicked);
         }
     },
     methods: {
         refresh() {
-            this.formatted = FormatText(this.text, this.context);
+            // Reset our context.
+            for(var i in this.context)
+                delete this.context[i];
+            FormatText(this.text, this.context, this.$refs.content, this.clicked);
+        },
+        clicked(e) {
+            this.$emit("answered", e.srcElement.innerHTML, e.srcElement);
         }
     }
 })

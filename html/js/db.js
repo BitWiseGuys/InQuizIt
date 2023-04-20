@@ -105,6 +105,25 @@ window.addOption = (option) => {
     return true;
 }
 
+window.setOption = (options) => {
+    if(!(context.package in window.databases)) return false;
+    if(!(context.category in window.databases[context.package])) return false;
+    if(!(context.set in window.databases[context.package][context.category])) return false;
+    let opts_group = window.databases[context.package][context.category][context.set];
+    var found = false;
+    for(var i in opts_group) {
+        let opts = opts_group[i];
+        for(var j in options) {
+            let option = options[j];
+            if(option[j] != opts[j]) { found = false; break; }
+        }
+        if(options.length != opts.length) continue;
+        if(found) break;
+    }
+    context.options = options;
+    return true;
+}
+
 window.loadQuestionSet = (package, category, set) => {
     return (window.loadDatabase(package) && window.loadCategory(category) && window.loadSet(set));
 };
@@ -117,7 +136,7 @@ window.loadQuestions = () => {
             .then((res)=>{
                 context.questions = [];
                 res.forEach(async (val)=>{
-                    var answers = await window.db.getAllAnswers(context.category, context.set, context.options.join(""), val.QuestionContent, val.QuestionType);
+                    var answers = await window.db.getAllAnswers(context.category, context.set, context.options.join(","), val.QuestionContent, val.QuestionType);
                     val.answers = [];
                     answers.forEach((a)=>{ val.answers.push(a.Answer); });
                     context.questions.push({content: val.QuestionContent, type: val.QuestionType, answers: val.answers});

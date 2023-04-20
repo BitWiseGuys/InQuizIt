@@ -87,14 +87,13 @@ contextBridge.exposeInMainWorld("ProblemSets", {
 //dbManager Calls For Front end
 contextBridge.exposeInMainWorld("db", {
 
-//Data Retrieval Calls
+//DATABASE RETRIEVAL CALLS
  getAllQuestionSets : async () => {
     const res = await ipcRenderer.invoke('getAllQuestionSets');
     console.log(res);
     return res;
   },
 
-  
   getAllCategories : async () => {
   const res = await ipcRenderer.invoke('getAllCategories');
   console.log(res);
@@ -119,11 +118,22 @@ contextBridge.exposeInMainWorld("db", {
     return res;
   },
 
-
+  getAllUsers : async () => {
+    const res = await ipcRenderer.invoke('getAllUsers');
+    console.log(res);
+    return res;
+  },
 
 
 
   //DATABASE INSERTION MAIN INVOKERS
+
+  newUser: async (FirstName,LastName) => {
+    const res = await ipcRenderer.invoke('newUser', FirstName,LastName);
+    console.log(res);
+    return res;
+  },
+
 
   //CREATES NEW QUESTIONSET DATA ROW GIVEN Category, NAME, SUBOPTIONS
   //window.db.newQuestionSet(Category,Name,Options);
@@ -168,8 +178,31 @@ contextBridge.exposeInMainWorld("db", {
     const res2 = await ipcRenderer.invoke('newAnswer', Category, Name, Options, Type, Question,Ans);
     console.log(res2);
     return res2;
+  },
+
+
+  //DELETION FUNCTIONS
+
+  //DELETE GIVEN QUESTION AND ALL REFERENCES TO THIS
+  delQuestion: async (Category, Name, Options, Type, Question) => {
+    const res = await ipcRenderer.invoke('delQuestion', Category, Name, Options, Type, Question);
+    console.log(res);
+    return res;
+  },
+
+   //DELETE GIVEN QUESTIONSET AND ALL REFERENCES TO THIS
+   delQuestionSet: async (Category, Name, Options) => {
+    const res = await ipcRenderer.invoke('delQuestionSet', Category, Name, Options);
+    console.log(res);
+    return res;
+  },
+
+  //DELETE GIVEN QUESTIONSET AND ALL REFERENCES TO THIS
+  delUser: async (FirstName,LastName) => {
+    const res = await ipcRenderer.invoke('delUser', FirstName,LastName);
+    console.log(res);
+    return res;
   }
 
- 
 });
 
