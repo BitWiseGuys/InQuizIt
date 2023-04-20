@@ -110,6 +110,7 @@ Vue.component("vDatabaseEditor", {
                 </div>
                 <textarea v-model="fields.Question.answers" rows="4" cols="100" :style="'width:100%;resize:none;'" placeholder="Answers (seperated by a newline)"></textarea>
                 <button @click="commitQuestionToDatabase">Commit to DB</button>
+                <button @click="cancelAddQuestion">Cancel</button>
             </template>
         </div>
     </v-screen>
@@ -164,12 +165,14 @@ Vue.component("vDatabaseEditor", {
                 this.editor.questions = window.context.questions;
             });
         },
-        editQuestion(package, category, set, options, type, content) {
+        // ! THIS SHOULD ALSO START A NEW TRANSACTION
+        editQuestion(type, content, answers) {
             this.fields.Question = {
-                content: content, type: type, answers: [], special: { type: "" }
+                content: content, type: type, answers: answers, special: { type: "" }
             }
             this.tab = "question";
         },
+        // ! THIS SHOULD ALSO START A NEW TRANSACTION
         setupCreateQuestion() {
             this.fields.Question = {
                 content: "", type: "", answers: [],
@@ -177,6 +180,7 @@ Vue.component("vDatabaseEditor", {
             };
             this.tab = "question";
         },
+        // ! THIS SHOULD ALSO COMMIT THE TRANSACTION
         commitQuestionToDatabase() {
             window.addQuestion(
                 this.fields.Question.type,
