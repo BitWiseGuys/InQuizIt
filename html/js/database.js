@@ -77,7 +77,7 @@ Vue.component("vDatabaseEditor", {
                             <td>{{question.type}}</td>
                             <td>{{question.content.substring(0,100)}}</td>
                             <td>
-                                <button @click="editQuestion(editor.package, editor.category, editor.set, editor.options, quetion.type, question.content)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
+                                <button @click="editQuestion(question.type, question.content)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
                                 <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
                             </td>
                         </tr>
@@ -164,7 +164,7 @@ Vue.component("vDatabaseEditor", {
                 this.editor.questions = window.context.questions;
             });
         },
-        editQuestion(package, category, set, options, type, content) {
+        editQuestion(type, content) {
             this.fields.Question = {
                 content: content, type: type, answers: [], special: { type: "" }
             }
