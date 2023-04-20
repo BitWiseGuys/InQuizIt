@@ -87,3 +87,19 @@ div.frame > div.footer {
     padding-left: 10px;
     padding-right: 10px;
 }
+
+*.flex {
+    display: flex;
+}
+
+*.flex.vertical {
+    flex-direction: column;
+}
+
+*.flex > *.flex-no-stretch {
+    flex: 0 1 auto;
+}
+
+*.flex > *.flex-stretch {
+    flex: 1 1 auto;
+}

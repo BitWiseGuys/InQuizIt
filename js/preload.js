@@ -152,6 +152,16 @@ contextBridge.exposeInMainWorld("db", {
     return res;
   },
 
+  deleteQuestion: async (Category, Name, Options, Type, Question) => {
+    const answers = await ipcRenderer.invoke('getAllAnswers', Category, Name, Options, Question, Type);
+    for (let answer in answers) {
+        const res = await ipcRenderer.invoke('deleteAnswer', Category, Name, Options, Type, Question, answer);
+        console.log(res);
+    }
+    const res = await ipcRenderer.invoke('deleteQuestion', Category, Name, Options, Type, Question);
+    console.log(res);
+  },
+
   //CREATE NEW ANSWER FOR AN ALREADY EXISTING QUESTION
   //window.db.newAnswer(Category,Name,Options,Type,Question,Ans);
   newAnswer: async (Category, Name, Options, Type, Question, Ans) => {
