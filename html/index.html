@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta
             http-equiv="Content-Security-Policy"
-            content="default-src 'self'; script-src 'self' 'unsafe-eval'" />
+            content="default-src 'self'; script-src 'self' 'unsafe-eval'; img-src * data:;" />
         <meta
             http-equiv="X-Content-Security-Policy"
             content="default-src 'self'; script-src 'self'" />
@@ -16,145 +16,32 @@
     </head>
     <body>
         <div id="MainLayout">
-            <v-overlay name="default" class="padding-15">
-                <v-group :direction="'horizontal'">
-                    <v-group-cell>
-                        <v-icons>
-                            <v-icon icon="house-fill" @click="screen = 'default';" title="Return Home" :disabled="screen == 'default'"></v-icon>
-                            <v-icon icon="gear-fill" @click="overlay='settings';" title="Change Settings"></v-icon>
-                            <v-icon icon="database-fill-gear" @click="screen = 'database editor'" title="Database Editor"></v-icon>
-                        </v-icons>
-                    </v-group-cell>
-                    <v-group-cell v-show="screen == 'questions'">
-                        <v-progressbar :max="100" :value="questionProgress" :labeled="true" :style="'width:400px;'"></v-progressbar>
-                    </v-group-cell>
-                    <v-group-cell>
-                        <v-icon icon="person" @click="overlay='login';" :disabled="screen != 'default'" title="Login/Logout">
-                            {{user ? (user.first + '&nbsp;' + user.last) : 'Login'}}
-                        </v-icon>
-                    </v-group-cell>
-                </v-group>
-            </v-overlay>
-            <v-overlay name="login" type="popup">
-                <v-frame>
-                    <template #header>
-                        <h2>Login</h2>
-                    </template>
-                    <template #default>
-                        <h3>Existing Users:</h3>
-                        <div class="users">
-                            <template v-for="user in users">
-                                <span @click="login_firstname = user.first; login_lastname = user.last;">
-                                    {{user.first}}&nbsp;{{user.last}}
-                                </span>
-                            </template>
-                        </div>
-                    </template>
-                    <template #footer>
-                        <p>
-                            Firstname: <input type="text" v-model="login_firstname">
-                            Lastname: <input type="text" v-model="login_lastname">
-                            <v-icon icon="person" @click="login">Login</v-icon>
-                            <v-icon icon="trash" @click="removeUser"></v-icon>
-                        </p>
-                    </template>
-                </v-frame>
-            </v-overlay>
-            <v-overlay name="settings" type="popup">
-                <v-frame :closeable="true" @close="overlay='default';">
-                    <template #header>
-                        <h2>Settings</h2>
-                    </template>
-                    <template #default>
-                        
-                    </template>
-                    <template #footer>
-                        
-                    </template>
-                </v-frame>
-            </v-overlay>
-            <v-screen name="default">
-                <h1>{{appName}}</h1>
-                <div>
-                    <hr><br>
-                    <v-icon icon="list-check" @click="screen = 'assignments'" :disabled="user == undefined">Assignments</v-icon>
-                    &nbsp;&nbsp;
-                    <v-icon icon="list-task" @click="screen = 'problem sets'" :disabled="user == undefined">Problem&nbsp;Sets</v-icon>
-                    <p v-if="user == undefined" class="smaller-icons">
-                        Please 
-                        <a @click="overlay='login';$event.preventDefault();" href="#">
-                            Login
-                        </a> 
-                        to Continue.
-                    </p>
-                    <p v-if="user != undefined">
-                        Welcome back: {{user.first}} {{user.last}}!
-                    </p>
-                </div>
-            </v-screen>
-            <v-overlay name="question settings" type="popup">
-                <v-frame :closeable="true" @close="overlay='default';">
-                    <template #header>
-                        <h2>{{selected_set[0]}} {{selected_set[1]}} Settings</h2>
-                    </template>
-                    <template>
-                        <p v-for="options, i in selected_set[2]">
-                            <template v-for="option in options">
-                                <input type="radio" :name="'option-'+i">&nbsp;{{option}}
-                            </template>
-                        </p>
-                    </template>
-                </v-frame>
-            </v-overlay>
-            <v-screen name="problem sets" class="no-center">
-                <h2>{{package.title}}</h2>
-                <div :class="'table table-grid'" class="flex-expand">
-                    <div v-for="set, set_name in package.sets" class="children-blocks text-center flex vertical">
-                        <h3>{{set_name}}</h3>
-                        <template v-for="opts, name in set">
-                            <button @click="selected_set = [set_name, name, opts];" :class="{'active' : (selected_set.length && set_name == selected_set[0] && name == selected_set[1])}">{{name}}</button>
-                        </template>
-                    </div>
-                </div>
-                <br>
-                <div class="flex-fit-content padding-15">
-                    <button class="float-right" :disabled="selected_set.length == 0" @click="selectQuestionSet();screen = 'questions';">
-                        Start &gt;&gt;
-                    </button>
-                    <button class="float-right" :disabled="selected_set.length == 0" @click="overlay='question settings';">
-                        <span class="bi bi-gear-fill"></span> Options
-                    </button>
-                </div>
-            </v-screen>
-            <v-screen name="questions" class="no-center">
-                <div class="main panel flex vertical">
-                    <div class="flex-stretch">
-                        <p>
-                            <v-metatag :context="questionContext" :text="questionContent" ref="question"></v-metatag>
-                        </p>
-                    </div>
-                    <div class="flex-no-stretch flex margin-5">
-                        <input type="text" class="flex-stretch" placeholder="Enter answer here" v-model="questionAnswerInput">
-                        <v-group :direction="'horizontal'" class="flex-no-stretch">
-                            <v-group-cell>
-                                <v-icons class="smaller-icons">
-                                    <v-icon icon="emoji-frown" title="Not confident" @click="nextQuestion(0)" :disabled="questionAnswerInput.length == 0"></v-icon>
-                                    <v-icon icon="emoji-neutral" title="Somewhat confident" @click="nextQuestion(1)" :disabled="questionAnswerInput.length == 0"></v-icon>
-                                    <v-icon icon="emoji-smile" title="Confident" @click="nextQuestion(2)" :disabled="questionAnswerInput.length == 0"></v-icon>
-                                </v-icons>
-                            </v-group-cell>
-                        </v-group>
-                    </div>
-                </div>
-            </v-screen>
+            <v-questions-screen ref="questions"></v-questions-screen>
+            <v-main-overlay></v-main-overlay>
+            <v-login-overlay></v-login-overlay>
+            <v-settings-overlay></v-settings-overlay>
+            <v-question-settings-overlay></v-question-settings-overlay>
+            <v-problem-sets-screen></v-problem-sets-screen>
+            <v-home-screen></v-home-screen>
             <v-database-editor></v-database-editor>
         </div>
+        <!--Import our VueJS library-->
         <script src="./js/libraries/vue/vue-dev.js"></script>
+        <!--Import our component scripts-->
         <script src="./js/components/progressbar.js"></script>
         <script src="./js/components/metatag.js"></script>
         <script src="./js/components/screen.js"></script>
         <script src="./js/components/group.js"></script>
         <script src="./js/components/icon.js"></script>
+        <!--Import our "screen" scripts-->
+        <script src="./js/screens/home.js"></script>
+        <script src="./js/screens/problemSets.js"></script>
+        <script src="./js/screens/questions.js"></script>
+        <!--Import our "overlay" scripts-->
+        <script src="./js/overlays/main.js"></script>
+        <script src="./js/overlays/login.js"></script>
+        <script src="./js/overlays/settings.js"></script>
+        <!--Import our "other" scripts-->
         <script src="./js/generators.js"></script>
         <script src="./js/database.js"></script>
         <script src="./js/index.js" defer></script>
