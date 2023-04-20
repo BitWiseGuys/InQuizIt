@@ -1,5 +1,5 @@
 /**
- * Author: Andrew Kerr
+ * Author: Andrew Kerr, Grant Duchars
  * Date: 04/06/2023
  */
 
@@ -49,7 +49,7 @@ Vue.component("vDatabaseEditor", {
                                     <td>{{set}}</td>
                                     <td>{{opt}}</td>
                                     <td>
-                                        <button @click="editSet(package, category, set, options)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
+                                        <button @click="editSet(package, category, set, opt)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
                                         <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
                                     </td>
                                 </tr>
@@ -59,7 +59,7 @@ Vue.component("vDatabaseEditor", {
                 </table>
             </template>
             <template v-if="tab == 'questions'">
-                <h3>{{editor.package}} {{editor.category}} {{editor.set}}-{{editor.options.join("")}}</h3>
+                <h3>{{editor.package}} {{editor.category}} {{editor.set}}-{{editor.options}}</h3>
                 <table>
                     <tr>
                         <th colspan="5">
@@ -77,7 +77,7 @@ Vue.component("vDatabaseEditor", {
                             <td>{{question.type}}</td>
                             <td>{{question.content.substring(0,100)}}</td>
                             <td>
-                                <button disabled="true"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
+                                <button @click="editQuestion(editor.package, editor.category, editor.set, editor.options, quetion.type, question.content)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
                                 <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
                             </td>
                         </tr>
@@ -159,12 +159,16 @@ Vue.component("vDatabaseEditor", {
         editSet(package, category, set, options) {
             this.editor = { package, category, set, options };
             window.loadQuestionSet(package, category, set);
-            var opts = options;
-            for(var i in opts)
-                window.addOption(opts[i]);
+            window.addOption(options);
             window.loadQuestions().then(()=>{
                 this.editor.questions = window.context.questions;
             });
+        },
+        editQuestion(package, category, set, options, type, content) {
+            this.fields.Question = {
+                content: content, type: type, answers: [], special: { type: "" }
+            }
+            this.tab = "question";
         },
         setupCreateQuestion() {
             this.fields.Question = {
@@ -177,13 +181,12 @@ Vue.component("vDatabaseEditor", {
             window.addQuestion(
                 this.fields.Question.type,
                 this.fields.Question.content,
-                this.fields.Question.answers
+                this.fields.Question.answers.split("\n")
             );
             this.fields.Question = {
                 content: "", type: "", answers: [],
                 special: { type: this.fields.Question.special.type, },
             };
-            this.tab = "question";
         },
         catSelectAnswerToContent() {
             this.fields.Question.content += "*[" + this.$refs.selectableText.value + "] ";
@@ -192,7 +195,4 @@ Vue.component("vDatabaseEditor", {
             this.fields.Question.content += "[" + this.$refs.selectableText.value + "] ";
         }
     },
-    created() {
-        
-    }
 })
