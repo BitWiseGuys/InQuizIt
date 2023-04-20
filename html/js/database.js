@@ -77,7 +77,7 @@ Vue.component("vDatabaseEditor", {
                             <td>{{question.type}}</td>
                             <td>{{question.content.substring(0,100)}}</td>
                             <td>
-                                <button @click="editQuestion(question.type, question.content)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
+                                <button @click="editQuestion(question.type, question.content, question.answers)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
                                 <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
                             </td>
                         </tr>
@@ -110,6 +110,7 @@ Vue.component("vDatabaseEditor", {
                 </div>
                 <textarea v-model="fields.Question.answers" rows="4" cols="100" :style="'width:100%;resize:none;'" placeholder="Answers (seperated by a newline)"></textarea>
                 <button @click="commitQuestionToDatabase">Commit to DB</button>
+                <button @click="cancelAddQuestion">Cancel</button>
             </template>
         </div>
     </v-screen>
@@ -164,12 +165,14 @@ Vue.component("vDatabaseEditor", {
                 this.editor.questions = window.context.questions;
             });
         },
-        editQuestion(type, content) {
+        // ! THIS SHOULD ALSO START A NEW TRANSACTION
+        editQuestion(type, content, answers) {
             this.fields.Question = {
-                content: content, type: type, answers: [], special: { type: "" }
+                content: content, type: type, answers: answers, special: { type: "" }
             }
             this.tab = "question";
         },
+        // ! THIS SHOULD ALSO START A NEW TRANSACTION
         setupCreateQuestion() {
             this.fields.Question = {
                 content: "", type: "", answers: [],
@@ -177,6 +180,7 @@ Vue.component("vDatabaseEditor", {
             };
             this.tab = "question";
         },
+        // ! THIS SHOULD ALSO COMMIT THE TRANSACTION
         commitQuestionToDatabase() {
             window.addQuestion(
                 this.fields.Question.type,
@@ -193,6 +197,14 @@ Vue.component("vDatabaseEditor", {
         },
         catSelectOtherToContent() {
             this.fields.Question.content += "[" + this.$refs.selectableText.value + "] ";
+        },
+        cancelAddQuestion() {
+            // ! THIS SHOULD ALSO ROLLBACK THE CURRENT TRANSACTION
+            this.fields.Question = {
+                content: "", type: "", answers: [],
+                special: { type: "", },
+            };
+            this.tab = "questions";
         }
     },
 })
