@@ -19,8 +19,8 @@ Vue.component("vQuestionsScreen", {
                     </v-group-cell>
                     <v-group-cell>
                         <v-icons class="smaller-icons">
-                            <v-icon icon="arrow-right" @click="nextQuestion(true)"><v-icon>
-                        <v-icons>
+                            <v-icon icon="arrow-right" @click="nextQuestion(true)"></v-icon>
+                        </v-icons>
                     </v-group-cell>
                 </v-group>
             </div>
