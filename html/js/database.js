@@ -1,5 +1,5 @@
 /**
- * Author: Andrew Kerr, Grant Duchars
+ * Author: Andrew Kerr, Grant Duchars, Connor Marshall
  * Date: 04/06/2023
  */
 
@@ -9,8 +9,9 @@ Vue.component("vDatabaseEditor", {
         <h2>Database Editor</h2>
         <div class="flex-fit-content tabs">
             <button :class="'tab '+(tab == 'default' ? 'active' : '')" @click="tab = 'default';">Sets</button>
-            <button :class="'tab '+(tab == 'questions' ? 'active' : '')" @click="tab = 'questions';">Questions</button>
-            <button :class="'tab '+(tab == 'question' ? 'active' : '')" @click="tab = 'question';">Question</button>
+            <button :class="'tab '+(tab == 'questions' ? 'active' : '')" @click="tab = 'questions';
+                                                                                updateQuestionTable();">Questions</button>
+            <button :class="'tab '+(tab == 'question' ? 'active' : '')" @click="tab = 'question';">Question Editor</button>
         </div>
         <div class="flex-expand margin-5 margin-top-none tabbed">
             <template v-if="tab == 'default'">
@@ -49,7 +50,7 @@ Vue.component("vDatabaseEditor", {
                                     <td>{{set}}</td>
                                     <td>{{opt}}</td>
                                     <td>
-                                        <button @click="editSet(package, category, set, opt)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
+                                        <button @click="editSet(package, category, set, opt);"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
                                         <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
                                     </td>
                                 </tr>
@@ -78,7 +79,7 @@ Vue.component("vDatabaseEditor", {
                             <td>{{question.content.substring(0,100)}}</td>
                             <td>
                                 <button @click="editQuestion(question.type, question.content, question.answers)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
-                                <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
+                                <button @click="deleteThisQuestion(question.type, question.content)"><span class="bi bi-trash"></span>&nbsp;Delete</button>
                             </td>
                         </tr>
                     </tbody>
@@ -122,6 +123,12 @@ Vue.component("vDatabaseEditor", {
                 SelectionTable : "",
                 QuestionTable: "",
             },
+            Prev_Question: {
+                content: "", type: "", answers: "",
+                special: {
+                    type: "",
+                }
+            },
             fields: {
                 SelectionTable : {
                     visible : false, package : "", category : "", set : "", options: "",
@@ -157,36 +164,56 @@ Vue.component("vDatabaseEditor", {
             this.fields.SelectionTable.set = "";
             this.fields.SelectionTable.options = "";
         },
-        editSet(package, category, set, options) {
+
+        updateQuestionTable(){
+          window.loadQuestions().then(() => {
+            this.$set(this.editor, "questions", window.context.questions);
+          });
+        },
+
+        async editSet(package, category, set, options) {
             this.editor = { package, category, set, options };
             window.loadQuestionSet(package, category, set);
             window.addOption(options);
-            window.loadQuestions().then(()=>{
-                this.editor.questions = window.context.questions;
+            window.loadQuestions().then(() => {
+              this.tab = "questions";
+              this.$set(this.editor, "questions", window.context.questions);
             });
+            
         },
-        // ! THIS SHOULD ALSO START A NEW TRANSACTION
         editQuestion(type, content, answers) {
             this.fields.Question = {
                 content: content, type: type, answers: answers, special: { type: "" }
-            }
+            };
+            this.Prev_Question = {
+                content: content, type: type, answers: answers, special: { type: "" }
+            };
             this.tab = "question";
         },
-        // ! THIS SHOULD ALSO START A NEW TRANSACTION
         setupCreateQuestion() {
             this.fields.Question = {
                 content: "", type: "", answers: [],
                 special: { type: "", },
             };
+            this.fields.Prev_Question = {
+                content: "", type: "", answers: [], special: { type: "" }
+            };
             this.tab = "question";
         },
-        // ! THIS SHOULD ALSO COMMIT THE TRANSACTION
         commitQuestionToDatabase() {
+            window.deleteQuestion(
+                this.Prev_Question.type,
+                this.Prev_Question.content,
+            );
             window.addQuestion(
                 this.fields.Question.type,
                 this.fields.Question.content,
                 this.fields.Question.answers.split("\n")
             );
+            this.Prev_Question = {
+                content: "", type: "", answers: [],
+                special: { type: this.fields.Question.special.type, },
+            };
             this.fields.Question = {
                 content: "", type: "", answers: [],
                 special: { type: this.fields.Question.special.type, },
@@ -199,12 +226,21 @@ Vue.component("vDatabaseEditor", {
             this.fields.Question.content += "[" + this.$refs.selectableText.value + "] ";
         },
         cancelAddQuestion() {
-            // ! THIS SHOULD ALSO ROLLBACK THE CURRENT TRANSACTION
+            this.Prev_Question = {
+                content: "", type: "", answers: [], special: { type: "" }
+            };
             this.fields.Question = {
                 content: "", type: "", answers: [],
                 special: { type: "", },
             };
             this.tab = "questions";
+        },
+        deleteThisQuestion(type, content) {
+            window.deleteQuestion(type, content).then(() => {
+              window.loadQuestions().then(() => {
+                this.$set(this.editor, "questions", window.context.questions);
+            });
+          });
         }
     },
 })
