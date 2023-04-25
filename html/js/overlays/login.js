@@ -48,7 +48,7 @@ Vue.component("vLoginOverlay", {
             }
             // Create a new user.
             // TODO: Need to insert into the database.
-            var user = { first: this.login_firstname, last: this.login_lastname };
+            var user = { first: this.firstname, last: this.lastname };
             this.$root.users.push(user);
             this.$root.user = user;
             this.$root.goto("","default");

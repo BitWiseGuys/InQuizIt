@@ -11,11 +11,16 @@ Vue.component("vQuestionsScreen", {
                 <input type="text" class="flex-stretch" placeholder="Enter answer here" v-model="answer">
                 <v-group :direction="'horizontal'" class="flex-no-stretch">
                     <v-group-cell>
-                        <v-icons class="smaller-icons">
-                            <v-icon icon="emoji-frown" title="Not confident" @click="nextQuestion(0)" :disabled="answer.length == 0"></v-icon>
-                            <v-icon icon="emoji-neutral" title="Somewhat confident" @click="nextQuestion(1)" :disabled="answer.length == 0"></v-icon>
-                            <v-icon icon="emoji-smile" title="Confident" @click="nextQuestion(2)" :disabled="answer.length == 0"></v-icon>
+                        <v-icons class="smaller-icons" mode="select">
+                            <v-icon icon="emoji-frown" title="Not confident" value="0"></v-icon>
+                            <v-icon icon="emoji-neutral" title="Somewhat confident" value="1"></v-icon>
+                            <v-icon icon="emoji-smile" title="Confident" value="2"></v-icon>
                         </v-icons>
+                    </v-group-cell>
+                    <v-group-cell>
+                        <v-icons class="smaller-icons">
+                            <v-icon icon="arrow-right" @click="nextQuestion(true)"><v-icon>
+                        <v-icons>
                     </v-group-cell>
                 </v-group>
             </div>
@@ -38,14 +43,10 @@ Vue.component("vQuestionsScreen", {
             this.cached_answer_elm = elm.parentElement;
             this.cached_answer_elm.classList.add("active");
         },
-        nextQuestion(lvl) {
+        nextQuestion(isStart) {
             var q = window.selectNextQuestion();
             if(!q) return;
-            // Temporary override for demo
-            if(lvl == 4)
-                this.content = "This is a test question that take advantage of the [selectable] text feature along with the ability to generate content\n{gen-UniqueLetter:1}, {gen-UniqueLetter:2}, {gen-UniqueLetter:3}, {gen-UniqueLetter:4} {image:https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/SMPTE_Color_Bars.svg/200px-SMPTE_Color_Bars.svg.png} {diagram:3-venn}";
-            else
-                this.content = q.content;
+            this.content = q.content;
             this.context = {};
             this.answer = "";
             this.cached_answer_elm = undefined;
@@ -53,8 +54,7 @@ Vue.component("vQuestionsScreen", {
             this.progress++;
         },
         onTransitionAway(towards) {
-            if(towards == this) return true;
-            return false;
+            
         }
     }
 });

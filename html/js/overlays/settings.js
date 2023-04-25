@@ -31,7 +31,7 @@ Vue.component("vQuestionSettingsOverlay", {
                 </p>
             </template>
             <template #footer>
-                <button class="float-right margin-5" :disabled="!isValidOptionSet" @click="$root.selectQuestionSet(QSelected);$root.goto('questions', 'default');">
+                <button class="float-right margin-5" :disabled="!isValidOptionSet" @click="$root.selectQuestionSet(QSelected);$root.goto('questions', 'question start');">
                     Start &gt;&gt;
                 </button>
             </template>
