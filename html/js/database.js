@@ -122,6 +122,12 @@ Vue.component("vDatabaseEditor", {
                 SelectionTable : "",
                 QuestionTable: "",
             },
+            Prev_Question: {
+                content: "", type: "", answers: "",
+                special: {
+                    type: "",
+                }
+            },
             fields: {
                 SelectionTable : {
                     visible : false, package : "", category : "", set : "", options: "",
@@ -165,28 +171,39 @@ Vue.component("vDatabaseEditor", {
                 this.editor.questions = window.context.questions;
             });
         },
-        // ! THIS SHOULD ALSO START A NEW TRANSACTION
         editQuestion(type, content, answers) {
             this.fields.Question = {
                 content: content, type: type, answers: answers, special: { type: "" }
-            }
+            };
+            this.Prev_Question = {
+                content: content, type: type, answers: answers, special: { type: "" }
+            };
             this.tab = "question";
         },
-        // ! THIS SHOULD ALSO START A NEW TRANSACTION
         setupCreateQuestion() {
             this.fields.Question = {
                 content: "", type: "", answers: [],
                 special: { type: "", },
             };
+            this.fields.Prev_Question = {
+                content: "", type: "", answers: [], special: { type: "" }
+            };
             this.tab = "question";
         },
-        // ! THIS SHOULD ALSO COMMIT THE TRANSACTION
         commitQuestionToDatabase() {
+            window.deleteQuestion(
+                this.Prev_Question.type,
+                this.Prev_Question.content,
+            );
             window.addQuestion(
                 this.fields.Question.type,
                 this.fields.Question.content,
                 this.fields.Question.answers.split("\n")
             );
+            this.Prev_Question = {
+                content: "", type: "", answers: [],
+                special: { type: this.fields.Question.special.type, },
+            };
             this.fields.Question = {
                 content: "", type: "", answers: [],
                 special: { type: this.fields.Question.special.type, },
@@ -199,7 +216,9 @@ Vue.component("vDatabaseEditor", {
             this.fields.Question.content += "[" + this.$refs.selectableText.value + "] ";
         },
         cancelAddQuestion() {
-            // ! THIS SHOULD ALSO ROLLBACK THE CURRENT TRANSACTION
+            this.Prev_Question = {
+                content: "", type: "", answers: [], special: { type: "" }
+            };
             this.fields.Question = {
                 content: "", type: "", answers: [],
                 special: { type: "", },

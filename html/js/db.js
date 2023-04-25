@@ -190,7 +190,6 @@ window.addQuestion = (type, content, answers) => {
     });
 }
 
-// ! THIS NEEDS TO BE IN A TRANSACTION
 window.deleteQuestion = (type, content) => {
     return new Promise((resolve, reject) => {
         if(typeof(type) != "string" || !type.length) return reject("Parameter 'type' needs to be a non-empty string.");
