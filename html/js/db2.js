@@ -6,7 +6,7 @@
  */
 
 // A collection of database functions and variables.
-window.database = { vars: { error: undefined, users: [] }, };
+window.database = { vars: { users: [] }, };
 
 /**
  * Aquires an array of users from the database.
@@ -72,13 +72,39 @@ window.database.removeUser = async(firstname, lastname) => {
  * @param {String} options The options that the requested questions are marked with.
  * @returns {Array<Object> | undefined} An array of question objects from the database or undefined should any of the parameters not exist.
  */
-window.database.getQuestions = (package, category, subcategory, options) => { return undefined; };
+window.database.getQuestions = async (package, category, subcategory, options) => {
+    var questions = await window.db.getAllQuestions(category, subcategory, options);
+    if(questions == undefined) return undefined;
+    for(var i in questions) {
+        var question = questions[i];
+        var answers = (await window.db.getAllAnswers(category, subcategory, options, question.QuestionContent, question.QuestionType));
+        var _answers = [];
+        answers.forEach((e) => {
+            _answers.push(e.Answer);
+        });
+        question.Answers = _answers;
+    }
+    return questions;
+};
 
 /**
- * Any function within window.database is required to set the error to undefined prior to execution and if an error ocurs (denoted by an undefined return from said function) then this function will return the reason for the error.
- * @returns {String | undefined} The last error (as a string) that one of the questions would have caused or undefined if none was found.
+ * Aquires the underlying database tables that store the question sets.
+ * @param {String} package The name of the package that you wish to get all question set data for.
  */
-window.database.getLastError = () => { return window.database.vars.error; };
+window.database.getAllQuestionSets = async (package) => {
+    var data = window.db.getAllCategories();
+
+};
+
+/**
+ * @param {String} package The package name that the category will be located within.
+ * @param {String} category The category name that the subcategory will be located within.
+ * @param {String} subcategory The subcategory name that the options will be located within.
+ * @param {String} options The options that the requested questions are marked with.
+ * @param {Number} score A numerical score for this question run.
+ * @returns {Boolean} True if the score was successfull added, otherwise False.
+ */
+window.database.addScore = async (package, category, subcategory, options, score) => { return false; }
 
 {
     // Initializes the initial state.
