@@ -59,12 +59,11 @@ app.on("window-all-closed", () => {
  *******************************************************/
 
 
-//data insertion
+//Question Data Insertion
 ipcMain.handle('newQuestionSet', async (event, Category, Name, Options)=> {
   const res = await dbMngr.newQuestionSet(Category, Name, Options);
   return res;
 });
-
 
 ipcMain.handle('newQuestion', async (event, Category, Name, Options, Type, Question)=> {
   const res = await dbMngr.newQuestion(Category, Name, Options, Type, Question);
@@ -77,13 +76,26 @@ ipcMain.handle('newAnswer', async (event, Category, Name, Options, Type, Questio
 });
 
 
+//user insertion
+ipcMain.handle('newUser', async (event, FirstName, LastName)=> {
+  const res = await dbMngr.newUser(FirstName, LastName);
+  return res;
+});
 
-//data retrieval
+
+
+//user retrieval
+ipcMain.handle('getAllUsers', async (event) => {
+  const res = await dbMngr.getAllUsers();
+  return res;
+});
+
+
+//Question data retrieval
 ipcMain.handle('getAllQuestionSets', async (event) => {
   const res = await dbMngr.getAllQuestionSets();
   return res;
 });
-
 
 ipcMain.handle('getAllCategories', async (event) => {
   const res = await dbMngr.getAllCategories();
@@ -102,6 +114,23 @@ ipcMain.handle('getAllQuestions', async (event, setCategory, setName, setOptions
 
 ipcMain.handle('getAllAnswers', async (event,  setCategory, setName, setOptions, questionContent, questionType) => {
   const res = await dbMngr.getAllAnswers(setCategory, setName, setOptions, questionContent, questionType);
+  return res;
+});
+
+
+//Deletion
+ipcMain.handle('delQuestion', async (event,  setCategory, setName, setOptions, questionContent, questionType) => {
+  const res = await dbMngr.deleteQuestion(setCategory, setName, setOptions, questionContent, questionType);
+  return res;
+});
+
+ipcMain.handle('delQuestionSet', async (event,  setCategory, setName, setOptions) => {
+  const res = await dbMngr.deleteQuestionSet(setCategory, setName, setOptions);
+  return res;
+});
+
+ipcMain.handle('delUser', async (event,  firstName, lastName) => {
+  const res = await dbMngr.deleteUser(firstName, lastName);
   return res;
 });
 

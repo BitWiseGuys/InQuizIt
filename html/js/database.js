@@ -1,5 +1,5 @@
 /**
- * Author: Andrew Kerr
+ * Author: Andrew Kerr, Grant Duchars
  * Date: 04/06/2023
  */
 
@@ -49,7 +49,7 @@ Vue.component("vDatabaseEditor", {
                                     <td>{{set}}</td>
                                     <td>{{opt}}</td>
                                     <td>
-                                        <button @click="editSet(package, category, set, options)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
+                                        <button @click="editSet(package, category, set, opt)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
                                         <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
                                     </td>
                                 </tr>
@@ -59,7 +59,7 @@ Vue.component("vDatabaseEditor", {
                 </table>
             </template>
             <template v-if="tab == 'questions'">
-                <h3>{{editor.package}} {{editor.category}} {{editor.set}}-{{editor.options.join("")}}</h3>
+                <h3>{{editor.package}} {{editor.category}} {{editor.set}}-{{editor.options}}</h3>
                 <table>
                     <tr>
                         <th colspan="5">
@@ -77,7 +77,7 @@ Vue.component("vDatabaseEditor", {
                             <td>{{question.type}}</td>
                             <td>{{question.content.substring(0,100)}}</td>
                             <td>
-                                <button disabled="true"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
+                                <button @click="editQuestion(question.type, question.content, question.answers)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
                                 <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
                             </td>
                         </tr>
@@ -103,10 +103,14 @@ Vue.component("vDatabaseEditor", {
                         <div v-if="fields.Question.special.type == 'ST'">
                             <label>Selectable Text:</label>
                             <input ref="selectableText" placeholder="Input Selectable Text">
+                            <button @click="catSelectAnswerToContent">Add as Answer</button>
+                            <button @click="catSelectOtherToContent">Add as Other</button>
                         </div>
                     </div>
                 </div>
                 <textarea v-model="fields.Question.answers" rows="4" cols="100" :style="'width:100%;resize:none;'" placeholder="Answers (seperated by a newline)"></textarea>
+                <button @click="commitQuestionToDatabase">Commit to DB</button>
+                <button @click="cancelAddQuestion">Cancel</button>
             </template>
         </div>
     </v-screen>
@@ -156,22 +160,51 @@ Vue.component("vDatabaseEditor", {
         editSet(package, category, set, options) {
             this.editor = { package, category, set, options };
             window.loadQuestionSet(package, category, set);
-            var opts = options;
-            for(var i in opts)
-                window.addOption(opts[i]);
+            window.addOption(options);
             window.loadQuestions().then(()=>{
                 this.editor.questions = window.context.questions;
             });
         },
+        // ! THIS SHOULD ALSO START A NEW TRANSACTION
+        editQuestion(type, content, answers) {
+            this.fields.Question = {
+                content: content, type: type, answers: answers, special: { type: "" }
+            }
+            this.tab = "question";
+        },
+        // ! THIS SHOULD ALSO START A NEW TRANSACTION
         setupCreateQuestion() {
             this.fields.Question = {
                 content: "", type: "", answers: [],
                 special: { type: "", },
             };
             this.tab = "question";
+        },
+        // ! THIS SHOULD ALSO COMMIT THE TRANSACTION
+        commitQuestionToDatabase() {
+            window.addQuestion(
+                this.fields.Question.type,
+                this.fields.Question.content,
+                this.fields.Question.answers.split("\n")
+            );
+            this.fields.Question = {
+                content: "", type: "", answers: [],
+                special: { type: this.fields.Question.special.type, },
+            };
+        },
+        catSelectAnswerToContent() {
+            this.fields.Question.content += "*[" + this.$refs.selectableText.value + "] ";
+        },
+        catSelectOtherToContent() {
+            this.fields.Question.content += "[" + this.$refs.selectableText.value + "] ";
+        },
+        cancelAddQuestion() {
+            // ! THIS SHOULD ALSO ROLLBACK THE CURRENT TRANSACTION
+            this.fields.Question = {
+                content: "", type: "", answers: [],
+                special: { type: "", },
+            };
+            this.tab = "questions";
         }
     },
-    created() {
-        
-    }
 })
