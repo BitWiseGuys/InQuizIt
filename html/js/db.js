@@ -128,7 +128,7 @@ window.loadQuestionSet = (package, category, set) => {
     return (window.loadDatabase(package) && window.loadCategory(category) && window.loadSet(set));
 };
 
-window.loadQuestions = () => {
+window.loadQuestions = async() => {
     return new Promise((resolve, reject) => {
         // Check if we have loaded a valid question set.
         if(context.package.length && context.category.length && context.set.length && context.options.length) {
@@ -190,12 +190,12 @@ window.addQuestion = (type, content, answers) => {
     });
 }
 
-window.deleteQuestion = (type, content) => {
+window.deleteQuestion = async(type, content) => {
     return new Promise((resolve, reject) => {
         if(typeof(type) != "string" || !type.length) return reject("Parameter 'type' needs to be a non-empty string.");
         if(typeof(content) != "string" || !content.length) return reject("Parameter 'content' needs to be a non-empty string.");
         if(context.package.length && context.category.length && context.set.length && context.options.length) {
-            window.db.delQuestion(context.category, context.set, context.options.join(""), type, content)
+            window.db.delQuestion(context.category, context.set, context.options.join(","),content, type)
             .then((res) => {
                 window.loadQuestions().then(()=>{resolve(res)}).catch((err)=>{reject(err)});
             }).catch((err) => {
