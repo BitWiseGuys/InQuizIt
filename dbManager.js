@@ -5,172 +5,321 @@ Database insertion functions
 ************************************************/
 
 var knex = require("knex")({
-  client: "sqlite3",
-  connection: {
-    filename: "./databases/InQuizIt.db"
-  }
+    client: "sqlite3",
+    connection: {
+        filename: "./databases/InQuizIt.db",
+    },
 });
 
-
-
 /*************************************************
- * 
+ *
  * Database Insertion Functions
  * Written by: Connor Marshall
- * 
+ *
  *************************************************/
 
-//knex insert given row object and table name
-async function insertToTable(row,table) {
-  try {
-    res = await knex(table).insert(row);
-    console.log(`Successfully inserted row into ${table} table!`);
-    return res;
-
-  } catch (err) {
-    console.error(`Error inserting row into ${table} table: ${err}`);
-  }
-};
-
-//Create a new QuestionSet
-async function newQuestionSet(Category, Name, Options, TentativeScore = 100,Package = 'Logicola') {
-  const row = {PackageName: Package, SetCategory: Category, SetName: Name, SetOptions: Options, CompletionScore: TentativeScore};
-  const table = "QuestionSets_T";
-  
-  res = await insertToTable(row,table);
-  return res;
-};
-
-//Add a new question to an existing questionset
-async function newQuestion(Category, Name, Options, Type, Question, Package = 'Logicola') {
-  const row = {PackageName: Package, SetCategory: Category, SetName: Name, SetOptions: Options, QuestionType: Type, QuestionContent: Question};
-  const table = "Questions_T";
-  
-  res = await insertToTable(row,table);
-  return res;
-};
-
-//Adds a new answer to a specific questionID question
-async function newAnswer(Category,Name,Options,Type,Question,Ans, Package = 'Logicola') {
-  const row = {PackageName: Package, SetCategory: Category, SetName: Name, SetOptions: Options, QuestionType: Type, QuestionContent: Question, Answer: Ans};
-  const table = "Answers_T";
-  
-  res = await insertToTable(row,table);
-  return res;
-};
-
-async function newUser(FirstName, LastName) {
-  const row = {FirstName: FirstName, LastName: LastName};
-  const table = "Users_T";
-  const res = await insertToTable(row, table);
-  return res;
+/**
+ * knex insert given row object and table name.
+ * @param {?} row
+ * @param {?} table
+ * @returns {Promise<string>}
+ */
+async function insertToTable(row, table) {
+    try {
+        res = await knex(table).insert(row);
+        console.log(`Successfully inserted row into ${table} table!`);
+        return res;
+    } catch (err) {
+        console.error(`Error inserting row into ${table} table: ${err}`);
+    }
 }
 
+/**
+ * Creates a new QuestionSet.
+ * @param {string} Category - The category's name
+ * @param {string} Name - The subcategory's name
+ * @param {string} Options - The subcategory's options
+ * @param {number} TentativeScore - Optional subcategory score
+ * @param {string} Package - Optional package name
+ * @returns {Promise<string>}
+ */
+async function newQuestionSet(
+    Category,
+    Name,
+    Options,
+    TentativeScore = 100,
+    Package = "Logicola"
+) {
+    const row = {
+        PackageName: Package,
+        SetCategory: Category,
+        SetName: Name,
+        SetOptions: Options,
+        CompletionScore: TentativeScore,
+    };
+    const table = "QuestionSets_T";
+
+    res = await insertToTable(row, table);
+    return res;
+}
+
+/**
+ * Add a new question to an existing questionset.
+ * @param {string} Category - The category's name
+ * @param {string} Name - The subcategory's name
+ * @param {string} Options - The subcategory's options
+ * @param {string} Type - The question's type
+ * @param {string} Question - The question's content
+ * @param {string} Package - Optional package name
+ * @returns {Promise<string>}
+ */
+async function newQuestion(
+    Category,
+    Name,
+    Options,
+    Type,
+    Question,
+    Package = "Logicola"
+) {
+    const row = {
+        PackageName: Package,
+        SetCategory: Category,
+        SetName: Name,
+        SetOptions: Options,
+        QuestionType: Type,
+        QuestionContent: Question,
+    };
+    const table = "Questions_T";
+
+    res = await insertToTable(row, table);
+    return res;
+}
+
+/**
+ * Adds a new answer to a specific questionID question.
+ * @param {string} Category - The category's name
+ * @param {string} Name - The subcategory's name
+ * @param {string} Options - The subcategory's options
+ * @param {string} Type - The question's type
+ * @param {string} Question - The question's content
+ * @param {string} Ans - The answer's content
+ * @param {string} Package - Optional package name
+ * @returns {Promise<string>}
+ */
+async function newAnswer(
+    Category,
+    Name,
+    Options,
+    Type,
+    Question,
+    Ans,
+    Package = "Logicola"
+) {
+    const row = {
+        PackageName: Package,
+        SetCategory: Category,
+        SetName: Name,
+        SetOptions: Options,
+        QuestionType: Type,
+        QuestionContent: Question,
+        Answer: Ans,
+    };
+    const table = "Answers_T";
+
+    res = await insertToTable(row, table);
+    return res;
+}
+
+/**
+ * Adds a new user to the database.
+ * @param {string} FirstName - The user's first name
+ * @param {string} LastName - The user's last name
+ * @returns {Promise<string>}
+ */
+async function newUser(FirstName, LastName) {
+    const row = { FirstName: FirstName, LastName: LastName };
+    const table = "Users_T";
+    const res = await insertToTable(row, table);
+    return res;
+}
 
 /*************************************************
- * 
+ *
  * Database Retrieval Functions
  * Written by: Eddie Stillman & Connor Marshall
- * 
+ *
  *************************************************/
 
+/**
+ * Gets all of the users from the database.
+ * @returns {object[]}
+ */
 async function getAllUsers() {
-  const res = await knex.select("*").from("Users_T");
-  return res;
+    const res = await knex.select("*").from("Users_T");
+    return res;
 }
 
-//returns all available question sets 
+/**
+ * Gets all of the question sets from the database.
+ * @returns {object[]}
+ */
 async function getAllQuestionSets() {
-  const res = await knex.select("*").from("QuestionSets_T");
-  return res;
-};
+    const res = await knex.select("*").from("QuestionSets_T");
+    return res;
+}
 
-//returns all available question sets 
+/**
+ * Gets all the question sets from the database again?
+ * @returns {object[]}
+ */
 async function getAllCategories() {
-  const res = await knex.select(knex.raw('distinct "SetCategory"')).from("QuestionSets_T");
-  return res;
-};
+    const res = await knex
+        .select(knex.raw('distinct "SetCategory"'))
+        .from("QuestionSets_T");
+    return res;
+}
 
-//return one question set given the (category, name, option)
+/**
+ * Gets the requested question set from the database.
+ * @param {string} setCategory - The category's name
+ * @param {string} setName - The subcategory's name
+ * @param {string} setOptions - The subcategory's options
+ * @returns {object}
+ */
 async function getQuestionSet(setCategory, setName, setOptions) {
-  const res = await knex.select("*").from("QuestionSets_T").where({SetName     : setName, 
-                                                                   SetOptions  : setOptions, 
-                                                                   SetCategory : setCategory});
-return res;
-};
+    const res = await knex.select("*").from("QuestionSets_T").where({
+        SetName: setName,
+        SetOptions: setOptions,
+        SetCategory: setCategory,
+    });
+    return res;
+}
 
+/**
+ * Gets all of the question of the given question set from the database.
+ * @param {string} setCategory - The category's name
+ * @param {string} setName - The subcategory's name
+ * @param {string} setOptions - The subcategory's options
+ * @returns {object[]}
+ */
 async function getAllQuestions(setCategory, setName, setOptions) {
-  const res = await knex.select("*").from("Questions_T").where({SetName     : setName, 
-                                                                SetOptions  : setOptions, 
-                                                                SetCategory : setCategory});
-return res;
-};
+    const res = await knex.select("*").from("Questions_T").where({
+        SetName: setName,
+        SetOptions: setOptions,
+        SetCategory: setCategory,
+    });
+    return res;
+}
 
-async function getAllAnswers(setCategory, setName, setOptions, questionContent, questionType) {
-  const res = await knex.select("*").from("Answers_T").where({SetName         : setName, 
-                                                              SetOptions      : setOptions,
-                                                              SetCategory     : setCategory,
-                                                              QuestionType    : questionType,
-                                                              QuestionContent : questionContent});
-return res;
-};
-
+/**
+ * Gets all of the answers of the provided question from the database.
+ * @param {string} setCategory - The category's name
+ * @param {string} setName - The subcategory's name
+ * @param {string} setOptions - The subcategory's options
+ * @param {string} questionContent - The question's content (the actual question)
+ * @param {string} questionType - The question's type
+ * @returns {object[]}
+ */
+async function getAllAnswers(
+    setCategory,
+    setName,
+    setOptions,
+    questionContent,
+    questionType
+) {
+    const res = await knex.select("*").from("Answers_T").where({
+        SetName: setName,
+        SetOptions: setOptions,
+        SetCategory: setCategory,
+        QuestionType: questionType,
+        QuestionContent: questionContent,
+    });
+    return res;
+}
 
 /*************************************************
- * 
+ *
  * Database Deletion Functions
  * Written by: Connor Marshall
- * 
- * 
+ *
  *************************************************/
-async function deleteQuestion(setCategory, setName, setOptions, questionContent, questionType) {
-  const res = await knex.del('*').from("Answers_T")
-  .where({SetName         : setName, 
-          SetOptions      : setOptions,
-          SetCategory     : setCategory,
-          QuestionType    : questionType,
-          QuestionContent : questionContent});
 
-  const res2 = await knex.del('*').from("Questions_T")
-  .where({SetName         : setName, 
-          SetOptions      : setOptions,
-          SetCategory     : setCategory,
-          QuestionType    : questionType,
-          QuestionContent : questionContent});
+/**
+ * Deletes the given question from the database.
+ * @param {string} setCategory - The category's name
+ * @param {string} setName - The subcategory's name
+ * @param {string} setOptions - The subcategory's options
+ * @param {string} questionContent - The question's content (the actual question)
+ * @param {string} questionType - The question's type
+ * @returns {Promise<number>} The number of affected rows
+ */
+async function deleteQuestion(
+    setCategory,
+    setName,
+    setOptions,
+    questionContent,
+    questionType
+) {
+    const res = await knex.del("*").from("Answers_T").where({
+        SetName: setName,
+        SetOptions: setOptions,
+        SetCategory: setCategory,
+        QuestionType: questionType,
+        QuestionContent: questionContent,
+    });
 
-  return res2;
-};
+    const res2 = await knex.del("*").from("Questions_T").where({
+        SetName: setName,
+        SetOptions: setOptions,
+        SetCategory: setCategory,
+        QuestionType: questionType,
+        QuestionContent: questionContent,
+    });
 
+    return res2;
+}
+
+/**
+ * Deletes the given question set from the database.
+ * @param {string} setCategory - The category's name
+ * @param {string} setName - The subcategory's name
+ * @param {string} setOptions - The subcategory's options
+ * @returns {Promise<number>} The number of affected rows
+ */
 async function deleteQuestionSet(setCategory, setName, setOptions) {
-  const res = await knex.del('*').from("Questions_T")
-  .where({SetName         : setName, 
-          SetOptions      : setOptions,
-          SetCategory     : setCategory});
+    const res = await knex.del("*").from("Questions_T").where({
+        SetName: setName,
+        SetOptions: setOptions,
+        SetCategory: setCategory,
+    });
 
-  const res2 = await knex.del('*').from("QestionSets_T")
-  .where({SetName         : setName, 
-          SetOptions      : setOptions,
-          SetCategory     : setCategory});
+    const res2 = await knex.del("*").from("QestionSets_T").where({
+        SetName: setName,
+        SetOptions: setOptions,
+        SetCategory: setCategory,
+    });
 
-  return res2;
-};
+    return res2;
+}
 
+/**
+ * Deletes the given user from the database
+ * @param {string} firstName - The user's first name
+ * @param {string} lastName - The user's last name
+ * @returns {Promise<number>} The number of affected rows
+ */
 async function deleteUser(firstName, lastName) {
-  const res = await knex.del('*').from("Scores_T")
-  .where({FirstName         : firstName, 
-          LastName      : lastName});
+    const res = await knex
+        .del("*")
+        .from("Scores_T")
+        .where({ FirstName: firstName, LastName: lastName });
 
-  const res2 = await knex.del('*').from("Users_T")
-          .where({FirstName      : firstName, 
-                  LastName      : lastName});
-  return res2;
-};
-
-
-
-
-
-
+    const res2 = await knex
+        .del("*")
+        .from("Users_T")
+        .where({ FirstName: firstName, LastName: lastName });
+    return res2;
+}
 
 //EXPORTS
 exports.newQuestionSet = newQuestionSet;
@@ -188,4 +337,3 @@ exports.getAllAnswers = getAllAnswers;
 exports.deleteQuestion = deleteQuestion;
 exports.deleteQuestionSet = deleteQuestionSet;
 exports.deleteUser = deleteUser;
-

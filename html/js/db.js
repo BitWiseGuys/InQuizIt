@@ -29,7 +29,9 @@ var context = {
     questionQueue: [],
 };
 
-// When called will reload the databases.
+/**
+ * Reloads the data from the database
+ */
 window.reloadDatabases = () => {
     var promise = window.db.getAllQuestionSets();
     promise.then((res) => {
@@ -66,7 +68,11 @@ window.reloadDatabases = () => {
     });
 };
 
-// Loads in the package (so long as it exists in the database).
+/**
+ * Loads in the package (so long as it exists in the database).
+ * @param {string} package
+ * @returns {boolean}
+ */
 window.loadDatabase = (package) => {
     if (!(package in window.databases)) return false;
     context.package = package;
@@ -78,7 +84,11 @@ window.loadDatabase = (package) => {
     return true;
 };
 
-// Loads in the category (so long as it exists in the database).
+/**
+ * Loads in the category (so long as it exists in the database).
+ * @param {string} category
+ * @returns {boolean}
+ */
 window.loadCategory = (category) => {
     if (!(context.package in window.databases)) return false;
     if (!(category in window.databases[context.package])) return false;
@@ -90,7 +100,11 @@ window.loadCategory = (category) => {
     return true;
 };
 
-// Loads in the category (so long as it exists in the database).
+/**
+ * Loads in the set (so long as it exists in the database).
+ * @param {string} set
+ * @returns {boolean}
+ */
 window.loadSet = (set) => {
     if (!(context.package in window.databases)) return false;
     if (!(context.category in window.databases[context.package])) return false;
@@ -103,7 +117,11 @@ window.loadSet = (set) => {
     return true;
 };
 
-// Loads in the category (so long as it exists in the database).
+/**
+ * ???
+ * @param {string} option
+ * @returns {boolean}
+ */
 window.addOption = (option) => {
     if (!(context.package in window.databases)) return false;
     if (!(context.category in window.databases[context.package])) return false;
@@ -119,6 +137,11 @@ window.addOption = (option) => {
     return true;
 };
 
+/**
+ * ???
+ * @param {string[]} options
+ * @returns {boolean}
+ */
 window.setOption = (options) => {
     if (!(context.package in window.databases)) return false;
     if (!(context.category in window.databases[context.package])) return false;
@@ -143,6 +166,13 @@ window.setOption = (options) => {
     return true;
 };
 
+/**
+ * Loads the given question set and returns true if successful
+ * @param {string} package - Package name
+ * @param {string} category - Category name
+ * @param {string} set - Set name
+ * @returns {boolean} `bool` - Whether the load was successful or not
+ */
 window.loadQuestionSet = (package, category, set) => {
     return (
         window.loadDatabase(package) &&
@@ -151,6 +181,10 @@ window.loadQuestionSet = (package, category, set) => {
     );
 };
 
+/**
+ * Loads the questions from the selected set
+ * @returns {Promise<string[]>}
+ */
 window.loadQuestions = async () => {
     return new Promise((resolve, reject) => {
         // Check if we have loaded a valid question set.
@@ -201,12 +235,22 @@ window.loadQuestions = async () => {
     });
 };
 
+/**
+ * Gets the next question in the list
+ * @returns {}
+ */
 window.selectNextQuestion = () => {
     if (context.questionQueue.length) return context.questionQueue.pop();
     context.questionQueue = shuffle(Array(...context.questions));
     return context.questionQueue.pop();
 };
 
+/**
+ * Adds the given question to the database
+ * @param {string} type - The question's type (eg multiple choice, typed, etc.)
+ * @param {string} content - The question's content (the actual question)
+ * @param {string[]} answers - A non empty array of answers
+ */
 window.addQuestion = (type, content, answers) => {
     return new Promise((resolve, reject) => {
         // Check if we have been given two non-empty string.
@@ -269,6 +313,11 @@ window.addQuestion = (type, content, answers) => {
     });
 };
 
+/**
+ * Deletes the given question and its answers from the database.
+ * @param {string} type - The question's type (eg multiple choice, typed, etc.)
+ * @param {string} content - The question's content (the actual question)
+ */
 window.deleteQuestion = async (type, content) => {
     return new Promise((resolve, reject) => {
         if (typeof type != "string" || !type.length)
@@ -308,6 +357,13 @@ window.deleteQuestion = async (type, content) => {
     });
 };
 
-window.addCategory = (package, category, name, options) => {
+/**
+ * Adds the given question category to the database.
+ * @param {string} category - The question category's name (eg. Propositional, Syllogistic)
+ * @param {string} name - The question category's subcategory name (eg. Propositional "Truth Tables", Propositional "Arguments")
+ * @param {Array<string>} options - The question category's subcategory's options (eg. [easier, harder], [multiple choice, typed])
+ * @returns
+ */
+window.addCategory = (category, name, options) => {
     return window.db.newQuestionSet(category, name, options);
 };

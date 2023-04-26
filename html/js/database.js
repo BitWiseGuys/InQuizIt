@@ -104,8 +104,7 @@ Vue.component("vDatabaseEditor", {
                         <div v-if="fields.Question.special.type == 'ST'">
                             <label>Selectable Text:</label>
                             <input ref="selectableText" placeholder="Input Selectable Text">
-                            <button @click="catSelectAnswerToContent">Add as Answer</button>
-                            <button @click="catSelectOtherToContent">Add as Other</button>
+                            <button @click="catSelectableToContent">Add Selectable</button>
                         </div>
                     </div>
                 </div>
@@ -158,6 +157,11 @@ Vue.component("vDatabaseEditor", {
         };
     },
     methods: {
+        /**
+         * ???
+         * @param {*} add
+         * @returns
+         */
         async closeSelectionTable(add) {
             // Are we actually adding the new info?
             if (add) {
@@ -187,7 +191,14 @@ Vue.component("vDatabaseEditor", {
             });
         },
 
-        async editSet(package, category, set, options) {
+        /**
+         * ???
+         * @param {string} package - The package's name
+         * @param {string} category - The category's name
+         * @param {string} set - The set's name
+         * @param {Array<string>} options - The subcategory options
+         */
+        editSet(package, category, set, options) {
             this.editor = { package, category, set, options };
             window.loadQuestionSet(package, category, set);
             window.addOption(options);
@@ -196,6 +207,13 @@ Vue.component("vDatabaseEditor", {
                 this.$set(this.editor, "questions", window.context.questions);
             });
         },
+
+        /**
+         * Sets up the question editor screen with the selected question to edit.
+         * @param {string} type - The question's type
+         * @param {string} content - The question's content (the actual question)
+         * @param {string[]} answers - The question's answers
+         */
         editQuestion(type, content, answers) {
             answersArray = JSON.parse(JSON.stringify(answers));
             this.fields.Question = {
@@ -212,6 +230,10 @@ Vue.component("vDatabaseEditor", {
             };
             this.tab = "question";
         },
+
+        /**
+         * Sets up the question editor screen with a new blank question.
+         */
         setupCreateQuestion() {
             this.fields.Question = {
                 content: "",
@@ -227,6 +249,11 @@ Vue.component("vDatabaseEditor", {
             };
             this.tab = "question";
         },
+
+        /**
+         * Takes the current input from the question editor screen and adds it to the database. \
+         * If you were previously editing an existing question it will try to remove the old question before addin the new one.
+         */
         commitQuestionToDatabase() {
             window
                 .deleteQuestion(
@@ -274,14 +301,18 @@ Vue.component("vDatabaseEditor", {
                     };
                 });
         },
-        catSelectAnswerToContent() {
-            this.fields.Question.content +=
-                "*[" + this.$refs.selectableText.value + "] ";
-        },
-        catSelectOtherToContent() {
+
+        /**
+         * Adds the current input from the selectable text generator to the question's content.
+         */
+        catSelectableToContent() {
             this.fields.Question.content +=
                 "[" + this.$refs.selectableText.value + "] ";
         },
+
+        /**
+         * Cancels the current question editor without updating the database.
+         */
         cancelAddQuestion() {
             this.Prev_Question = {
                 content: "",
@@ -297,6 +328,12 @@ Vue.component("vDatabaseEditor", {
             };
             this.tab = "questions";
         },
+
+        /**
+         * Deletes the selected question and all of its answers from the database.
+         * @param {string} type - The question's type
+         * @param {string} content - The question's content
+         */
         deleteThisQuestion(type, content) {
             window.deleteQuestion(type, content).then(() => {
                 window.loadQuestions().then(() => {
