@@ -9,34 +9,34 @@ window.diagrams = window.diagrams ? window.diagrams : {};
 /**
  * Parses the given string into an array of string's/objects' (the strings are raw text and objects are made up of tags, an optional identifier and an optional attribute).
  * @param {String} text
- * @returns 
+ * @returns
  */
 function Parse(text) {
     var result = [];
     var string = "";
     var mode = 0;
     var object = undefined;
-    for(var i in text) {
+    for (var i in text) {
         var c = text[i];
         // Check to see if we are in raw text mode.
-        if(mode == 0) {
+        if (mode == 0) {
             // Check if we can transition into a tag.
-            if(c == '{') {
+            if (c == "{") {
                 // Transition (and setup) for our next mode.
                 mode = 1;
                 object = {};
                 // Store our leading string (if we have one).
-                if(string.length) {
+                if (string.length) {
                     result.push(string);
                     string = "";
                 }
             }
             // Check if we can transition into a selection
-            else if(c == '[') {
+            else if (c == "[") {
                 // Transition (and setup) for our next mode.
                 mode = 5;
                 // Store our leading string (if we have one).
-                if(string.length) {
+                if (string.length) {
                     result.push(string);
                     string = "";
                 }
@@ -45,39 +45,41 @@ function Parse(text) {
             else string += c;
         }
         // Check to see if we are in tag mode.
-        else if(mode == 1) {
+        else if (mode == 1) {
             // Check if we can transition into an identifier.
-            if(c == ':') {
+            if (c == ":") {
                 // Check to make sure we had a tag before transitioning.
-                if(string.length == 0) {
-                    console.error("Transitioning from tag to identifier without providing a tag name.");
+                if (string.length == 0) {
+                    console.error(
+                        "Transitioning from tag to identifier without providing a tag name."
+                    );
                     return [undefined, i];
                 }
                 // Transition into our identifier mode (if applicable).
-                if(string.indexOf("gen-") == 0) {
+                if (string.indexOf("gen-") == 0) {
                     mode = 2;
-                    object['tag'] = string;
-                }
-                else if(string.indexOf("image") == 0) {
+                    object["tag"] = string;
+                } else if (string.indexOf("image") == 0) {
                     mode = 6;
-                    object['type'] = "image";
-                }
-                else if(string.indexOf("diagram") == 0) {
+                    object["type"] = "image";
+                } else if (string.indexOf("diagram") == 0) {
                     mode = 6;
-                    object['type'] = "diagram";
+                    object["type"] = "diagram";
                 }
                 string = "";
             }
             // Check if we have completed our tag.
-            else if(c == '}') {
+            else if (c == "}") {
                 // Check to make sure we had a tag before transitioning.
-                if(string.length == 0) {
-                    console.error("Transitioning from tag to identifier without providing a tag name.");
+                if (string.length == 0) {
+                    console.error(
+                        "Transitioning from tag to identifier without providing a tag name."
+                    );
                     return [undefined, i];
                 }
                 // Switch back to the raw text mode and store our object.
                 mode = 0;
-                object['tag'] = string;
+                object["tag"] = string;
                 result.push({ type: "generator", content: object });
                 string = "";
             }
@@ -85,31 +87,35 @@ function Parse(text) {
             else string += c;
         }
         // Check to see if we are in identifier mode.
-        else if(mode == 2) {
+        else if (mode == 2) {
             // Check to see if we can transition into attribute mode.
-            if(c == '(') {
+            if (c == "(") {
                 // Check to make sure we had an identifer before transitioning.
-                if(string.length == 0) {
-                    console.error("Transitioning from identifer to attribute without providing an identifier name.");
+                if (string.length == 0) {
+                    console.error(
+                        "Transitioning from identifer to attribute without providing an identifier name."
+                    );
                     return [undefined, i];
                 }
 
                 // Transition into our identifier mode.
                 mode = 3;
-                object['identifier'] = string;
+                object["identifier"] = string;
                 string = "";
             }
             // Check to see if we are transitioning into raw text mode.
-            else if(c == '}') {
+            else if (c == "}") {
                 // Check to make sure we had an identifer before transitioning.
-                if(string.length == 0) {
-                    console.error("Transitioning from identifer to attribute without providing an identifier name.");
+                if (string.length == 0) {
+                    console.error(
+                        "Transitioning from identifer to attribute without providing an identifier name."
+                    );
                     return [undefined, i];
                 }
 
                 // Transition into our raw text mode.
                 mode = 0;
-                object['identifier'] = string;
+                object["identifier"] = string;
                 string = "";
                 result.push({ type: "generator", content: object });
             }
@@ -117,63 +123,60 @@ function Parse(text) {
             else string += c;
         }
         // Check to see if we are in attribute mode.
-        else if(mode == 3) {
+        else if (mode == 3) {
             // Check to see if we can transition into ending-tag mode.
-            if(c == ')') {
+            if (c == ")") {
                 // Check to make sure we had an attribute before transitioning.
-                if(string.length == 0) {
-                    console.error("Transitioning from attribute to ending-tag without providing an attribute name.");
+                if (string.length == 0) {
+                    console.error(
+                        "Transitioning from attribute to ending-tag without providing an attribute name."
+                    );
                     return [undefined, i];
                 }
 
                 // Transition into our ending-tag mode.
                 mode = 4;
-                object['attribute'] = string;
+                object["attribute"] = string;
                 string = "";
             }
             // Otherwise append character to attribute string.
             else string += c;
-        }
-        else if(mode == 4) {
+        } else if (mode == 4) {
             // Check to see if we have found our ending tag.
-            if(c == '}') {
+            if (c == "}") {
                 // Transition into our raw text mode.
                 mode = 0;
                 // Store any trailing info so that we can use it for further parsing if necessary.
-                if(string.length) object['trailing'] = string;
+                if (string.length) object["trailing"] = string;
                 string = "";
                 result.push({ type: "generator", content: object });
-            }
-            else string += c;
-        }
-        else if(mode == 5) {
+            } else string += c;
+        } else if (mode == 5) {
             // Check to see if we have found our ending tag.
-            if(c == ']') {
+            if (c == "]") {
                 // Transition into our raw text mode.
                 mode = 0;
                 // Store our string as an array.
-                if(string.length) result.push({ type: "selectable", content: string});
+                if (string.length)
+                    result.push({ type: "selectable", content: string });
                 string = "";
-            }
-            else string += c;
-        }
-        else if(mode == 6) {
+            } else string += c;
+        } else if (mode == 6) {
             // Check to see if we have found our ending tag.
-            if(c == '}') {
+            if (c == "}") {
                 // Transition into our raw text mode.
                 mode = 0;
                 // Store our string as an array.
-                if(string.length) result.push({ type: object['type'], data: string});
+                if (string.length)
+                    result.push({ type: object["type"], data: string });
                 string = "";
-            }
-            else string += c;
+            } else string += c;
         }
     }
     // Check to see if we ended up failing to close a tag.
-    if(mode != 0)
+    if (mode != 0)
         console.warn("Might be missing an ending '}' to close off a metatag.");
-    else if(string.length != 0)
-        result.push(string);
+    else if (string.length != 0) result.push(string);
     return [result, undefined];
 }
 
@@ -184,111 +187,153 @@ function Parse(text) {
 function FormatText(text, ctx, root, onClick) {
     root.innerHTML = "";
     // We can only format the text if we have a way of creating/modifying/using persistant data.
-    if(typeof(ctx) != 'object') return text;
+    if (typeof ctx != "object") return text;
     // Parse the text and give us some data to work with.
     var [parts, error] = Parse(text);
     // Did we fail to parse our text?
-    if(error != undefined) {
-        console.error(`Failed to parse '${text}' into a valid metatag structure, error at index: ${error}.`);
+    if (error != undefined) {
+        console.error(
+            `Failed to parse '${text}' into a valid metatag structure, error at index: ${error}.`
+        );
         return undefined;
     }
     // Finally we need to resolve our parts into elements.
     var element = undefined;
-    for(var i in parts) {
+    for (var i in parts) {
         var part = parts[i];
-        if(typeof(part) == 'object') {
+        if (typeof part == "object") {
             // Are we working with selectable text?
-            if(part.type == "selectable") {
+            if (part.type == "selectable") {
                 part = part.content;
                 // Ensure we have an element to work with.
                 element = root.appendChild(document.createElement("button"));
-                element.addEventListener("click",onClick);
-                FormatText(part,ctx,element);
+                element.addEventListener("click", onClick);
+                FormatText(part, ctx, element);
                 element = undefined;
-            }
-            else if(part.type == "image") {
+            } else if (part.type == "image") {
                 // Ensure we have an element to work with.
                 element = root.appendChild(document.createElement("img"));
                 element.src = part.data;
                 element = undefined;
-            }
-            else if(part.type == "diagram") {
+            } else if (part.type == "diagram") {
                 // Ensure we have an element to work with.
                 element = root.appendChild(document.createElement("canvas"));
                 element.routine = window.diagrams[part.data];
-                if(element.routine) element.routine(element, { action: "init" });
+                if (element.routine)
+                    element.routine(element, { action: "init" });
                 element = undefined;
             }
             // Are we working with a generator?
-            else if(part.type == "generator") {
+            else if (part.type == "generator") {
                 part = part.content;
                 // Ensure we have an element to work with.
-                if(!element) element = root.appendChild(document.createElement("span"));
+                if (!element)
+                    element = root.appendChild(document.createElement("span"));
                 // Ensure we have a cache to work with.
-                if(!ctx.cached) ctx.cached = {};
-                if(!ctx.images) ctx.images = {};
+                if (!ctx.cached) ctx.cached = {};
+                if (!ctx.images) ctx.images = {};
                 // Check to see if we have an identifier.
-                if(part['identifier'] != undefined) {
+                if (part["identifier"] != undefined) {
                     // Check if we already have this info cached.
-                    if(ctx.cached[part['tag']] && ctx.cached[part['tag']][part['identifier']]) {
-                        if(part['attribute']) {
-                            element.innerHTML += ctx.cached[part['tag']][part['identifier']][part['attribute']];
-                        }
-                        else {
-                            var obj = ctx.cached[part['tag']][part['identifier']];
-                            if(typeof(obj) == "object") {
-                                if(typeof(obj.stringify) == 'function')
+                    if (
+                        ctx.cached[part["tag"]] &&
+                        ctx.cached[part["tag"]][part["identifier"]]
+                    ) {
+                        if (part["attribute"]) {
+                            element.innerHTML +=
+                                ctx.cached[part["tag"]][part["identifier"]][
+                                    part["attribute"]
+                                ];
+                        } else {
+                            var obj =
+                                ctx.cached[part["tag"]][part["identifier"]];
+                            if (typeof obj == "object") {
+                                if (typeof obj.stringify == "function")
                                     element.innerHTML += obj.stringify();
                                 else {
-                                    console.warn("Metatag is showing cached object to the end-user, should either have attribute or stringify function.", part, obj);
-                                    element.innerHTML += "<"+part['tag']+":"+part['identifier']+">";
+                                    console.warn(
+                                        "Metatag is showing cached object to the end-user, should either have attribute or stringify function.",
+                                        part,
+                                        obj
+                                    );
+                                    element.innerHTML +=
+                                        "<" +
+                                        part["tag"] +
+                                        ":" +
+                                        part["identifier"] +
+                                        ">";
                                 }
-                            }
-                            else element.innerHTML += obj;
+                            } else element.innerHTML += obj;
                         }
                     }
                     // Otherwise we will have to generate it.
                     else {
                         // Ensure we have a cache for this data.
-                        if(!ctx.cached[part['tag']]) ctx.cached[part['tag']] = {};
+                        if (!ctx.cached[part["tag"]])
+                            ctx.cached[part["tag"]] = {};
                         // Do we have generators?
-                        if(window.generators) {
+                        if (window.generators) {
                             // Check for a generator and generate the content.
                             window.generators.forEach((generator) => {
-                                if(generator.name == part['tag']) {
+                                if (generator.name == part["tag"]) {
                                     // Generate our content.
-                                    var content = generator.generate(ctx.cached[part['tag']], generator.param);
-                                    ctx.cached[part['tag']][part['identifier']] = content;
+                                    var content = generator.generate(
+                                        ctx.cached[part["tag"]],
+                                        generator.param
+                                    );
+                                    ctx.cached[part["tag"]][
+                                        part["identifier"]
+                                    ] = content;
                                     // Append to the end of our result.
-                                    if(part['attribute']) {
-                                        element.innerHTML += content[part['attribute']];
-                                    }
-                                    else {
+                                    if (part["attribute"]) {
+                                        element.innerHTML +=
+                                            content[part["attribute"]];
+                                    } else {
                                         let obj = content;
-                                        if(typeof(obj) == "object") {
-                                            if(typeof(obj.stringify) == 'function')
-                                                element.innerHTML += obj.stringify();
+                                        if (typeof obj == "object") {
+                                            if (
+                                                typeof obj.stringify ==
+                                                "function"
+                                            )
+                                                element.innerHTML +=
+                                                    obj.stringify();
                                             else {
-                                                console.warn("Metatag is showing recent cached object to the end-user, should either have attribute or stringify function.", part, obj);
-                                                element.innerHTML += "<"+part['tag']+":"+part['identifier']+">";
+                                                console.warn(
+                                                    "Metatag is showing recent cached object to the end-user, should either have attribute or stringify function.",
+                                                    part,
+                                                    obj
+                                                );
+                                                element.innerHTML +=
+                                                    "<" +
+                                                    part["tag"] +
+                                                    ":" +
+                                                    part["identifier"] +
+                                                    ">";
                                             }
-                                        }
-                                        else element.innerHTML += obj;
+                                        } else element.innerHTML += obj;
                                     }
                                 }
                             });
                         }
                         // Did we fail to generate the content.
-                        if(!ctx.cached[part['tag']][part['identifier']]) {
-                            console.warn("Metatag is showing unresolved part to end-user, missing a generator for our content.", part);
-                            element.innerHTML += "&lt;"+part['tag']+":"+part['identifier']+"&gt;";
+                        if (!ctx.cached[part["tag"]][part["identifier"]]) {
+                            console.warn(
+                                "Metatag is showing unresolved part to end-user, missing a generator for our content.",
+                                part
+                            );
+                            element.innerHTML +=
+                                "&lt;" +
+                                part["tag"] +
+                                ":" +
+                                part["identifier"] +
+                                "&gt;";
                         }
                     }
                 }
             }
-        }
-        else {
-            if(!element) element = root.appendChild(document.createElement("span"));
+        } else {
+            if (!element)
+                element = root.appendChild(document.createElement("span"));
             element.innerHTML += part;
         }
     }
@@ -314,29 +359,37 @@ window.CreateContentGenerator = CreateContentGenerator;
 
 Vue.component("vMetatag", {
     props: ["text", "context"],
-    template:`
+    template: `
     <span ref="content"></span>
     `,
     watch: {
         text(newValue) {
             // Reset our context.
-            for(var i in this.context)
-                delete this.context[i];
-            FormatText(newValue, this.context, this.$refs.content, this.clicked);
-        }
+            for (var i in this.context) delete this.context[i];
+            FormatText(
+                newValue,
+                this.context,
+                this.$refs.content,
+                this.clicked
+            );
+        },
     },
     methods: {
         refresh() {
             // Reset our context.
-            for(var i in this.context)
-                delete this.context[i];
-            FormatText(this.text, this.context, this.$refs.content, this.clicked);
+            for (var i in this.context) delete this.context[i];
+            FormatText(
+                this.text,
+                this.context,
+                this.$refs.content,
+                this.clicked
+            );
         },
         clicked(e) {
             this.$emit("answered", e.srcElement.innerHTML, e.srcElement);
-        }
-    }
-})
+        },
+    },
+});
 
 // process(tag, id, attr) {
 //     // Check if we need to look in the answer unit.
@@ -373,7 +426,7 @@ Vue.component("vMetatag", {
 //                     // Ensure we have a space for this id/tag.
 //                     if(!this.metadata[tag][id])  {
 //                         // Check if we can initialize it.
-//                         // if(this.question.metadata[tag] && this.question.metadata[tag][id]) 
+//                         // if(this.question.metadata[tag] && this.question.metadata[tag][id])
 //                         this.metadata[tag][id] = this.question.metadata[tag][id];
 //                         // // Otherwise try to fallback to a default value.
 //                         // else if(this.question.metadata[tag]["default"]);

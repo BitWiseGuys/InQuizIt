@@ -120,40 +120,56 @@ Vue.component("vDatabaseEditor", {
         return {
             tab: "default",
             filters: {
-                SelectionTable : "",
+                SelectionTable: "",
                 QuestionTable: "",
             },
             Prev_Question: {
-                content: "", type: "", answers: "",
+                content: "",
+                type: "",
+                answers: "",
                 special: {
                     type: "",
-                }
+                },
             },
             fields: {
-                SelectionTable : {
-                    visible : false, package : "", category : "", set : "", options: "",
+                SelectionTable: {
+                    visible: false,
+                    package: "",
+                    category: "",
+                    set: "",
+                    options: "",
                 },
                 Question: {
-                    content: "", type: "", answers: "",
+                    content: "",
+                    type: "",
+                    answers: "",
                     special: {
                         type: "",
                     },
                 },
             },
             editor: {
-                package : "", category : "", set : "", options: "", questions: [],
+                package: "",
+                category: "",
+                set: "",
+                options: "",
+                questions: [],
             },
-        }
+        };
     },
     methods: {
         async closeSelectionTable(add) {
             // Are we actually adding the new info?
-            if(add) {
+            if (add) {
                 try {
-                    await window.addCategory(this.fields.SelectionTable.package, this.fields.SelectionTable.category, this.fields.SelectionTable.set, this.fields.SelectionTable.options);
+                    await window.addCategory(
+                        this.fields.SelectionTable.package,
+                        this.fields.SelectionTable.category,
+                        this.fields.SelectionTable.set,
+                        this.fields.SelectionTable.options
+                    );
                     await window.reloadDatabases();
-                }
-                catch(err) {
+                } catch (err) {
                     console.error(err);
                     return;
                 }
@@ -165,10 +181,10 @@ Vue.component("vDatabaseEditor", {
             this.fields.SelectionTable.options = "";
         },
 
-        updateQuestionTable(){
-          window.loadQuestions().then(() => {
-            this.$set(this.editor, "questions", window.context.questions);
-          });
+        updateQuestionTable() {
+            window.loadQuestions().then(() => {
+                this.$set(this.editor, "questions", window.context.questions);
+            });
         },
 
         async editSet(package, category, set, options) {
@@ -176,90 +192,121 @@ Vue.component("vDatabaseEditor", {
             window.loadQuestionSet(package, category, set);
             window.addOption(options);
             window.loadQuestions().then(() => {
-              this.tab = "questions";
-              this.$set(this.editor, "questions", window.context.questions);
+                this.tab = "questions";
+                this.$set(this.editor, "questions", window.context.questions);
             });
-            
         },
         editQuestion(type, content, answers) {
             answersArray = JSON.parse(JSON.stringify(answers));
             this.fields.Question = {
-                content: content, type: type, answers: answersArray, special: { type: "" }
+                content: content,
+                type: type,
+                answers: answersArray,
+                special: { type: "" },
             };
             this.Prev_Question = {
-                content: content, type: type, answers: answersArray, special: { type: "" }
+                content: content,
+                type: type,
+                answers: answersArray,
+                special: { type: "" },
             };
             this.tab = "question";
         },
         setupCreateQuestion() {
             this.fields.Question = {
-                content: "", type: "", answers: [],
-                special: { type: "", },
+                content: "",
+                type: "",
+                answers: [],
+                special: { type: "" },
             };
             this.fields.Prev_Question = {
-                content: "", type: "", answers: [], special: { type: "" }
+                content: "",
+                type: "",
+                answers: [],
+                special: { type: "" },
             };
             this.tab = "question";
         },
         commitQuestionToDatabase() {
-            window.deleteQuestion(
-                this.Prev_Question.type,
-                this.Prev_Question.content,
-            ).then(() => {
+            window
+                .deleteQuestion(
+                    this.Prev_Question.type,
+                    this.Prev_Question.content
+                )
+                .then(() => {
+                    let answersString = JSON.parse(
+                        JSON.stringify(this.fields.Question.answers)
+                    );
+                    answersArray = answersString.split("\n");
 
-            let answersString = JSON.parse(JSON.stringify(this.fields.Question.answers));
-            answersArray = answersString.split("\n");
+                    console.log(answersArray);
 
-            console.log(answersArray);
+                    //answersString = JSON.stringify(this.fields.Question.answers);
+                    //answersArray = answersString.split('\n');
 
+                    console.log(
+                        "window.addQuestion(" +
+                            this.fields.Question.type +
+                            "," +
+                            this.fields.Question.content +
+                            "," +
+                            answersArray +
+                            ")"
+                    );
 
+                    window.addQuestion(
+                        this.fields.Question.type,
+                        this.fields.Question.content,
+                        answersArray
+                    );
 
-            //answersString = JSON.stringify(this.fields.Question.answers);
-            //answersArray = answersString.split('\n');
-            
-
-
-                console.log("window.addQuestion("+this.fields.Question.type + ","+this.fields.Question.content+"," + answersArray + ")");
-            
-            window.addQuestion(
-                this.fields.Question.type,
-                this.fields.Question.content,
-                answersArray
-            );
-
-            this.Prev_Question = {
-                content: "", type: "", answers: [],
-                special: { type: this.fields.Question.special.type, },
-            };
-            this.fields.Question = {
-                content: "", type: "", answers: [],
-                special: { type: this.fields.Question.special.type, },
-            };
-
-          });
+                    this.Prev_Question = {
+                        content: "",
+                        type: "",
+                        answers: [],
+                        special: { type: this.fields.Question.special.type },
+                    };
+                    this.fields.Question = {
+                        content: "",
+                        type: "",
+                        answers: [],
+                        special: { type: this.fields.Question.special.type },
+                    };
+                });
         },
         catSelectAnswerToContent() {
-            this.fields.Question.content += "*[" + this.$refs.selectableText.value + "] ";
+            this.fields.Question.content +=
+                "*[" + this.$refs.selectableText.value + "] ";
         },
         catSelectOtherToContent() {
-            this.fields.Question.content += "[" + this.$refs.selectableText.value + "] ";
+            this.fields.Question.content +=
+                "[" + this.$refs.selectableText.value + "] ";
         },
         cancelAddQuestion() {
             this.Prev_Question = {
-                content: "", type: "", answers: [], special: { type: "" }
+                content: "",
+                type: "",
+                answers: [],
+                special: { type: "" },
             };
             this.fields.Question = {
-                content: "", type: "", answers: [],
-                special: { type: "", },
+                content: "",
+                type: "",
+                answers: [],
+                special: { type: "" },
             };
             this.tab = "questions";
         },
         deleteThisQuestion(type, content) {
             window.deleteQuestion(type, content).then(() => {
-              window.loadQuestions().then(() => {
-                this.$set(this.editor, "questions", window.context.questions);
+                window.loadQuestions().then(() => {
+                    this.$set(
+                        this.editor,
+                        "questions",
+                        window.context.questions
+                    );
+                });
             });
-          });
-        }
+        },
     },
-})
+});

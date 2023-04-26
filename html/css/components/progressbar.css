@@ -52,7 +52,7 @@ div.progressbar > div > p {
 *.group-vertical div.progressbar > div > p {
     padding-right: 0;
     text-align: center;
-    height:initial;
-    width:100%;
+    height: initial;
+    width: 100%;
     padding-top: 5px;
 }

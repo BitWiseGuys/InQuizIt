@@ -44,7 +44,8 @@ button:active:not(:disabled) {
     box-shadow: inset 0px 0px 5px #c1c1c1;
 }
 
-button:disabled, button.disabled {
+button:disabled,
+button.disabled {
     color: var(--button-fg-color-disabled);
     background-color: var(--button-bg-color-disabled);
     cursor: not-allowed;

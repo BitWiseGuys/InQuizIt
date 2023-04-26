@@ -1,4 +1,4 @@
-Vue.component("vSettingsOverlay",{
+Vue.component("vSettingsOverlay", {
     template: `
     <v-overlay name="settings" type="popup">
         <v-frame :closeable="true" @close="$root.goto('','default');">
@@ -13,7 +13,7 @@ Vue.component("vSettingsOverlay",{
             </template>
         </v-frame>
     </v-overlay>
-    `
+    `,
 });
 
 Vue.component("vQuestionSettingsOverlay", {
@@ -42,31 +42,31 @@ Vue.component("vQuestionSettingsOverlay", {
         return {
             QOptions: [],
             QSelected: [],
-        }
+        };
     },
     computed: {
         isValidOptionSet() {
-            if(this.QSelected.length != this.QOptions.length) return false;
-            for(var i in this.QSelected) {
+            if (this.QSelected.length != this.QOptions.length) return false;
+            for (var i in this.QSelected) {
                 var sel = this.QSelected[i];
-                if(sel == undefined) return false;
+                if (sel == undefined) return false;
             }
             return true;
-        }
+        },
     },
     methods: {
         validateOptionSet(i, opt) {
-            while(this.QSelected.length <= i) this.QSelected.push(undefined);
+            while (this.QSelected.length <= i) this.QSelected.push(undefined);
             this.QSelected[i] = opt;
         },
     },
     watch: {
         "$root.selected_set"(newValue) {
             var opts = transpose(newValue[2]);
-            for(var i in opts) {
+            for (var i in opts) {
                 opts[i] = [...new Set(opts[i])];
             }
             this.QOptions = opts;
-        }
-    }
+        },
+    },
 });

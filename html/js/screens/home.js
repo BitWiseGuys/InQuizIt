@@ -1,4 +1,4 @@
-Vue.component("vHomeScreen",{
+Vue.component("vHomeScreen", {
     template: `
     <v-screen name="default">
         <h1>{{$root.appName}}</h1>

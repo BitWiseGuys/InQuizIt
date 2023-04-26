@@ -34,18 +34,19 @@ Vue.component("vQuestionsScreen", {
             answer: "",
             progress: 0,
             cached_answer_elm: undefined,
-        }
+        };
     },
     methods: {
         answeredQuestionWith(val, elm) {
             this.answer = val;
-            if(this.cached_answer_elm) this.cached_answer_elm.classList.remove("active");
+            if (this.cached_answer_elm)
+                this.cached_answer_elm.classList.remove("active");
             this.cached_answer_elm = elm.parentElement;
             this.cached_answer_elm.classList.add("active");
         },
         nextQuestion(isStart) {
             var q = window.selectNextQuestion();
-            if(!q) return;
+            if (!q) return;
             this.content = q.content;
             this.context = {};
             this.answer = "";
@@ -53,8 +54,6 @@ Vue.component("vQuestionsScreen", {
             this.$refs.question.refresh();
             this.progress++;
         },
-        onTransitionAway(towards) {
-            
-        }
-    }
+        onTransitionAway(towards) {},
+    },
 });

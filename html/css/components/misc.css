@@ -90,7 +90,7 @@ button.tab {
     border-color: var(--theme-color-foreground-primary);
     border-bottom: none;
     color: var(--theme-color-foreground-primary);
-    width:fit-content;
+    width: fit-content;
     display: inline-block;
 }
 

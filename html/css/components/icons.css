@@ -33,7 +33,7 @@ a.icon {
     /* Border Style */
     border: 1px transparent solid;
     border-radius: 5px;
-    
+
     /* Font Style */
     font-family: "Lato Regular";
     font-size: 15pt;
@@ -43,7 +43,8 @@ a.icon {
     background-color: var(--icon-bg-color);
 }
 
-a.icon-pressed:not(.disabled), a.icon.clickable:active:not(.disabled) {
+a.icon-pressed:not(.disabled),
+a.icon.clickable:active:not(.disabled) {
     color: var(--icon-fg-color-click);
     background-color: var(--icon-bg-color-click);
     -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;

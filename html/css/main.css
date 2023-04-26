@@ -17,7 +17,6 @@
 @import url("input.css");
 @import url("text.css");
 
-
 /*===[ THEME DATA ]==========================================================================================================*/
 * {
     /* Background Theme */
@@ -32,7 +31,7 @@
 
     /* Accent Color Theme */
     --theme-color-accent-normal: #fb9e05;
-    --theme-color-accent-danger: #CD4631;
+    --theme-color-accent-danger: #cd4631;
 
     /*Main Screen Color's*/
     --main-border-color: var(--theme-color-accent-normal);
@@ -85,8 +84,8 @@
     /*Scrollbar style*/
     --scrollbar-width: 10px;
     --scrollbar-bg-color: var(--theme-color-background-secondary);
-    --scrollbar-fg-color:var(--theme-color-background-tertiary);
-    --scrollbar-fg-color-hover:var(--theme-color-accent-normal);
+    --scrollbar-fg-color: var(--theme-color-background-tertiary);
+    --scrollbar-fg-color-hover: var(--theme-color-accent-normal);
 
     /*Progressbar style*/
     --progressbar-height: 24px;
@@ -111,8 +110,8 @@ body {
 
 /*===[ MISC STYLES ]========================================================================================================*/
 #MainLayout {
-    width:100vw;
-    height:100vh;
+    width: 100vw;
+    height: 100vh;
     background-color: var(--main-bg-color);
     overflow: hidden;
 }
@@ -123,15 +122,15 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--scrollbar-bg-color); 
+    background: var(--scrollbar-bg-color);
     border-radius: calc(var(--scrollbar-width) / 2);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-fg-color); 
+    background: var(--scrollbar-fg-color);
     border-radius: calc(var(--scrollbar-width) / 2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-fg-color-hover); 
+    background: var(--scrollbar-fg-color-hover);
 }

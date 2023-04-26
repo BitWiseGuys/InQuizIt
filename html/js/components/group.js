@@ -5,8 +5,8 @@
  */
 
 Vue.component("vGroup", {
-    props: ['direction'],
-    template:`
+    props: ["direction"],
+    template: `
     <div :class="'group group-'+(direction ? direction : 'horizontal')">
         <slot></slot>
     </div>
@@ -14,11 +14,11 @@ Vue.component("vGroup", {
 });
 
 Vue.component("vGroupCell", {
-    template:`
+    template: `
     <div class="group-cell">
         <div>
             <slot></slot>
         </div>
     </div>
-    `
+    `,
 });
