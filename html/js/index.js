@@ -63,7 +63,7 @@ const app = new Vue({
                 console.warn(`Unable to set options \"${opts}\".`);
             window.loadQuestions().then(()=>{
                 self.questionProgress = -1;
-                self.nextQuestion(-1);
+                self.$refs.questions.nextQuestion(-1);
                 self.$forceUpdate();
             });
         },
