@@ -8,7 +8,7 @@
  * HTML Tag: <v-progressbar :max=float :value=float :labeled=boolean><v-progressbar>
  * HTML Attributes:
  *  max[float]       : A floating point number that indicates the maximum possible value that this progressbar should be expecting.
- *  value[float]     : A floating point number that indicates the current value that this progressbar is set to. 
+ *  value[float]     : A floating point number that indicates the current value that this progressbar is set to.
  *  labeled[boolean] : A boolean value that indicates if the progressbar should show a percentage label.
  */
 Vue.component("vProgressbar", {

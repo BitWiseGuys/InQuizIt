@@ -1,7 +1,7 @@
 /**
  * Author: Andrew Kerr
  * Date: 3/28/2023
- * Description: Defines two html tags, v-popup and v-popup-screen. 
+ * Description: Defines two html tags, v-popup and v-popup-screen.
  *   v-popup is a tooltip popup that is displayed inline with whatever information it is representing.
  *   v-popup-screen is a screen popup that is displayed above all other elements on the page.
  */
@@ -14,7 +14,7 @@
  *  direction[string] : A string of which these values are recognized (above, below or right) which will determine the position of the popup.
  *  type[string]      : A string of which these values are recognized (normal, info, invalid) which will determine the border color of the popup.
  * VUE Slot: <template v-slot:'slot name'> | <template #'slot name'>
- *  default: Any HTML tags placed within this tag will be placed within the popup prior to the text attribute. 
+ *  default: Any HTML tags placed within this tag will be placed within the popup prior to the text attribute.
  */
 Vue.component("vPopup", {
     props: ["text", "visible", "direction", "type"],

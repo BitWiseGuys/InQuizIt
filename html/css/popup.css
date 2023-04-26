@@ -13,7 +13,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    left:100%;
+    left: 100%;
     margin-left: 15px;
     width: 200px;
     padding: 10px;
@@ -27,18 +27,18 @@
 
 .popup:before {
     content: "";
-    position:absolute;
-    left:100%;
-    margin-left:-5px;
-    top:50%;
-    transform:translateY(-50%);
-    border:10px solid #000;
+    position: absolute;
+    left: 100%;
+    margin-left: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 10px solid #000;
     border-color: transparent var(--popup-bd-color) transparent transparent;
-    display:none;
+    display: none;
 }
 
 .popup.below:after {
-    left:50%;
+    left: 50%;
     transform: translateX(-50%);
     margin-left: 0px;
     top: 100%;
@@ -48,31 +48,32 @@
 .popup.below:before {
     border-color: transparent transparent var(--popup-bd-color) transparent;
     margin: initial;
-    left:50%;
+    left: 50%;
     transform: translateY(-50%);
-    top:100%;
+    top: 100%;
     margin-top: 5px;
 }
 
 .popup.above:after {
     margin: initial;
     margin-bottom: 10px;
-    left:50%;
+    left: 50%;
     top: 0%;
-    transform: translate(-50%,-150%);
+    transform: translate(-50%, -150%);
 }
 
 .popup.above:before {
     border-color: var(--popup-bd-color) transparent transparent transparent;
     margin: initial;
-    left:50%;
-    transform: translate(-50%,-100%);
-    top:0%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    top: 0%;
     margin-bottom: 10px;
 }
 
 .popup.above.invalid:before {
-    border-color: var(--popup-bd-color-invalid) transparent transparent transparent;
+    border-color: var(--popup-bd-color-invalid) transparent transparent
+        transparent;
 }
 
 .popup.invalid:after {
@@ -82,14 +83,17 @@
 }
 
 .popup.invalid:not(.below):not(.above):before {
-    border-color: transparent var(--popup-bd-color-invalid) transparent transparent;
+    border-color: transparent var(--popup-bd-color-invalid) transparent
+        transparent;
 }
 
 .popup.below.invalid:before {
-    border-color: transparent transparent var(--popup-bd-color-invalid) transparent;
+    border-color: transparent transparent var(--popup-bd-color-invalid)
+        transparent;
 }
 
-.popup.show:before, .popup.show:after {
+.popup.show:before,
+.popup.show:after {
     display: block;
 }
 
@@ -135,7 +139,7 @@
 }
 
 .popup-screen > div > div.header > a.bi {
-    float:right;
+    float: right;
     background-color: transparent !important;
     border: none !important;
 }

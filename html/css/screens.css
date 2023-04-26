@@ -7,8 +7,8 @@
 /*===[ NAVBAR/MISC ]==========================================================================================================*/
 div#navbar {
     position: fixed;
-    right:5px;
-    top:10px;
+    right: 5px;
+    top: 10px;
 }
 
 div#subnavbar {
@@ -45,7 +45,7 @@ div#title > div {
 
 div#title > div > hr {
     max-width: 50%;
-    margin-bottom: 25px;   
+    margin-bottom: 25px;
 }
 
 /*===[ PROBLEM SET SCREEN ]===================================================================================================*/
@@ -60,7 +60,7 @@ div#problemSet {
     background-color: var(--panel-bg-color);
     border: 1px transparent;
     border-radius: 25px;
-    
+
     display: flex;
     flex-flow: column;
     padding-left: 15px;
@@ -153,9 +153,9 @@ div#settings {
 
 div#settings > h2 {
     position: fixed;
-    top:0;
-    left:0;
-    right:0;
+    top: 0;
+    left: 0;
+    right: 0;
     text-align: center;
 }
 
@@ -222,6 +222,6 @@ div#UserSubScreen > div.manageuser > div {
     flex: 1 0 auto;
 }
 
-div#UserSubScreen > div > div { 
+div#UserSubScreen > div > div {
     margin-left: 15px;
 }

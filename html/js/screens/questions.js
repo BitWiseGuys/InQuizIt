@@ -29,23 +29,24 @@ Vue.component("vQuestionsScreen", {
             answer: "",
             progress: 0,
             cached_answer_elm: undefined,
-        }
+        };
     },
     methods: {
         answeredQuestionWith(val, elm) {
             this.answer = val;
-            if(this.cached_answer_elm) this.cached_answer_elm.classList.remove("active");
+            if (this.cached_answer_elm)
+                this.cached_answer_elm.classList.remove("active");
             this.cached_answer_elm = elm.parentElement;
             this.cached_answer_elm.classList.add("active");
         },
         nextQuestion(lvl) {
             var q = window.selectNextQuestion();
-            if(!q) return;
+            if (!q) return;
             // Temporary override for demo
-            if(lvl == 4)
-                this.content = "This is a test question that take advantage of the [selectable] text feature along with the ability to generate content\n{gen-UniqueLetter:1}, {gen-UniqueLetter:2}, {gen-UniqueLetter:3}, {gen-UniqueLetter:4} {image:https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/SMPTE_Color_Bars.svg/200px-SMPTE_Color_Bars.svg.png} {diagram:3-venn}";
-            else
-                this.content = q.content;
+            if (lvl == 4)
+                this.content =
+                    "This is a test question that take advantage of the [selectable] text feature along with the ability to generate content\n{gen-UniqueLetter:1}, {gen-UniqueLetter:2}, {gen-UniqueLetter:3}, {gen-UniqueLetter:4} {image:https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/SMPTE_Color_Bars.svg/200px-SMPTE_Color_Bars.svg.png} {diagram:3-venn}";
+            else this.content = q.content;
             this.context = {};
             this.answer = "";
             this.cached_answer_elm = undefined;
@@ -53,8 +54,8 @@ Vue.component("vQuestionsScreen", {
             this.progress++;
         },
         onTransitionAway(towards) {
-            if(towards == this) return true;
+            if (towards == this) return true;
             return false;
-        }
-    }
+        },
+    },
 });

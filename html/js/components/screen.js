@@ -29,7 +29,7 @@ Vue.component("vOverlay", {
             return this.$root.overlay == this.name;
         },
     },
-})
+});
 
 Vue.component("vFrame", {
     props: ["closeable"],
@@ -46,5 +46,5 @@ Vue.component("vFrame", {
             <slot name="footer"></slot>
         </div>
     </div>
-    `
+    `,
 });

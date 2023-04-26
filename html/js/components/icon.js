@@ -22,37 +22,38 @@ Vue.component("vIcon", {
     `,
     computed: {
         isSelected() {
-            if(this.$parent.mode == "select")
+            if (this.$parent.mode == "select")
                 return this.$parent.selected == this.value;
-            if(this.$parent.mode == "toggle")
-                return this.toggled;
+            if (this.$parent.mode == "toggle") return this.toggled;
             return this.pressed;
         },
         canClick() {
-            return !this.disabled && (this.clickable != undefined ? this.clickable : true);
-        }
+            return (
+                !this.disabled &&
+                (this.clickable != undefined ? this.clickable : true)
+            );
+        },
     },
     methods: {
         click(e) {
             // Check if we can even be clicked.
-            if(!this.canClick) return;
+            if (!this.canClick) return;
             // Handle select and toggle modes.
-            if(this.$parent.mode == "select") {
+            if (this.$parent.mode == "select") {
                 this.$parent.selected = this.value;
                 this.$parent.$emit("change", this.value);
             }
-            if(this.$parent.mode == "toggle")
-                this.toggled = !this.toggled;
+            if (this.$parent.mode == "toggle") this.toggled = !this.toggled;
             // Call an outside function to inform them of a click.
-            this.$emit('click',e);
-        }
+            this.$emit("click", e);
+        },
     },
     data() {
         return {
             // Keeps track of if this icon is toggled or not (only used if the parent mode is 'toggle').
             toggled: false,
-        }
-    }
+        };
+    },
 });
 
 Vue.component("vIcons", {
@@ -65,6 +66,6 @@ Vue.component("vIcons", {
     data() {
         return {
             selected: undefined,
-        }
-    }
+        };
+    },
 });
