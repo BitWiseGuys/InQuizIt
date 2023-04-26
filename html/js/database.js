@@ -1,5 +1,5 @@
 /**
- * Author: Andrew Kerr, Grant Duchars
+ * Author: Andrew Kerr, Grant Duchars, Connor Marshall
  * Date: 04/06/2023
  */
 
@@ -9,8 +9,9 @@ Vue.component("vDatabaseEditor", {
         <h2>Database Editor</h2>
         <div class="flex-fit-content tabs">
             <button :class="'tab '+(tab == 'default' ? 'active' : '')" @click="tab = 'default';">Sets</button>
-            <button :class="'tab '+(tab == 'questions' ? 'active' : '')" @click="tab = 'questions';">Questions</button>
-            <button :class="'tab '+(tab == 'question' ? 'active' : '')" @click="tab = 'question';">Question</button>
+            <button :class="'tab '+(tab == 'questions' ? 'active' : '')" @click="tab = 'questions';
+                                                                                updateQuestionTable();">Questions</button>
+            <button :class="'tab '+(tab == 'question' ? 'active' : '')" @click="tab = 'question';">Question Editor</button>
         </div>
         <div class="flex-expand margin-5 margin-top-none tabbed">
             <template v-if="tab == 'default'">
@@ -49,7 +50,7 @@ Vue.component("vDatabaseEditor", {
                                     <td>{{set}}</td>
                                     <td>{{opt}}</td>
                                     <td>
-                                        <button @click="editSet(package, category, set, opt)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
+                                        <button @click="editSet(package, category, set, opt);"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
                                         <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
                                     </td>
                                 </tr>
@@ -183,6 +184,12 @@ Vue.component("vDatabaseEditor", {
             this.fields.SelectionTable.set = "";
             this.fields.SelectionTable.options = "";
         },
+        updateQuestionTable() {
+            window.loadQuestions().then(() => {
+                this.$set(this.editor, "questions", window.context.questions);
+            });
+        },
+
         /**
          * ???
          * @param {string} package - The package's name
@@ -195,9 +202,11 @@ Vue.component("vDatabaseEditor", {
             window.loadQuestionSet(package, category, set);
             window.addOption(options);
             window.loadQuestions().then(() => {
-                this.editor.questions = window.context.questions;
+                this.tab = "questions";
+                this.$set(this.editor, "questions", window.context.questions);
             });
         },
+
         /**
          * Sets up the question editor screen with the selected question to edit.
          * @param {string} type - The question's type
@@ -219,6 +228,7 @@ Vue.component("vDatabaseEditor", {
             };
             this.tab = "question";
         },
+
         /**
          * Sets up the question editor screen with a new blank question.
          */
@@ -237,6 +247,7 @@ Vue.component("vDatabaseEditor", {
             };
             this.tab = "question";
         },
+
         /**
          * Takes the current input from the question editor screen and adds it to the database. \
          * If you were previously editing an existing question it will try to remove the old question before addin the new one.
@@ -264,6 +275,7 @@ Vue.component("vDatabaseEditor", {
                 special: { type: this.fields.Question.special.type },
             };
         },
+
         /**
          * Adds the current input from the selectable text generator to the question's content.
          */
@@ -271,6 +283,7 @@ Vue.component("vDatabaseEditor", {
             this.fields.Question.content +=
                 "[" + this.$refs.selectableText.value + "] ";
         },
+
         /**
          * Cancels the current question editor without updating the database.
          */
@@ -289,18 +302,22 @@ Vue.component("vDatabaseEditor", {
             };
             this.tab = "questions";
         },
+
         /**
          * Deletes the selected question and all of its answers from the database.
          * @param {string} type - The question's type
          * @param {string} content - The question's content
          */
         deleteThisQuestion(type, content) {
-            window.deleteQuestion(type, content);
-            window.loadQuestionSet(
-                context.package,
-                context.category,
-                context.set
-            );
+            window.deleteQuestion(type, content).then(() => {
+                window.loadQuestions().then(() => {
+                    this.$set(
+                        this.editor,
+                        "questions",
+                        window.context.questions
+                    );
+                });
+            });
         },
     },
 });

@@ -185,7 +185,7 @@ window.loadQuestionSet = (package, category, set) => {
  * Loads the questions from the selected set
  * @returns {Promise<Array<string>>}
  */
-window.loadQuestions = () => {
+window.loadQuestions = async () => {
     return new Promise((resolve, reject) => {
         // Check if we have loaded a valid question set.
         if (
@@ -314,7 +314,7 @@ window.addQuestion = (type, content, answers) => {
  * @param {string} type - The question's type (eg multiple choice, typed, etc.)
  * @param {string} content - The question's content (the actual question)
  */
-window.deleteQuestion = (type, content) => {
+window.deleteQuestion = async (type, content) => {
     return new Promise((resolve, reject) => {
         if (typeof type != "string" || !type.length)
             return reject("Parameter 'type' needs to be a non-empty string.");
@@ -332,9 +332,9 @@ window.deleteQuestion = (type, content) => {
                 .delQuestion(
                     context.category,
                     context.set,
-                    context.options.join(""),
-                    type,
-                    content
+                    context.options.join(","),
+                    content,
+                    type
                 )
                 .then((res) => {
                     window
