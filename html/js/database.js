@@ -182,11 +182,12 @@ Vue.component("vDatabaseEditor", {
             
         },
         editQuestion(type, content, answers) {
+            answersArray = JSON.parse(JSON.stringify(answers));
             this.fields.Question = {
-                content: content, type: type, answers: answers, special: { type: "" }
+                content: content, type: type, answers: answersArray, special: { type: "" }
             };
             this.Prev_Question = {
-                content: content, type: type, answers: answers, special: { type: "" }
+                content: content, type: type, answers: answersArray, special: { type: "" }
             };
             this.tab = "question";
         },
@@ -204,12 +205,28 @@ Vue.component("vDatabaseEditor", {
             window.deleteQuestion(
                 this.Prev_Question.type,
                 this.Prev_Question.content,
-            );
+            ).then(() => {
+
+            let answersString = JSON.parse(JSON.stringify(this.fields.Question.answers));
+            answersArray = answersString.split("\n");
+
+            console.log(answersArray);
+
+
+
+            //answersString = JSON.stringify(this.fields.Question.answers);
+            //answersArray = answersString.split('\n');
+            
+
+
+                console.log("window.addQuestion("+this.fields.Question.type + ","+this.fields.Question.content+"," + answersArray + ")");
+            
             window.addQuestion(
                 this.fields.Question.type,
                 this.fields.Question.content,
-                this.fields.Question.answers.split("\n")
+                answersArray
             );
+
             this.Prev_Question = {
                 content: "", type: "", answers: [],
                 special: { type: this.fields.Question.special.type, },
@@ -218,6 +235,8 @@ Vue.component("vDatabaseEditor", {
                 content: "", type: "", answers: [],
                 special: { type: this.fields.Question.special.type, },
             };
+
+          });
         },
         catSelectAnswerToContent() {
             this.fields.Question.content += "*[" + this.$refs.selectableText.value + "] ";

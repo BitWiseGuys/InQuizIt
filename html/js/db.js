@@ -166,8 +166,8 @@ window.selectNextQuestion = () => {
 window.addQuestion = (type, content, answers) => {
     return new Promise((resolve, reject) => {
         // Check if we have been given two non-empty string.
-        if(typeof(type) != "string" || !type.length) return reject("Parameter 'type' needs to be a non-empty string.");
-        if(typeof(content) != "string" || !content.length) return reject("Parameter 'content' needs to be a non-empty string.");
+        if(typeof(type) != "string" || !type.length) return reject("Parameter 'type' needs to be a non-empty string. it is " + typeof type);
+        if(typeof(content) != "string" || !content.length) return reject("Parameter 'content' needs to be a non-empty string. it is "+ type);
         // Check if we have been given an non-empty array.
         if(!Array.isArray(answers) || !answers.length) return reject("Parameter 'answers' needs to be a non-empty array.");
         // Check if we have loaded into a valid question set.
@@ -192,8 +192,8 @@ window.addQuestion = (type, content, answers) => {
 
 window.deleteQuestion = async(type, content) => {
     return new Promise((resolve, reject) => {
-        if(typeof(type) != "string" || !type.length) return reject("Parameter 'type' needs to be a non-empty string.");
-        if(typeof(content) != "string" || !content.length) return reject("Parameter 'content' needs to be a non-empty string.");
+        if(typeof(type) != "string" || !type.length) return resolve("Parameter 'type' needs to be a non-empty string.");
+        if(typeof(content) != "string" || !content.length) return resolve("Parameter 'content' needs to be a non-empty string.");
         if(context.package.length && context.category.length && context.set.length && context.options.length) {
             window.db.delQuestion(context.category, context.set, context.options.join(","),content, type)
             .then((res) => {
