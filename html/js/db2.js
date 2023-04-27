@@ -6,7 +6,7 @@
  */
 
 // A collection of database functions and variables.
-window.database = { vars: { users: [] }, };
+window.database = { vars: { users: [], }, };
 
 /**
  * Aquires an array of users from the database.
@@ -25,6 +25,7 @@ window.database.addUser = async (firstname, lastname) => {
     var result = await window.db.newUser(firstname, lastname);
     if(result && result.length > window.database.vars.users.length) {
         window.database.vars.users.push({FirstName: firstname, LastName: lastname});
+        if(app) app.users = window.database.vars.users;
         return true;
     }
     return false;
@@ -57,6 +58,7 @@ window.database.removeUser = async(firstname, lastname) => {
             var user = window.database.vars.users[i];
             if(user.FirstName == firstname && user.LastName == lastname) {
                 window.database.vars.users.splice(i, 1);
+                if(app) app.users = window.database.vars.users;
                 return true;
             }
         }
@@ -110,6 +112,7 @@ window.database.addScore = async (package, category, subcategory, options, score
     // Initializes the initial state.
     var temp = async () => {
         window.database.vars.users = await window.db.getAllUsers();
+        if(app) app.users = window.database.vars.users;
     };
     temp();
     temp = undefined;

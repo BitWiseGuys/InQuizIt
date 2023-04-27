@@ -48,3 +48,13 @@ p.right, h1.right, h2.right, h3.right, h4.right, h5.right, h6.right, a.right {
 p.float-right, h1.float-right, h2.float-right, h3.float-right, h4.float-right, h5.float-right, h6.float-right, a.float-right {
     float: right;
 }
+
+a:not(.icon) {
+    color: var(--link-color);
+    text-decoration: underline;
+}
+
+a:not(.icon):active, a:not(.icon):visited, a:not(.icon):hover {
+    color: var(--link-active-color);
+    text-decoration: double;
+}

@@ -3,15 +3,15 @@ Vue.component("vQuestionsScreen", {
     <v-screen name="questions" class="no-center">
         <div class="main panel flex vertical">
             <div class="flex-stretch">
-                <p>
-                    <v-metatag :context="context" :text="content" ref="question" @answered="answeredQuestionWith"></v-metatag>
+                <p class="margin-5">
+                    <v-metatag :context="context" :text="q.content" ref="question" @answered="answeredQuestionWith"></v-metatag>
                 </p>
             </div>
             <div class="flex-no-stretch flex margin-5">
-                <input type="text" class="flex-stretch" placeholder="Enter answer here" v-model="answer">
-                <v-group :direction="'horizontal'" class="flex-no-stretch">
+                <input type="text" class="flex-stretch" placeholder="Enter answer here" v-model="answer" :disabled="continueQ">
+                <v-group :direction="'horizontal'" class="flex-no-stretch" v-show="!continueQ">
                     <v-group-cell>
-                        <v-icons class="smaller-icons" mode="select">
+                        <v-icons class="smaller-icons" mode="select" @change="changeConfidence">
                             <v-icon icon="emoji-frown" title="Not confident" value="0"></v-icon>
                             <v-icon icon="emoji-neutral" title="Somewhat confident" value="1"></v-icon>
                             <v-icon icon="emoji-smile" title="Confident" value="2"></v-icon>
@@ -19,7 +19,14 @@ Vue.component("vQuestionsScreen", {
                     </v-group-cell>
                     <v-group-cell>
                         <v-icons class="smaller-icons">
-                            <v-icon icon="arrow-right" @click="nextQuestion(true)"></v-icon>
+                            <v-icon icon="arrow-right" @click="verify()" :disabled="confidence < 0"></v-icon>
+                        </v-icons>
+                    </v-group-cell>
+                </v-group>
+                <v-group :direction="'horizontal'" class="flex-no-stretch" v-show="continueQ">
+                    <v-group-cell>
+                        <v-icons class="smaller-icons">
+                            <v-icon :icon="correct ? 'check-square' : 'x-square'" @click="nextQuestion()">&nbsp;Next&nbsp;Question</v-icon>
                         </v-icons>
                     </v-group-cell>
                 </v-group>
@@ -32,8 +39,13 @@ Vue.component("vQuestionsScreen", {
             context: {},
             content: "",
             answer: "",
+            q: {},
             progress: 0,
+            max_score: 100,
             cached_answer_elm: undefined,
+            confidence: -1,
+            continueQ: false,
+            correct: false,
         }
     },
     methods: {
@@ -43,18 +55,48 @@ Vue.component("vQuestionsScreen", {
             this.cached_answer_elm = elm.parentElement;
             this.cached_answer_elm.classList.add("active");
         },
-        nextQuestion(isStart) {
+        verify() {
+            if(this.q.answers) {
+                var answers = this.answer.split(",");
+                var all_found = [];
+                var incorrect = false;
+                for(var i in answers) {
+                    var a = answers[i].toLowerCase();
+                    var found = false; 
+                    for(var j in this.q.answers) {
+                        var b = String(this.q.answers[j]).toLowerCase();
+                        if(b == a && all_found.indexOf(j) == -1) { found = true; all_found.push(j); break; }
+                    }
+                    if(!found) { incorrect = true; break; }
+                }
+                if(incorrect || all_found.length != this.q.answers.length) {
+                    this.progress -= (this.confidence ? 10 * this.confidence : 0);
+                    if(this.progress < 0) this.progress = 0;
+                    this.correct = false;
+                }
+                else {
+                    this.progress += (this.confidence ? 10 * this.confidence : 0);
+                    if(this.progress > this.max_score) this.progress = this.max_score;
+                    this.correct = true;
+                }
+            }
+            this.continueQ = true;
+        },
+        nextQuestion() {
             var q = window.selectNextQuestion();
             if(!q) return;
-            this.content = q.content;
+            this.q = q;
             this.context = {};
             this.answer = "";
             this.cached_answer_elm = undefined;
             this.$refs.question.refresh();
-            this.progress++;
+            this.continueQ = false;
+        },
+        changeConfidence(confidence) {
+            this.confidence = confidence;
         },
         onTransitionAway(towards) {
             
-        }
+        },
     }
 });

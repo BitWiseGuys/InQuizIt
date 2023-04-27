@@ -121,6 +121,13 @@ window.setOption = (options) => {
         if(found) break;
     }
     context.options = options;
+    window.db.getQuestionSet(context.category, context.set, context.options.join(",")).then((res)=>{
+        res = res[0];
+        if(app) {
+            app.$refs.questions.max_score = res.CompletionScore;
+            app.QDescription = res.setDescription;
+        }
+    });
     return true;
 }
 
