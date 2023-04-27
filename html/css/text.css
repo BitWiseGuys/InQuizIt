@@ -49,12 +49,12 @@ p.float-right, h1.float-right, h2.float-right, h3.float-right, h4.float-right, h
     float: right;
 }
 
-a {
+a:not(.icon) {
     color: var(--link-color);
     text-decoration: underline;
 }
 
-a:active, a:visited, a:hover {
+a:not(.icon):active, a:not(.icon):visited, a:not(.icon):hover {
     color: var(--link-active-color);
     text-decoration: double;
 }
