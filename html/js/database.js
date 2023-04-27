@@ -15,7 +15,8 @@ Vue.component("vDatabaseEditor", {
         </div>
         <div class="flex-expand margin-5 margin-top-none tabbed">
             <template v-if="tab == 'default'">
-                <table>
+            <div class="scrollable-container">
+            <table>
                     <tr>
                         <th colspan="5">
                             <input v-model="filters.SelectionTable" placeholder="Filter">
@@ -58,9 +59,11 @@ Vue.component("vDatabaseEditor", {
                         </template>
                     </tbody>
                 </table>
+                </div>
             </template>
             <template v-if="tab == 'questions'">
                 <h3>{{editor.package}} {{editor.category}} {{editor.set}}-{{editor.options}}</h3>
+                <div class = "scrollable-container">
                 <table>
                     <tr>
                         <th colspan="5">
@@ -84,6 +87,7 @@ Vue.component("vDatabaseEditor", {
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </template>
             <template v-if="tab == 'question'">
                 <input list="QTypes" placeholder="Question Type" v-model="fields.Question.type">
