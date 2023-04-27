@@ -114,7 +114,6 @@ const app = new Vue({
         }
     },
     created() {
-        // TODO: Needs to get stuff from the database.
         this.users = [
             { first: 'Andrew', last: 'Kerr' },
             { first: 'Grant', last: 'Duchars' },

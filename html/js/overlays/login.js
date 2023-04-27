@@ -9,8 +9,8 @@ Vue.component("vLoginOverlay", {
                 <h3>Existing Users:</h3>
                 <div class="users">
                     <template v-for="user in $root.users">
-                        <span @click="firstname = user.first; lastname = user.last;">
-                            {{user.first}}&nbsp;{{user.last}}
+                        <span @click="firstname = user.FirstName; lastname = user.LastName;">
+                            {{user.FirstName}}&nbsp;{{user.LastName}}
                         </span>
                     </template>
                 </div>
@@ -40,33 +40,26 @@ Vue.component("vLoginOverlay", {
             let users = this.$root.users;
             for(var i in users) {
                 let user = users[i];
-                if(user.first == this.firstname && user.last == this.lastname) {
-                    this.$root.user = user;
+                if(user.FirstName == this.firstname && user.LastName == this.lastname) {
+                    this.$root.user = { first: user.FirstName, last: user.LastName };
                     this.$root.goto("","default");
+                    this.$root.$forceUpdate();
                     return;
                 }
             }
             // Create a new user.
-            // TODO: Need to insert into the database.
-            var user = { first: this.firstname, last: this.lastname };
-            this.$root.users.push(user);
-            this.$root.user = user;
-            this.$root.goto("","default");
+            database.addUser(this.firstname, this.lastname).then(()=>{
+                this.$root.user = { first: this.firstname, last: this.lastname };
+                this.$root.goto("","default");
+                this.$root.$forceUpdate();
+            });
         },
         removeUser() {
             // Can't remove a non-existing account.
             if(this.firstname.length == 0 || this.lastname.length == 0) return;
-            // Search for existing user.
-            let users = this.$root.users;
-            for(var i in users) {
-                let user = users[i];
-                if(user.first == this.firstname && user.last == this.lastname) {
-                    // Remove this user!
-                    users.splice(i, 1);
-                    //TODO: Need to remove from the database.
-                    return;
-                }
-            }
+            database.removeUser(this.firstname, this.lastname).then(()=>{
+                this.$root.$forceUpdate();
+            });
         },
     }
 });
