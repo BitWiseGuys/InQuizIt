@@ -109,7 +109,7 @@ Vue.component("vDatabaseEditor", {
                         </div>
                     </div>
                 </div>
-                <textarea v-model="fields.Question.answers" rows="4" cols="100" :style="'width:100%;resize:none;'" placeholder="Answers (seperated by a newline)"></textarea>
+                <textarea v-model="displayAnswers" rows="4" cols="100" :style="'width:100%;resize:none;'" placeholder="Answers (seperated by a newline)"></textarea>
                 <button @click="commitQuestionToDatabase">Commit to DB</button>
                 <button @click="cancelAddQuestion">Cancel</button>
             </template>
@@ -144,6 +144,16 @@ Vue.component("vDatabaseEditor", {
                 package : "", category : "", set : "", options: "", questions: [],
             },
         }
+    },
+    computed:{
+      displayAnswers: {
+        get: function() {
+          return this.fields.Question.answers.join('\n');
+        },
+        set: function(newValue) {
+          this.fields.Question.answers = newValue.split('\n');
+        }
+      }
     },
     methods: {
         async closeSelectionTable(add) {
@@ -207,8 +217,8 @@ Vue.component("vDatabaseEditor", {
                 this.Prev_Question.content,
             ).then(() => {
 
-            let answersString = JSON.parse(JSON.stringify(this.fields.Question.answers));
-            answersArray = answersString.split("\n");
+            let answersArray = JSON.parse(JSON.stringify(this.fields.Question.answers));
+            
 
             console.log(answersArray);
 
