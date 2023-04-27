@@ -5,8 +5,6 @@ Vue.component("vMainOverlay", {
             <v-group-cell>
                 <v-icons>
                     <v-icon icon="house-fill" @click="$root.goto('default');" title="Return Home" :disabled="$root.screen == 'default'"></v-icon>
-                    <v-icon icon="gear-fill" @click="$root.goto('','settings');" title="Change Settings"></v-icon>
-                    <v-icon icon="database-fill-gear" @click="$root.goto('database editor','')" title="Database Editor" :disabled="$root.screen != 'default'"></v-icon>
                 </v-icons>
             </v-group-cell>
             <v-group-cell v-show="$root.screen == 'questions'">
@@ -21,3 +19,8 @@ Vue.component("vMainOverlay", {
     </v-overlay>
     `,
 });
+
+/*
+<v-icon icon="gear-fill" @click="$root.goto('','settings');" title="Change Settings"></v-icon>
+<v-icon icon="database-fill-gear" @click="$root.goto('database editor','')" title="Database Editor" :disabled="$root.screen != 'default'"></v-icon>
+*/

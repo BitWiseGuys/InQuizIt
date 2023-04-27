@@ -39,6 +39,8 @@
     --main-bg-color: var(--theme-color-background-primary);
     --text-color: var(--theme-color-foreground-primary);
     --text-color-inactive: var(--theme-color-foreground-secondary);
+    --link-color: var(--theme-color-accent-normal);
+    --link-active-color: var(--theme-color-accent-normal);
 
     /*Frame Color's*/
     --frame-bg-color: var(--theme-color-background-primary);

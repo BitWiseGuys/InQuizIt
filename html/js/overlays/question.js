@@ -9,7 +9,7 @@ Vue.component("vQuestionStartOverlay", {
                 <p></p>
             </template>
             <template #footer>
-                <button @click="$root.goto('','default');$root.$refs.questions.nextQuestion(false);">Begin</button>
+                <button class="margin-5 float-right" @click="$root.goto('','default');$root.$refs.questions.nextQuestion(false);">Begin</button>
             </template>
         </v-frame>
     </v-overlay>
