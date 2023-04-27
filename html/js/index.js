@@ -33,6 +33,7 @@ const app = new Vue({
         questionAnswerInput: "",
         questionOptions: [],
         questionSelectedOptions: {},
+        QDescription: "",
     },
     computed: {
         isValidOptionSet() {
@@ -114,10 +115,6 @@ const app = new Vue({
         }
     },
     created() {
-        this.users = [
-            { first: 'Andrew', last: 'Kerr' },
-            { first: 'Grant', last: 'Duchars' },
-        ];
         this.selectPackage("Logicola");
     },
 });

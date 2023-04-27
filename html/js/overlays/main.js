@@ -8,7 +8,7 @@ Vue.component("vMainOverlay", {
                 </v-icons>
             </v-group-cell>
             <v-group-cell v-show="$root.screen == 'questions'">
-                <v-progressbar :max="100" :value="$root.$refs.questions.progress" :labeled="true" :style="'width:400px;'"></v-progressbar>
+                <v-progressbar :max="$root.$refs.questions.max_score" :value="$root.$refs.questions.progress" :labeled="true" :style="'width:400px;'"></v-progressbar>
             </v-group-cell>
             <v-group-cell>
                 <v-icon icon="person" @click="$root.goto('','login');" :disabled="$root.screen != 'default'" title="Login/Logout">
