@@ -125,6 +125,39 @@ contextBridge.exposeInMainWorld("db", {
     const res = await ipcRenderer.invoke('delUser', FirstName,LastName);
     console.log(res);
     return res;
+  },
+
+  /*******************************************************
+   * Score Database Functions
+   *******************************************************/
+  
+  //return a promise to all scores of inputted user
+  getAllScores: async (FirstName,LastName) => {
+    const res = await ipcRenderer.invoke('getAllScores', FirstName,LastName);
+    return res;
+  },
+  
+  //return a promise to update or add a score value for the user and problem set inputted
+  updateScore: async (firstName,lastName, setCategory, setName, setOptions, scoreVal) => {
+    const res = await ipcRenderer.invoke('updateScore', firstName,lastName, setCategory, setName, setOptions, scoreVal);
+    return res;
+  },
+
+
+
+
+
+
+
+  /*******************************************************
+   * Score Validation Funcitons
+   *******************************************************/
+  encryptScore: (scoreString) => {
+    return ipcRenderer.invoke('encryptScore',scoreString);  
+  },
+
+  decryptScore: (str1,str2,str3) => {
+    return ipcRenderer.invoke('decryptScore',str1,str2,str3);
   }
 
 });
