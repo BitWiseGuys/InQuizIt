@@ -10,40 +10,45 @@ contextBridge.exposeInMainWorld("versions", {
 //dbManager Calls For Front end
 contextBridge.exposeInMainWorld("db", {
 
-//DATABASE RETRIEVAL CALLS
+  mergeDB : async (dbPath) => {
+     const res = await ipcRenderer.invoke('mergeDB',dbPath);
+     return res;
+   },
+
+   replaceDB : async (dbPath) => {
+      const res = await ipcRenderer.invoke('replaceDB',dbPath);
+      return res;
+    },
+  
+   //DATABASE RETRIEVAL CALLS
+
  getAllQuestionSets : async () => {
     const res = await ipcRenderer.invoke('getAllQuestionSets');
-    console.log(res);
     return res;
   },
 
   getAllCategories : async () => {
   const res = await ipcRenderer.invoke('getAllCategories');
-  console.log(res);
   return res;
   },
 
    getQuestionSet : async (setCategory, setName, setOptions) => {
     const res = await ipcRenderer.invoke('getQuestionSet', setCategory, setName, setOptions);
-    console.log(res);
     return res;
   },
 
    getAllQuestions : async (setCategory, setName, setOptions) => {
     const res = await ipcRenderer.invoke('getAllQuestions', setCategory, setName, setOptions);
-    console.log(res);
     return res;
   },
 
   getAllAnswers : async (setCategory, setName, setOptions, questionContent, questionType) => {
     const res = await ipcRenderer.invoke('getAllAnswers', setCategory, setName, setOptions, questionContent, questionType);
-    console.log(res);
     return res;
   },
 
   getAllUsers : async () => {
     const res = await ipcRenderer.invoke('getAllUsers');
-    console.log(res);
     return res;
   },
 
@@ -53,7 +58,6 @@ contextBridge.exposeInMainWorld("db", {
 
   newUser: async (FirstName,LastName) => {
     const res = await ipcRenderer.invoke('newUser', FirstName,LastName);
-    console.log(res);
     return res;
   },
 
@@ -62,7 +66,6 @@ contextBridge.exposeInMainWorld("db", {
   //window.db.newQuestionSet(Category,Name,Options);
   newQuestionSet: async (Category, Name, Options) => {
     const res = await ipcRenderer.invoke('newQuestionSet', Category, Name, Options);
-    console.log(res);
     return res;
   },
  
@@ -71,7 +74,6 @@ contextBridge.exposeInMainWorld("db", {
   //window.db.newQuestion(Category,Name,Options,Type, Question);
   newQuestion: async (Category, Name, Options, Type, Question) => {
     const res = await ipcRenderer.invoke('newQuestion', Category, Name, Options, Type, Question);
-    console.log(res);
     return res;
   },
 
@@ -82,14 +84,12 @@ contextBridge.exposeInMainWorld("db", {
         console.log(res);
     }
     const res = await ipcRenderer.invoke('deleteQuestion', Category, Name, Options, Type, Question);
-    console.log(res);
   },
 
   //CREATE NEW ANSWER FOR AN ALREADY EXISTING QUESTION
   //window.db.newAnswer(Category,Name,Options,Type,Question,Ans);
   newAnswer: async (Category, Name, Options, Type, Question, Ans) => {
     const res = await ipcRenderer.invoke('newAnswer', Category, Name, Options, Type, Question,Ans);
-    console.log(res);
     return res;
   },
 
@@ -97,9 +97,7 @@ contextBridge.exposeInMainWorld("db", {
   //window.db.newQuestionWithAnswer(Category,Name,Options,Type,Question,Ans);
   newQuestionWithAnswer: async (Category, Name, Options, Type, Question, Ans) => {
     const res1 = await ipcRenderer.invoke('newQuestion', Category, Name, Options, Type, Question);
-    console.log(res1);
     const res2 = await ipcRenderer.invoke('newAnswer', Category, Name, Options, Type, Question,Ans);
-    console.log(res2);
     return res2;
   },
 
@@ -109,21 +107,18 @@ contextBridge.exposeInMainWorld("db", {
   //DELETE GIVEN QUESTION AND ALL REFERENCES TO THIS
   delQuestion: async (Category, Name, Options, Type, Question) => {
     const res = await ipcRenderer.invoke('delQuestion', Category, Name, Options, Type, Question);
-    console.log(res);
     return res;
   },
 
    //DELETE GIVEN QUESTIONSET AND ALL REFERENCES TO THIS
    delQuestionSet: async (Category, Name, Options) => {
     const res = await ipcRenderer.invoke('delQuestionSet', Category, Name, Options);
-    console.log(res);
     return res;
   },
 
   //DELETE GIVEN QUESTIONSET AND ALL REFERENCES TO THIS
   delUser: async (FirstName,LastName) => {
     const res = await ipcRenderer.invoke('delUser', FirstName,LastName);
-    console.log(res);
     return res;
   },
 

@@ -14,6 +14,92 @@ var knex = require("knex")({
 
 
 
+/************************************************
+ * 
+ * Database Merge/Replace Functions
+ * 
+ ***********************************************/
+
+//given the path to another inquizit database file, merge all non redundant
+//data into the main db
+async function mergeDatabases(externDbPath) {
+  console.log(externDbPath);
+  // Connect second external database
+  const knex2 = require("knex")({
+    client: 'sqlite3',
+    connection: {
+      filename: externDbPath,
+    },
+    useNullAsDefault: true,
+  });
+
+  // Get a list of tables in the first database
+  const tables = await knex2('sqlite_master')
+    .where('type', 'table')
+    .select('name');
+
+  // For each table
+  for (const table of tables) {
+    try {
+      // Get all rows from the table in the first database
+      const rows = await knex2(table.name).select();
+
+      // Insert all rows into the corresponding table in the second database
+      await knex(table.name).insert(rows).onConflict().ignore();
+    } catch (err) {
+      console.error(`Error inserting data into table ${table.name}:`, err);
+    }
+  }
+
+  console.log("Succefully Merged External Database in Main");
+
+  // Close the connection
+  await knex2.destroy();
+}
+
+//fully replace exisitng main db with specified file path
+//also creates backup of original file
+async function replaceDatabase(externDbPath){
+  const fs = require('fs');
+  const path = require('path');
+
+//close current knex connection
+await knex.destroy();
+
+//create backup of original DB file
+fs.copyFile('./databases/InQuizIt.db', './databases/InQuizIt-old.db', err => {
+  if (err) throw err;
+  console.log('Backup File copied and renamed successfully!');
+});
+
+
+//copies specified file as new main DB
+const sourceFile = externDbPath;
+const targetDir = './databases';
+const targetFile = path.join(targetDir, 'InQuizIt.db');
+
+fs.copyFile(sourceFile, targetFile, err => {
+  if (err) throw err;
+  console.log('New DB File copied and renamed successfully!');
+});
+
+//reopen new main knex connection
+knex = require("knex")({
+  client: "sqlite3",
+  connection: {
+    filename: "./databases/InQuizIt.db"
+  },
+  useNullAsDefault: true
+});
+console.log("Main DB successfully reconnected");
+
+}
+
+
+
+
+
+
 /*************************************************
  * 
  * Database Insertion Functions
@@ -196,6 +282,9 @@ async function updateScore(firstName,lastName, setCategory, setName, setOptions,
 
 
 //EXPORTS
+exports.mergeDatabases = mergeDatabases;
+exports.replaceDatabase = replaceDatabase;
+
 exports.newQuestionSet = newQuestionSet;
 exports.newQuestion = newQuestion;
 exports.newAnswer = newAnswer;
