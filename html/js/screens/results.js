@@ -1,5 +1,5 @@
-function GenerateSecureScore(score) {
-    return "Encoded score goes here!";
+async function GenerateSecureScore(score) {
+    return await window.db.encryptScore(String(score.CurrentScore));
 }
 
 Vue.component("vResultsScreen", {
@@ -18,10 +18,10 @@ Vue.component("vResultsScreen", {
                 </tr>
                 <tr v-for="score in scores">
                     <td>{{score.PackageName}}</td>
-                    <td>{{score.CategoryName}}</td>
+                    <td>{{score.SetCategory}}</td>
                     <td>{{score.SetName}}</td>
                     <td>{{score.SetOptions}}</td>
-                    <td>{{score.CurrScore}}</td>
+                    <td>{{score.CurrentScore}}</td>
                     <td>
                         <button @click="Submit(score)">Submit</button>
                     </td>
@@ -41,13 +41,13 @@ Vue.component("vResultsScreen", {
         };
     },
     methods: {
-        Submit(score) {
+        async Submit(score) {
             // Check if we support the clipboard API otherwise we need to go about this the long way.
             if(navigator && navigator.clipboard && navigator.clipboard.writeText)
-                navigator.clipboard.writeText(GenerateSecureScore(score));
+                navigator.clipboard.writeText(await GenerateSecureScore(score));
             else {
                 const el = document.createElement('textarea');
-                el.value = GenerateSecureScore(score);
+                el.value = await GenerateSecureScore(score);
                 el.setAttribute('readonly', '');
                 el.style.position = 'absolute';
                 el.style.left = '-9999px';

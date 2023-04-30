@@ -217,21 +217,11 @@ window.addCategory = (package, category, name, options) => {
 };
 
 window.getScores = async (firstName, lastName) => {
-    return [
-        {
-            FirstName: "Andrew",
-            LastName: "Kerr",
-            PackageName: "LogiCola",
-            CategoryName: "A",
-            SetName: "A",
-            SetOptions: "A",
-            CurrScore: 100,
-        }
-    ];
+    return await window.db.getAllScores(firstName, lastName);
 }
 
 window.setScore = async (firstName, lastName, package, category, set, options, score) => {
-    return undefined;
+    return await window.db.updateScore(firstName, lastName, category, set, options.join(","), score);
 }
 
 window.getOptions = () => {
