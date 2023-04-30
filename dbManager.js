@@ -8,7 +8,8 @@ var knex = require("knex")({
   client: "sqlite3",
   connection: {
     filename: "./databases/InQuizIt.db"
-  }
+  },
+  useNullAsDefault: true
 });
 
 
@@ -167,7 +168,29 @@ async function deleteUser(firstName, lastName) {
 };
 
 
+/*************************************************
+ * 
+ * Database Score Functions
+ * Written by: Connor Marshall
+ * 
+ * 
+ *************************************************/
 
+//retrieve all scores for a specific user
+async function getAllScores(firstName,lastName) {
+  const res = await knex.select("*")
+  .from("Scores_T")
+  .where({FirstName: firstName, LastName: lastName});
+  return res;
+};
+
+//update or create a score value if not already present
+async function updateScore(firstName,lastName, setCategory, setName, setOptions, scoreVal){
+  const res = await knex("Scores_T")
+  .insert({ FirstName: firstName, LastName: lastName, PackageName: "Logicola", SetCategory: setCategory, SetName: setName, SetOptions: setOptions, CurrentScore: scoreVal})
+  .onConflict(["FirstName", "LastName", "PackageName", "SetCategory", "SetName", "SetOptions"]).merge();
+  return res;
+}
 
 
 
@@ -188,4 +211,7 @@ exports.getAllAnswers = getAllAnswers;
 exports.deleteQuestion = deleteQuestion;
 exports.deleteQuestionSet = deleteQuestionSet;
 exports.deleteUser = deleteUser;
+
+exports.getAllScores = getAllScores;
+exports.updateScore = updateScore;
 

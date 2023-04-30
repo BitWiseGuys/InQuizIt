@@ -1,8 +1,9 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 
-
+//backend js files
 const dbMngr = require('./dbManager');
+const scoreVal = require('./scoreValidation');
 
 
 const createWindow = () => {
@@ -135,3 +136,30 @@ ipcMain.handle('delUser', async (event,  firstName, lastName) => {
 });
 
 
+/*******************************************************
+   * Score Database Functions
+   *******************************************************/
+  
+  ipcMain.handle('getAllScores', async (event,firstName,lastName) => {
+    const res = await dbMngr.getAllScores(firstName,lastName);
+    return res;
+  });
+  
+  ipcMain.handle('updateScore', async (event,firstName,lastName, setCategory, setName, setOptions, scoreVal) => {
+    const res = await dbMngr.updateScore(firstName,lastName, setCategory, setName, setOptions, scoreVal);
+    return res;
+  });
+
+
+
+/*******************************************************
+ * Score Validation Funcitons
+ *******************************************************/
+
+ipcMain.handle('encryptScore', (event,scoreString) => {
+  return scoreVal.encryptScore(scoreString);
+});
+
+ipcMain.handle('decryptScore', (event,str1,str2,str3) => {
+  return scoreVal.decryptScore(str1,str2,str3);
+});

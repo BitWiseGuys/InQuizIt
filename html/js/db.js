@@ -135,7 +135,7 @@ window.loadQuestionSet = (package, category, set) => {
     return (window.loadDatabase(package) && window.loadCategory(category) && window.loadSet(set));
 };
 
-window.loadQuestions = () => {
+window.loadQuestions = async() => {
     return new Promise((resolve, reject) => {
         // Check if we have loaded a valid question set.
         if(context.package.length && context.category.length && context.set.length && context.options.length) {
@@ -173,17 +173,17 @@ window.selectNextQuestion = () => {
 window.addQuestion = (type, content, answers) => {
     return new Promise((resolve, reject) => {
         // Check if we have been given two non-empty string.
-        if(typeof(type) != "string" || !type.length) return reject("Parameter 'type' needs to be a non-empty string.");
-        if(typeof(content) != "string" || !content.length) return reject("Parameter 'content' needs to be a non-empty string.");
+        if(typeof(type) != "string" || !type.length) return reject("Parameter 'type' needs to be a non-empty string. it is " + typeof type);
+        if(typeof(content) != "string" || !content.length) return reject("Parameter 'content' needs to be a non-empty string. it is "+ type);
         // Check if we have been given an non-empty array.
         if(!Array.isArray(answers) || !answers.length) return reject("Parameter 'answers' needs to be a non-empty array.");
         // Check if we have loaded into a valid question set.
         if(context.package.length && context.category.length && context.set.length && context.options.length) {
             // Add in the new question.
-            window.db.newQuestion(context.category, context.set, context.options.join(""), type, content)
+            window.db.newQuestion(context.category, context.set, context.options.join(","), type, content)
             .then(async (res) => {
                 for(var i in answers)
-                    await window.db.newAnswer(context.category, context.set, context.options.join(""), type, content, answers[i]);
+                    await window.db.newAnswer(context.category, context.set, context.options.join(","), type, content, answers[i]);
                 // Reload the question set.
                 window.loadQuestions().then(()=>{resolve(res)}).catch((err)=>{reject(err)});
             }).catch((err) => {
@@ -197,13 +197,12 @@ window.addQuestion = (type, content, answers) => {
     });
 }
 
-// ! THIS NEEDS TO BE IN A TRANSACTION
-window.deleteQuestion = (type, content) => {
+window.deleteQuestion = async(type, content) => {
     return new Promise((resolve, reject) => {
-        if(typeof(type) != "string" || !type.length) return reject("Parameter 'type' needs to be a non-empty string.");
-        if(typeof(content) != "string" || !content.length) return reject("Parameter 'content' needs to be a non-empty string.");
+        if(typeof(type) != "string" || !type.length) return resolve("Parameter 'type' needs to be a non-empty string.");
+        if(typeof(content) != "string" || !content.length) return resolve("Parameter 'content' needs to be a non-empty string.");
         if(context.package.length && context.category.length && context.set.length && context.options.length) {
-            window.db.deleteQuestion(context.category, context.set, context.options.join(""), type, content)
+            window.db.delQuestion(context.category, context.set, context.options.join(","),content, type)
             .then((res) => {
                 window.loadQuestions().then(()=>{resolve(res)}).catch((err)=>{reject(err)});
             }).catch((err) => {

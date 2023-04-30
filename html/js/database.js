@@ -1,5 +1,5 @@
 /**
- * Author: Andrew Kerr, Grant Duchars
+ * Author: Andrew Kerr, Grant Duchars, Connor Marshall
  * Date: 04/06/2023
  */
 
@@ -9,12 +9,14 @@ Vue.component("vDatabaseEditor", {
         <h2>Database Editor</h2>
         <div class="flex-fit-content tabs">
             <button :class="'tab '+(tab == 'default' ? 'active' : '')" @click="tab = 'default';">Sets</button>
-            <button :class="'tab '+(tab == 'questions' ? 'active' : '')" @click="tab = 'questions';">Questions</button>
-            <button :class="'tab '+(tab == 'question' ? 'active' : '')" @click="tab = 'question';">Question</button>
+            <button :class="'tab '+(tab == 'questions' ? 'active' : '')" @click="tab = 'questions';
+                                                                                updateQuestionTable();">Questions</button>
+            <button :class="'tab '+(tab == 'question' ? 'active' : '')" @click="tab = 'question';">Question Editor</button>
         </div>
         <div class="flex-expand margin-5 margin-top-none tabbed">
             <template v-if="tab == 'default'">
-                <table>
+            <div class="scrollable-container">
+            <table>
                     <tr>
                         <th colspan="5">
                             <input v-model="filters.SelectionTable" placeholder="Filter">
@@ -49,7 +51,7 @@ Vue.component("vDatabaseEditor", {
                                     <td>{{set}}</td>
                                     <td>{{opt}}</td>
                                     <td>
-                                        <button @click="editSet(package, category, set, opt)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
+                                        <button @click="editSet(package, category, set, opt);"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
                                         <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
                                     </td>
                                 </tr>
@@ -57,9 +59,11 @@ Vue.component("vDatabaseEditor", {
                         </template>
                     </tbody>
                 </table>
+                </div>
             </template>
             <template v-if="tab == 'questions'">
                 <h3>{{editor.package}} {{editor.category}} {{editor.set}}-{{editor.options}}</h3>
+                <div class = "scrollable-container">
                 <table>
                     <tr>
                         <th colspan="5">
@@ -78,11 +82,12 @@ Vue.component("vDatabaseEditor", {
                             <td>{{question.content.substring(0,100)}}</td>
                             <td>
                                 <button @click="editQuestion(question.type, question.content, question.answers)"><span class="bi bi-pencil"></span>&nbsp;Edit</button>
-                                <button disabled="true"><span class="bi bi-trash"></span>&nbsp;Delete</button>
+                                <button @click="deleteThisQuestion(question.type, question.content)"><span class="bi bi-trash"></span>&nbsp;Delete</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </template>
             <template v-if="tab == 'question'">
                 <input list="QTypes" placeholder="Question Type" v-model="fields.Question.type">
@@ -108,7 +113,7 @@ Vue.component("vDatabaseEditor", {
                         </div>
                     </div>
                 </div>
-                <textarea v-model="fields.Question.answers" rows="4" cols="100" :style="'width:100%;resize:none;'" placeholder="Answers (seperated by a newline)"></textarea>
+                <textarea v-model="displayAnswers" rows="4" cols="100" :style="'width:100%;resize:none;'" placeholder="Answers (seperated by a newline)"></textarea>
                 <button @click="commitQuestionToDatabase">Commit to DB</button>
                 <button @click="cancelAddQuestion">Cancel</button>
             </template>
@@ -121,6 +126,12 @@ Vue.component("vDatabaseEditor", {
             filters: {
                 SelectionTable : "",
                 QuestionTable: "",
+            },
+            Prev_Question: {
+                content: "", type: "", answers: "",
+                special: {
+                    type: "",
+                }
             },
             fields: {
                 SelectionTable : {
@@ -137,6 +148,16 @@ Vue.component("vDatabaseEditor", {
                 package : "", category : "", set : "", options: "", questions: [],
             },
         }
+    },
+    computed:{
+      displayAnswers: {
+        get: function() {
+          return this.fields.Question.answers.join('\n');
+        },
+        set: function(newValue) {
+          this.fields.Question.answers = newValue.split('\n');
+        }
+      }
     },
     methods: {
         async closeSelectionTable(add) {
@@ -157,40 +178,79 @@ Vue.component("vDatabaseEditor", {
             this.fields.SelectionTable.set = "";
             this.fields.SelectionTable.options = "";
         },
-        editSet(package, category, set, options) {
+
+        updateQuestionTable(){
+          window.loadQuestions().then(() => {
+            this.$set(this.editor, "questions", window.context.questions);
+          });
+        },
+
+        async editSet(package, category, set, options) {
             this.editor = { package, category, set, options };
             window.loadQuestionSet(package, category, set);
             window.addOption(options);
-            window.loadQuestions().then(()=>{
-                this.editor.questions = window.context.questions;
+            window.loadQuestions().then(() => {
+              this.tab = "questions";
+              this.$set(this.editor, "questions", window.context.questions);
             });
+            
         },
-        // ! THIS SHOULD ALSO START A NEW TRANSACTION
         editQuestion(type, content, answers) {
+            answersArray = JSON.parse(JSON.stringify(answers));
             this.fields.Question = {
-                content: content, type: type, answers: answers, special: { type: "" }
-            }
+                content: content, type: type, answers: answersArray, special: { type: "" }
+            };
+            this.Prev_Question = {
+                content: content, type: type, answers: answersArray, special: { type: "" }
+            };
             this.tab = "question";
         },
-        // ! THIS SHOULD ALSO START A NEW TRANSACTION
         setupCreateQuestion() {
             this.fields.Question = {
                 content: "", type: "", answers: [],
                 special: { type: "", },
             };
+            this.fields.Prev_Question = {
+                content: "", type: "", answers: [], special: { type: "" }
+            };
             this.tab = "question";
         },
-        // ! THIS SHOULD ALSO COMMIT THE TRANSACTION
         commitQuestionToDatabase() {
+            window.deleteQuestion(
+                this.Prev_Question.type,
+                this.Prev_Question.content,
+            ).then(() => {
+
+            let answersArray = JSON.parse(JSON.stringify(this.fields.Question.answers));
+            
+
+            console.log(answersArray);
+
+
+
+            //answersString = JSON.stringify(this.fields.Question.answers);
+            //answersArray = answersString.split('\n');
+            
+
+
+                console.log("window.addQuestion("+this.fields.Question.type + ","+this.fields.Question.content+"," + answersArray + ")");
+            
             window.addQuestion(
                 this.fields.Question.type,
                 this.fields.Question.content,
-                this.fields.Question.answers.split("\n")
+                answersArray
             );
+
+            this.Prev_Question = {
+                content: "", type: "", answers: [],
+                special: { type: this.fields.Question.special.type, },
+            };
             this.fields.Question = {
                 content: "", type: "", answers: [],
                 special: { type: this.fields.Question.special.type, },
             };
+
+          });
         },
         catSelectAnswerToContent() {
             this.fields.Question.content += "*[" + this.$refs.selectableText.value + "] ";
@@ -199,12 +259,21 @@ Vue.component("vDatabaseEditor", {
             this.fields.Question.content += "[" + this.$refs.selectableText.value + "] ";
         },
         cancelAddQuestion() {
-            // ! THIS SHOULD ALSO ROLLBACK THE CURRENT TRANSACTION
+            this.Prev_Question = {
+                content: "", type: "", answers: [], special: { type: "" }
+            };
             this.fields.Question = {
                 content: "", type: "", answers: [],
                 special: { type: "", },
             };
             this.tab = "questions";
+        },
+        deleteThisQuestion(type, content) {
+            window.deleteQuestion(type, content).then(() => {
+              window.loadQuestions().then(() => {
+                this.$set(this.editor, "questions", window.context.questions);
+            });
+          });
         }
     },
 })
