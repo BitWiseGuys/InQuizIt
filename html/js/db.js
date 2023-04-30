@@ -216,3 +216,25 @@ window.deleteQuestion = (type, content) => {
 window.addCategory = (package, category, name, options) => {
     return window.db.newQuestionSet(category, name, options);
 };
+
+window.getScores = async (firstName, lastName) => {
+    return [
+        {
+            FirstName: "Andrew",
+            LastName: "Kerr",
+            PackageName: "LogiCola",
+            CategoryName: "A",
+            SetName: "A",
+            SetOptions: "A",
+            CurrScore: 100,
+        }
+    ];
+}
+
+window.setScore = async (firstName, lastName, package, category, set, options, score) => {
+    return undefined;
+}
+
+window.getOptions = () => {
+    return context.options;
+};

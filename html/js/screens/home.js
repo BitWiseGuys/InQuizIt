@@ -6,6 +6,8 @@ Vue.component("vHomeScreen",{
             <hr><br>
             <v-icon icon="database-fill-gear" @click="$root.goto('database editor','')" :disabled="$root.user == undefined">&nbsp;Question&nbsp;Editor</v-icon>
             &nbsp;&nbsp;
+            <v-icon icon="list-check" @click="$root.goto('results','')" :disabled="$root.user == undefined">&nbsp;Scores</v-icon>
+            &nbsp;&nbsp;
             <v-icon icon="list-task" @click="$root.goto('problem sets')" :disabled="$root.user == undefined">&nbsp;Problem&nbsp;Sets</v-icon>
             <p v-if="$root.user == undefined" class="smaller-icons">
                 Please 

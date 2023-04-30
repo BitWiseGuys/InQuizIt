@@ -46,7 +46,7 @@ Vue.component("vQuestionSettingsOverlay", {
     },
     computed: {
         isValidOptionSet() {
-            if(this.QSelected.length != this.QOptions.length) return false;
+            if(this.QSelected.length < this.QOptions.length) return false;
             for(var i in this.QSelected) {
                 var sel = this.QSelected[i];
                 if(sel == undefined) return false;

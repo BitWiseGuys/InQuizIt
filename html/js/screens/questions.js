@@ -79,6 +79,8 @@ Vue.component("vQuestionsScreen", {
                     if(this.progress > this.max_score) this.progress = this.max_score;
                     this.correct = true;
                 }
+                window.setScore(this.$root.user.first, this.$root.user.last, undefined, this.$root.selected_set[0], this.$root.selected_set[1], window.getOptions(), (this.progress / this.max_score) * 100);
+                if(this.progress == this.max_score) this.$root.goto("results","default");
             }
             this.continueQ = true;
         },
