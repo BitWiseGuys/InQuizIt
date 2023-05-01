@@ -59,6 +59,16 @@ app.on("window-all-closed", () => {
  * 
  *******************************************************/
 
+//merge inputted database path to main database
+ipcMain.handle('mergeDB', async (event, dbPath)=> {
+  const res = await dbMngr.mergeDatabases(dbPath);
+  return res;
+});
+
+ipcMain.handle('replaceDB', async (event, dbPath)=> {
+  const res = await dbMngr.replaceDatabase(dbPath);
+  return res;
+});
 
 //Question Data Insertion
 ipcMain.handle('newQuestionSet', async (event, Category, Name, Options)=> {
