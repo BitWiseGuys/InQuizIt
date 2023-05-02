@@ -1,3 +1,12 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 4/4/2023
+ * Description: Defines the settings overlay for both general settings and question set specific settings.
+ */
+
+/** UNUSED
+ * HTML Tag: <v-settings-overlay></v-settings-overlay>
+ */
 Vue.component("vSettingsOverlay",{
     template: `
     <v-overlay name="settings" type="popup">
@@ -16,6 +25,9 @@ Vue.component("vSettingsOverlay",{
     `
 });
 
+/**
+ * HTML Tag: <v-question-settings-overlay></v-question-settings-overlay>
+ */
 Vue.component("vQuestionSettingsOverlay", {
     template: `
     <v-overlay name="question settings" type="popup">
@@ -40,11 +52,17 @@ Vue.component("vQuestionSettingsOverlay", {
     `,
     data() {
         return {
+            // The options that are available to be selected from.
             QOptions: [],
+            // The actually selected options that the user has choosen.
             QSelected: [],
         }
     },
     computed: {
+        /**
+         * Checks to see if we have a valid option set to work with.
+         * @returns True if we have a valid set of options, otherwise false.
+         */
         isValidOptionSet() {
             if(this.QSelected.length < this.QOptions.length) return false;
             for(var i in this.QSelected) {
@@ -55,12 +73,21 @@ Vue.component("vQuestionSettingsOverlay", {
         }
     },
     methods: {
+        /**
+         * Sets the option within the set of options at the given index to the given option.
+         * @param {Number} i The index within the array of options that we are setting.
+         * @param {String} opt The option that has been chosen. 
+         */
         validateOptionSet(i, opt) {
             while(this.QSelected.length <= i) this.QSelected.push(undefined);
             this.QSelected[i] = opt;
         },
     },
     watch: {
+        /**
+         * Watches the value at "$root.selected_set" and will be triggered upon update.
+         * @param {Array} newValue The new value that "$root.selected_set" has been changed to.
+         */
         "$root.selected_set"(newValue) {
             var opts = transpose(newValue[2]);
             for(var i in opts) {

@@ -312,6 +312,12 @@ function CreateContentGenerator(strName, fnGenerate, optionalParam) {
 }
 window.CreateContentGenerator = CreateContentGenerator;
 
+/**
+ * HTML Tag: <v-metatag :text=string :context=object></v-metatag>
+ * Attributes:
+ *  text[string]    : A string that uses the metatag format, this string will be parsed and displayed within the metatag.
+ *  context[object] : An object that will contain the context data for the metatag, can be shared between metatags and stores data parsed by a metatag. 
+ */
 Vue.component("vMetatag", {
     props: ["text", "context"],
     template:`

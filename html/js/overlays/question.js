@@ -1,3 +1,12 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 4/4/2023
+ * Description: Defines the prompt that is shown to the user prior to the start of the question set.
+ */
+
+/**
+ * HTML Tag: <v-question-start-overlay></v-question-start-overlay>
+ */
 Vue.component("vQuestionStartOverlay", {
     template: `
     <v-overlay name="question start" type="popup">

@@ -1,3 +1,12 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 4/4/2023
+ * Description: Defines the main screen that the user will be first shown upon program startup.
+ */
+
+/**
+ * HTML Tag: <v-home-screen></v-home-screen>
+ */
 Vue.component("vHomeScreen",{
     template: `
     <v-screen name="default">
