@@ -28,7 +28,7 @@ function transpose(matrix) {
 const app = new Vue({
     el: "#MainLayout",
     data: {
-        appName: "Logicola",
+        appName: "Logicola+",
         screen: "default",
         overlay: "default",
         users: [],
