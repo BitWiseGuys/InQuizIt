@@ -1,3 +1,12 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 4/4/2023
+ * Description: Defines the login overlay that the user will use to login to the program.
+ */
+
+/**
+ * HTML Tag: <v-login-overlay></v-login-overlay>
+ */
 Vue.component("vLoginOverlay", {
     template: `
     <v-overlay name="login" type="popup">
@@ -28,11 +37,16 @@ Vue.component("vLoginOverlay", {
     `,
     data() {
         return {
+            // The users input for their firstname.
             firstname: "",
+            // The users input for their lastname.
             lastname: "",
         };
     },
     methods: {
+        /**
+         * Called when the user clicks the login button, this function starts the login process.
+         */
         login() {
             // Can't login to a non-existing account.
             if(this.firstname.length == 0 || this.lastname.length == 0) return;
@@ -54,6 +68,9 @@ Vue.component("vLoginOverlay", {
                 this.$root.$forceUpdate();
             });
         },
+        /**
+         * Called when the user clicks the trash icon button, this function starts the remove user process.
+         */
         removeUser() {
             // Can't remove a non-existing account.
             if(this.firstname.length == 0 || this.lastname.length == 0) return;

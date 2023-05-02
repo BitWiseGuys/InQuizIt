@@ -1,3 +1,12 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 4/4/2023
+ * Description: Defines the questions screen that will display each question for the user to answer.
+ */
+
+/**
+ * HTML Tag: <v-questions-screen></v-questions-screen>
+ */
 Vue.component("vQuestionsScreen", {
     template: `
     <v-screen name="questions" class="no-center">

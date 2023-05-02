@@ -3,6 +3,9 @@
  * Date: 04/06/2023
  */
 
+/**
+ * HTML Tag: <v-database-editor></v-database-editor>
+ */
 Vue.component("vDatabaseEditor", {
     template: `
     <v-screen name="database editor" class="no-center">

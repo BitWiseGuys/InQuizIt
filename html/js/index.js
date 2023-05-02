@@ -1,4 +1,13 @@
-// Source: https://stackoverflow.com/questions/17428587/transposing-a-2d-array-in-javascript
+/**
+ * Author: Andrew Kerr
+ * Description: The main Vue root component, the basics of the application. 
+ */
+
+/**
+ * Transposes a given matrix.
+ * @param {Array<Array<*>>} matrix A matrix of objects that will be transposed. 
+ * @returns The transposed matrix.
+ */
 function transpose(matrix) {
     const rows = matrix.length, cols = matrix[0].length;
     const grid = [];
@@ -13,6 +22,9 @@ function transpose(matrix) {
     return grid;
   }
 
+/**
+ * Creates the root component for our app.
+ */
 const app = new Vue({
     el: "#MainLayout",
     data: {
@@ -43,19 +55,35 @@ const app = new Vue({
         }
     },
     methods: {
+        /**
+         * Navigates the user to a particular screen or overlay.
+         * @param {String} screen An optional screen name to navigate to.
+         * @param {String} overlay An optional overlay name to navigate to.
+         */
         goto(screen, overlay) {
             if(screen && screen.length) this.screen = screen;
             if(overlay && overlay.length) this.overlay = overlay;
         },
+        /**
+         * Selects a particular package.
+         * @param {String} name The name of the package to select. 
+         */
         selectPackage(name) {
             this.package.title = name;
             this.refreshProblemSets();
         },
+        /**
+         * Refreshes the underlying package sets to match the selected set.
+         */
         refreshProblemSets() {
             if(this.package.title in this.databases)
                 this.package.sets = this.databases[this.package.title];
             else this.package.sets = {};
         },
+        /**
+         * Selects a particular question set using the given options.
+         * @param {Array<String>} opts An array of option strings.
+         */
         selectQuestionSet(opts) {
             let self = this;
             if(!window.loadQuestionSet(this.package.title, this.selected_set[0], this.selected_set[1]))
@@ -70,9 +98,17 @@ const app = new Vue({
         },
     },
     watch: {
+        /**
+         * Watches the databases member and is invoked upon its change.
+         * @param {*} newValue The new value of the member variable.
+         */
         databases(newValue) {
             this.refreshProblemSets();
         },
+        /**
+         * Watches the selected_set member and is invoked upon its change.
+         * @param {*} newValue The new value of the member variable.
+         */
         selected_set(newValue) {
             var opts = transpose(newValue[2]);
             for(var i in opts) {
@@ -80,6 +116,11 @@ const app = new Vue({
             }
             this.questionOptions = opts;
         },
+        /**
+         * Watches the screen member and is invoked upon its change.
+         * @param {*} newValue The new value of the member variable.
+         * @param {*} oldValue The old value of the member variable.
+         */
         screen(newValue, oldValue) {
             var newElement = undefined;
             var oldElement = undefined;
@@ -97,6 +138,11 @@ const app = new Vue({
             }
             if(newElement && newElement.onTransitionInto) newElement.onTransitionInto();
         },
+        /**
+         * Watches the screen member and is invoked upon its change.
+         * @param {*} newValue The new value of the member variable.
+         * @param {*} oldValue The old value of the member variable.
+         */
         overlay(newValue, oldValue) {
             var newElement = undefined;
             var oldElement = undefined;

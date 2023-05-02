@@ -19,7 +19,9 @@ function shuffle(array) {
 
 var context = { root: undefined, package: "", category: "", set: "", options: [], questions: [], questionQueue: [], };
 
-// When called will reload the databases.
+/**
+ * When called will reload the underlying databases and will notify the Vue frontend of the change.
+ */
 window.reloadDatabases = ()=> {
     var promise = window.db.getAllQuestionSets();
     promise.then((res)=>{
@@ -59,7 +61,11 @@ window.reloadDatabases = ()=> {
     });
 };
 
-// Loads in the package (so long as it exists in the database).
+/**
+ * Sets the underlying package that we are going to use.
+ * @param {String} package The name of the package we are going to use.
+ * @returns True if we have changed to this package, otherwise false.
+ */
 window.loadDatabase = (package) => {
     if(!(package in window.databases)) return false;
     context.package = package;
@@ -71,7 +77,11 @@ window.loadDatabase = (package) => {
     return true;
 }
 
-// Loads in the category (so long as it exists in the database).
+/**
+ * Sets the underlying category that we are going to use.
+ * @param {String} category The name of the category we are going to use.
+ * @returns True if we have changed to this category, otherwise false.
+ */
 window.loadCategory = (category) => {
     if(!(context.package in window.databases)) return false;
     if(!(category in window.databases[context.package])) return false;
@@ -83,7 +93,11 @@ window.loadCategory = (category) => {
     return true;
 }
 
-// Loads in the category (so long as it exists in the database).
+/**
+ * Sets the underlying set name that we are going to use.
+ * @param {String} set The name of the set we are going to use.
+ * @returns True if we have changed to this set, otherwise false.
+ */
 window.loadSet = (set) => {
     if(!(context.package in window.databases)) return false;
     if(!(context.category in window.databases[context.package])) return false;
@@ -95,7 +109,11 @@ window.loadSet = (set) => {
     return true;
 }
 
-// Loads in the category (so long as it exists in the database).
+/**
+ * Adds the option to the underlying options that we are going to use.
+ * @param {String} option The name of the option we are going to add.
+ * @returns True if we have added this option, otherwise false.
+ */
 window.addOption = (option) => {
     if(!(context.package in window.databases)) return false;
     if(!(context.category in window.databases[context.package])) return false;
@@ -105,6 +123,11 @@ window.addOption = (option) => {
     return true;
 }
 
+/**
+ * Sets the underlying options that we are going to use.
+ * @param {String} options The name of the options we are going to use.
+ * @returns True if we have changed to this options, otherwise false.
+ */
 window.setOption = (options) => {
     if(!(context.package in window.databases)) return false;
     if(!(context.category in window.databases[context.package])) return false;
@@ -131,10 +154,21 @@ window.setOption = (options) => {
     return true;
 }
 
+/**
+ * A quick three in one call to load in the package, category and set that we are going to use.
+ * @param {String} package The name of the package we are going to use.
+ * @param {String} category The name of the category we are going to use.
+ * @param {String} set The name of the set we are going to use.
+ * @returns True if we have changed to this combination, otherwise false.
+ */
 window.loadQuestionSet = (package, category, set) => {
     return (window.loadDatabase(package) && window.loadCategory(category) && window.loadSet(set));
 };
 
+/**
+ * Loads in all of the questions that are apart of the loaded combination of package, category, set and options.
+ * @returns {Promise<Array>} A promise that when resolved will pass an array or all options within the loaded package, category, set and options combo.
+ */
 window.loadQuestions = async() => {
     return new Promise((resolve, reject) => {
         // Check if we have loaded a valid question set.
@@ -163,6 +197,10 @@ window.loadQuestions = async() => {
     })
 };
 
+/**
+ * Selects the next question within the underlying question pool.
+ * @returns {Object} The question object that is next in the question pool.
+ */
 window.selectNextQuestion = () => {
     if(context.questionQueue.length)
         return context.questionQueue.pop();
@@ -170,6 +208,13 @@ window.selectNextQuestion = () => {
     return context.questionQueue.pop();
 };
 
+/**
+ * Adds a new question to the database.
+ * @param {String} type The question type.
+ * @param {String} content The question content.
+ * @param {Array} answers An array of answers to the question.
+ * @returns {Promise} A promise that indicates the result of the insert question operation.
+ */
 window.addQuestion = (type, content, answers) => {
     return new Promise((resolve, reject) => {
         // Check if we have been given two non-empty string.
@@ -197,6 +242,12 @@ window.addQuestion = (type, content, answers) => {
     });
 }
 
+/**
+ * Deletes a question from the underyling question database.
+ * @param {String} type The question type. 
+ * @param {String} content The question content.
+ * @returns {Promise} A promise that will indicate the success or failure of the operation.
+ */
 window.deleteQuestion = async(type, content) => {
     return new Promise((resolve, reject) => {
         if(typeof(type) != "string" || !type.length) return resolve("Parameter 'type' needs to be a non-empty string.");
@@ -212,18 +263,46 @@ window.deleteQuestion = async(type, content) => {
     })
 };
 
+/**
+ * Adds a category to the database.
+ * @param {String} package The package name that the category will be added under.
+ * @param {String} category The category name that the category will be added under.
+ * @param {String} name The name of the set that the category will be added as.
+ * @param {String} options The options that this category will have.
+ * @returns A promise that when resolved will indicate the operation success or failure.
+ */
 window.addCategory = (package, category, name, options) => {
     return window.db.newQuestionSet(category, name, options);
 };
 
+/**
+ * Gets the scores for the user with the matching first and last names.
+ * @param {String} firstName The users first name.
+ * @param {String} lastName The users last name.
+ * @returns {Array<Object>} An array of objects that represent the users scores. 
+ */
 window.getScores = async (firstName, lastName) => {
     return await window.db.getAllScores(firstName, lastName);
 }
 
+/**
+ * Sets the underlying score for the given database combo.
+ * @param {String} firstName The first name of the user that the score is for.
+ * @param {String} lastName The last name of the user that the score is for.
+ * @param {String} package The name of the package that the score is for.
+ * @param {String} category The name of the category that the score is for.
+ * @param {String} set The name of the set that the score is for.
+ * @param {Array<String>} options An array of strings that represent the options for this set.
+ * @param {Number} score The score that will be stored. 
+ */
 window.setScore = async (firstName, lastName, package, category, set, options, score) => {
     return await window.db.updateScore(firstName, lastName, category, set, options.join(","), score);
 }
 
+/**
+ * Gets the underlying options for the database combo.
+ * @returns {Array<String>} An array of strings for the question sets options.
+ */
 window.getOptions = () => {
     return context.options;
 };

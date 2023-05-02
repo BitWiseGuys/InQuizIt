@@ -1,3 +1,14 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 4/4/2023
+ * Description: Defines the main overlay that the user will be first shown upon program startup.
+ */
+
+/**
+ * Generates an encrypted version of the users score.
+ * @param {Object} score An object containing the data that needs to be encoded.
+ * @returns A string of three values encoding the encrypted data.
+ */
 async function GenerateSecureScore(score) {
     // return await window.db.encryptScore(String(score.CurrentScore));
     return await window.db.encryptScore(score);
@@ -7,6 +18,9 @@ async function GenerateScore(dividedCode) {
     return await window.db.decryptScore(dividedCode[0], dividedCode[1], dividedCode[2]);
 }
 
+/**
+ * HTML Tag: <v-results-screen></v-results-screen>
+ */
 Vue.component("vResultsScreen", {
     template: `
     <v-screen name="results" class="no-center">
@@ -59,12 +73,17 @@ Vue.component("vResultsScreen", {
     data() {
         return {
             tab: "default",
+            // An array of scores that the user has completed.
             scores: [],
             assignmentCode: "",
             validatedCode: ""
         };
     },
     methods: {
+        /**
+         * Submits the users score, in this case does so by copying it to the clipboard.
+         * @param {Object} score The individual score object (held within scores array) that we are submitting.
+         */
         async Submit(score) {
             stringifiedScore = "Name: " + score.FirstName + " " + score.LastName + 
                                ", Package Name: " + score.PackageName + 
@@ -88,6 +107,9 @@ Vue.component("vResultsScreen", {
                 document.body.removeChild(el);
             }
         },
+        /**
+         * Called by the root whenever we are transitioning from a different screen into this one.
+         */
         async onTransitionInto() {
             this.scores = await window.getScores(this.$root.user.first, this.$root.user.last);
         },

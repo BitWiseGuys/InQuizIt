@@ -55,8 +55,19 @@ Vue.component("vIcon", {
     }
 });
 
+/**
+ * HTML Tag: <v-icons mode=string></v-icons>
+ * HTML Attributes:
+ *  mode[string] : An optional string of either "select" or "toggle", where:
+ *                    "select": allows one inter-icon to be selected and,
+ *                    "toggle": allows each inter-icon to be toggleable.
+ * Vue Slot: 
+ *  default: A place to insert all of the inter-icons.
+ * Vue Emit:
+ *  change: When the mode is "select" this event is emitted when a inter-icon is selected.
+ */
 Vue.component("vIcons", {
-    props: ["disabled", "mode"],
+    props: ["mode"],
     template: `
     <div class="icons">
         <slot></slot>

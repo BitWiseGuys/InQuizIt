@@ -1,3 +1,12 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 4/4/2023
+ * Description: Defines the main overlay that the user will be first shown upon program startup.
+ */
+
+/**
+ * HTML Tag: <v-main-overlay></v-main-overlay>
+ */
 Vue.component("vMainOverlay", {
     template: `
     <v-overlay name="default" class="padding-15">
@@ -19,8 +28,3 @@ Vue.component("vMainOverlay", {
     </v-overlay>
     `,
 });
-
-/*
-<v-icon icon="gear-fill" @click="$root.goto('','settings');" title="Change Settings"></v-icon>
-<v-icon icon="database-fill-gear" @click="$root.goto('database editor','')" title="Database Editor" :disabled="$root.screen != 'default'"></v-icon>
-*/

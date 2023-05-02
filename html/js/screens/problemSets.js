@@ -1,3 +1,12 @@
+/**
+ * Author: Andrew Kerr
+ * Date: 4/4/2023
+ * Description: Defines the problem set screen that the user will be able to select a problem set from.
+ */
+
+/**
+ * HTML Tag: <v-problem-sets-screen></v-problem-sets-screen>
+ */
 Vue.component("vProblemSetsScreen", {
     template: `
     <v-screen name="problem sets" class="no-center">
