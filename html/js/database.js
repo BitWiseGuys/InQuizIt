@@ -9,7 +9,7 @@
 Vue.component("vDatabaseEditor", {
     template: `
     <v-screen name="database editor" class="no-center">
-        <h2>Database Editor</h2>
+        <h2>Question Editor</h2>
         <div class="flex-fit-content tabs">
             <button :class="'tab '+(tab == 'default' ? 'active' : '')" @click="tab = 'default';">Sets</button>
             <button :class="'tab '+(tab == 'questions' ? 'active' : '')" @click="tab = 'questions';
@@ -187,7 +187,6 @@ Vue.component("vDatabaseEditor", {
             this.$set(this.editor, "questions", window.context.questions);
           });
         },
-
         async editSet(package, category, set, options) {
             this.editor = { package, category, set, options };
             window.loadQuestionSet(package, category, set);
