@@ -1,7 +1,7 @@
 {
-    "name": "InQuizIt",
+  "name": "Logicola+",
     "version": "1.0.0",
-    "description": "Test",
+    "description": "A fully offline homework/practice problem program that allows teachers to completion of assigned exercises.",
     "main": "main.js",
     "scripts": {
         "start": "electron .",
@@ -18,5 +18,8 @@
         "knex": "^2.4.2",
         "sqlite3": "^5.1.6",
         "vue-electron": "^1.0.6"
-    }
+    },
+    "extraResources": [
+      "./databases/InQuizIt.db"
+      ]
 }

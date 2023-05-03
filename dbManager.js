@@ -4,10 +4,22 @@ Database insertion functions
 -functions needed for question insertion into database
 ************************************************/
 
+const { app } = require("electron");
+const path = require("path");
+
+const getDBPath = (filename) => {
+  let base = app.getAppPath()
+  if (app.isPackaged) {
+  base = base.replace('\app.asar', '')
+  }
+  console.log(path.resolve(base, `./databases/${filename}`));
+  return path.resolve(base, `./databases/${filename}`);
+  };
+
 var knex = require("knex")({
   client: "sqlite3",
   connection: {
-    filename: "./databases/InQuizIt.db"
+    filename: getDBPath('InQuizIt.db')
   },
   useNullAsDefault: true
 });
@@ -234,7 +246,7 @@ async function deleteQuestionSet(setCategory, setName, setOptions) {
           SetOptions      : setOptions,
           SetCategory     : setCategory});
 
-  const res2 = await knex.del('*').from("QestionSets_T")
+  const res2 = await knex.del('*').from("QuestionSets_T")
   .where({SetName         : setName, 
           SetOptions      : setOptions,
           SetCategory     : setCategory});
