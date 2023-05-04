@@ -16,6 +16,10 @@ Vue.component("vQuestionsScreen", {
                     <v-metatag :context="context" :text="q.content" ref="question" @answered="answeredQuestionWith"></v-metatag>
                 </p>
             </div>
+            <div class="flex-no-stretch margin-5" style="text-align:left;" v-show="continueQ" v-if="q && q.answers && q.answers.length">
+                <h4>Answer:</h4>
+                <p>{{q.answers.join(", ")}}</p>
+            </div>
             <div class="flex-no-stretch flex margin-5">
                 <input type="text" class="flex-stretch" placeholder="Enter answer here" v-model="answer" :disabled="continueQ">
                 <v-group :direction="'horizontal'" class="flex-no-stretch" v-show="!continueQ">
@@ -108,6 +112,9 @@ Vue.component("vQuestionsScreen", {
         },
         onTransitionAway(towards) {
             
+        },
+        async onTransitionInto() {
+            this.progress = (await window.getScore(this.$root.user.first, this.$root.user.last, undefined, this.$root.selected_set[0], this.$root.selected_set[1], window.getOptions()) / 100) * this.max_score;
         },
     }
 });

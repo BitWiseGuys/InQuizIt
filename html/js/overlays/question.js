@@ -18,7 +18,11 @@ Vue.component("vQuestionStartOverlay", {
                 <p>{{$root.QDescription}}</p>
             </template>
             <template #footer>
-                <button class="margin-5 float-right" @click="$root.goto('','default');$root.$refs.questions.nextQuestion(false);">Begin</button>
+                <div class="flex horizontal margin-5">
+                    <v-progressbar :max="$root.$refs.questions.max_score" :value="$root.$refs.questions.progress" :labeled="true" class="flex-stretch"></v-progressbar>
+                    <button class="flex-no-stretch" @click="$root.goto('','default');$root.$refs.questions.progress=0;$root.$refs.questions.nextQuestion(false);" v-show="$root.$refs.questions.progress">Restart</button>
+                    <button class="flex-no-stretch" @click="$root.goto('','default');$root.$refs.questions.nextQuestion(false);">{{$root.$refs.questions.progress ? 'Continue' : 'Begin'}}</button>
+                </div>
             </template>
         </v-frame>
     </v-overlay>

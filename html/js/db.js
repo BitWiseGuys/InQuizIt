@@ -300,6 +300,29 @@ window.setScore = async (firstName, lastName, package, category, set, options, s
 }
 
 /**
+ * Gets the underlying score for the given database combo.
+ * @param {String} firstName The first name of the user that the score is for.
+ * @param {String} lastName The last name of the user that the score is for.
+ * @param {String} package The name of the package that the score is for.
+ * @param {String} category The name of the category that the score is for.
+ * @param {String} set The name of the set that the score is for.
+ * @param {Array<String>} options An array of strings that represent the options for this set.
+ */
+window.getScore = async (firstName, lastName, package, category, set, options) => {
+    console.log(firstName, lastName, package, category, set, options.join(","));
+    var scores = await window.db.getAllScores(firstName, lastName);
+    for(var i in scores) {
+        let score = scores[i];
+        console.log(score);
+        if(/*score.PackageName == package &&*/ score.SetCategory == category && score.SetName == set && score.SetOptions == options.join(",")) {
+            console.log(score.CurrentScore);
+            return score.CurrentScore;
+        }
+    }
+    return 0;
+}
+
+/**
  * Gets the underlying options for the database combo.
  * @returns {Array<String>} An array of strings for the question sets options.
  */

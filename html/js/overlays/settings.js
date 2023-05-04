@@ -56,6 +56,7 @@ Vue.component("vQuestionSettingsOverlay", {
             QOptions: [],
             // The actually selected options that the user has choosen.
             QSelected: [],
+            isValidOptionSet: false,
         }
     },
     computed: {
@@ -63,14 +64,15 @@ Vue.component("vQuestionSettingsOverlay", {
          * Checks to see if we have a valid option set to work with.
          * @returns True if we have a valid set of options, otherwise false.
          */
-        isValidOptionSet() {
-            if(this.QSelected.length < this.QOptions.length) return false;
-            for(var i in this.QSelected) {
-                var sel = this.QSelected[i];
-                if(sel == undefined) return false;
-            }
-            return true;
-        }
+        // isValidOptionSet() {
+        //     if(this.QSelected.length < this.QOptions.length) return false;
+        //     console.log("Checking further...");
+        //     for(var i = 0; i < this.QOptions.length; i++) {
+        //         var sel = this.QSelected[i];
+        //         if(sel == undefined) return false;
+        //     }
+        //     return true;
+        // }
     },
     methods: {
         /**
@@ -79,8 +81,14 @@ Vue.component("vQuestionSettingsOverlay", {
          * @param {String} opt The option that has been chosen. 
          */
         validateOptionSet(i, opt) {
-            while(this.QSelected.length <= i) this.QSelected.push(undefined);
+            while(this.QSelected.length < i) this.QSelected.push(undefined);
             this.QSelected[i] = opt;
+            if(this.QSelected.length < this.QOptions.length) { this.isValidOptionSet = false; return; }
+             for(var i = 0; i < this.QOptions.length; i++) {
+                 var sel = this.QSelected[i];
+                 if(sel == undefined) { this.isValidOptionSet = false; return; }
+             }
+             this.isValidOptionSet = true;
         },
     },
     watch: {
