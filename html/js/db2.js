@@ -23,9 +23,9 @@ window.database.getUsers = () => { return window.database.vars.users; };
 window.database.addUser = async (firstname, lastname) => { 
     if(window.database.hasUser(firstname, lastname)) return false;
     var result = await window.db.newUser(firstname, lastname);
-    if(result && result.length > window.database.vars.users.length) {
+    if(result && result[0] > window.database.vars.users.length) {
         window.database.vars.users.push({FirstName: firstname, LastName: lastname});
-        if(app) app.users = window.database.vars.users;
+        if(app) { app.users = window.database.vars.users; app.$forceUpdate(); }
         return true;
     }
     return false;
