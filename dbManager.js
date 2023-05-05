@@ -6,6 +6,7 @@ Database insertion functions
 
 const { app } = require("electron");
 const path = require("path");
+const { pathToFileURL } = require("url");
 
 const getDBPath = (filename) => {
   let base = app.getAppPath()
@@ -16,6 +17,7 @@ const getDBPath = (filename) => {
   return path.resolve(base, `./databases/${filename}`);
   };
 
+
 var knex = require("knex")({
   client: "sqlite3",
   connection: {
@@ -23,6 +25,7 @@ var knex = require("knex")({
   },
   useNullAsDefault: true
 });
+
 
 
 
@@ -76,7 +79,7 @@ async function replaceDatabase(externDbPath){
   const path = require('path');
 
 //close current knex connection
-await knex.destroy();
+//await knex.destroy();
 
 //create backup of original DB file
 fs.copyFile('./databases/InQuizIt.db', './databases/InQuizIt-old.db', err => {
@@ -86,7 +89,9 @@ fs.copyFile('./databases/InQuizIt.db', './databases/InQuizIt-old.db', err => {
 
 
 //copies specified file as new main DB
-const sourceFile = externDbPath;
+const sourceName = externDbPath;
+const sourceFile = path.resolve(externDbPath);
+console.log(sourceFile);
 const targetDir = './databases';
 const targetFile = path.join(targetDir, 'InQuizIt.db');
 
@@ -96,13 +101,14 @@ fs.copyFile(sourceFile, targetFile, err => {
 });
 
 //reopen new main knex connection
-knex = require("knex")({
+var knex = require("knex")({
   client: "sqlite3",
   connection: {
-    filename: "./databases/InQuizIt.db"
+    filename: getDBPath('InQuizIt.db')
   },
   useNullAsDefault: true
 });
+
 console.log("Main DB successfully reconnected");
 
 }
