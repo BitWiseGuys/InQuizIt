@@ -15,8 +15,13 @@ contextBridge.exposeInMainWorld("db", {
      return res;
    },
 
-   replaceDB : async (dbPath) => {
+  replaceDB : async (dbPath) => {
       const res = await ipcRenderer.invoke('replaceDB',dbPath);
+      return res;
+    },
+  
+    databaseAction : async (bReplace) => {
+      const res = await ipcRenderer.invoke('databaseAction',bReplace);
       return res;
     },
   

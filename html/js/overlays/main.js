@@ -14,6 +14,7 @@ Vue.component("vMainOverlay", {
             <v-group-cell>
                 <v-icons>
                     <v-icon icon="house-fill" @click="$root.goto('default');" title="Return Home" :disabled="$root.screen == 'default'"></v-icon>
+                    <v-icon icon="gear-fill" @click="$root.goto('','settings');" title="Return Home"></v-icon>
                 </v-icons>
             </v-group-cell>
             <v-group-cell v-show="$root.screen == 'questions'">

@@ -15,14 +15,27 @@ Vue.component("vSettingsOverlay",{
                 <h2>Settings</h2>
             </template>
             <template #default>
-                
+                <div class="margin-5">
+                    <p>Click the button below to add a package to the application.</p>
+                    <button @click="addPackage">Add Package</button>
+                    <p>Click the button below to replace an existing package in the application.</p>
+                    <button @click="replacePackage">Replace Package</button>
+                </div>
             </template>
             <template #footer>
                 
             </template>
         </v-frame>
     </v-overlay>
-    `
+    `,
+    methods: {
+        async addPackage() {
+            await window.db.databaseAction(false);
+        },
+        async replacePackage() {
+            await window.db.databaseAction(true);
+        }
+    }
 });
 
 /**

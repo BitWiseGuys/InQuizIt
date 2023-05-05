@@ -1,5 +1,6 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
+const fs = require("fs");
 
 //backend js files
 const dbMngr = require('./dbManager');
@@ -68,6 +69,29 @@ ipcMain.handle('mergeDB', async (event, dbPath)=> {
 ipcMain.handle('replaceDB', async (event, dbPath)=> {
   const res = await dbMngr.replaceDatabase(dbPath);
   return res;
+});
+
+ipcMain.handle('databaseAction', async (event, bReplace) => {
+  var result = await dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
+		properties: ["openFile"],
+		filters: [{
+			name: "Package", extensions: ["db"],
+		}]
+	});
+	if(!result.canceled && result.filePaths.length) {
+		var path = result.filePaths[0];
+    const database = dbMngr.getDBPath("InQuizIt.db");
+    if(fs.existsSync(path)) {
+      // if(!fs.existsSync(database))
+      //   fs.copyFileSync(path, database);
+      // else {
+        if(bReplace)
+          return await dbMngr.replaceDatabase(path);
+        else 
+          return await dbMngr.mergeDatabases(path);
+      //}
+    }
+	}
 });
 
 //Question Data Insertion
