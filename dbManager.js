@@ -6,14 +6,13 @@ Database insertion functions
 
 const { app } = require("electron");
 const path = require("path");
-const { pathToFileURL } = require("url");
 
 const getDBPath = (filename) => {
   let base = app.getAppPath()
   if (app.isPackaged) {
   base = base.replace('\app.asar', '')
   }
-  console.log(path.resolve(base, `./databases/${filename}`));
+  //console.log(path.resolve(base, `./databases/${filename}`));
   return path.resolve(base, `./databases/${filename}`);
   };
 
@@ -82,7 +81,7 @@ async function replaceDatabase(externDbPath){
 //await knex.destroy();
 
 //create backup of original DB file
-fs.copyFile('./databases/InQuizIt.db', './databases/InQuizIt-old.db', err => {
+fs.copyFile(getDBPath('InQuizIt.db'), getDBPath('InQuizIt-old.db'), err => {
   if (err) throw err;
   console.log('Backup File copied and renamed successfully!');
 });
@@ -92,8 +91,8 @@ fs.copyFile('./databases/InQuizIt.db', './databases/InQuizIt-old.db', err => {
 const sourceName = externDbPath;
 const sourceFile = path.resolve(externDbPath);
 console.log(sourceFile);
-const targetDir = './databases';
-const targetFile = path.join(targetDir, 'InQuizIt.db');
+const targetFile = getDBPath('InQuizIt.db');
+
 
 fs.copyFile(sourceFile, targetFile, err => {
   if (err) throw err;
@@ -110,6 +109,23 @@ var knex = require("knex")({
 });
 
 console.log("Main DB successfully reconnected");
+
+}
+
+//copys the db file to the desktop
+async function exportDatabase()
+{
+  const fs = require('fs');
+  const { app } = require('electron');
+
+  const sourceFile = getDBPath('InQuizIt.db');
+  const desktopPath = app.getPath('desktop');
+  const targetFile = `${desktopPath}/exportedLogicola.db`;
+
+  fs.copyFile(sourceFile, targetFile, err => {
+    if (err) throw err;
+    console.log('File copied to desktop successfully!');
+  });
 
 }
 
@@ -302,6 +318,7 @@ async function updateScore(firstName,lastName, setCategory, setName, setOptions,
 //EXPORTS
 exports.mergeDatabases = mergeDatabases;
 exports.replaceDatabase = replaceDatabase;
+exports.exportDatabase = exportDatabase;
 
 exports.newQuestionSet = newQuestionSet;
 exports.newQuestion = newQuestion;

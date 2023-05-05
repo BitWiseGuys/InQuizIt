@@ -7,6 +7,8 @@
 /** UNUSED
  * HTML Tag: <v-settings-overlay></v-settings-overlay>
  */
+
+
 Vue.component("vSettingsOverlay",{
     template: `
     <v-overlay name="settings" type="popup">
@@ -16,10 +18,12 @@ Vue.component("vSettingsOverlay",{
             </template>
             <template #default>
                 <div class="margin-5">
-                    <p>Click the button below to add a package to the application.</p>
+                    <p>Click the button below to add content to the application.</p>
                     <button @click="addPackage">Add Package</button>
-                    <p>Click the button below to replace an existing package in the application.</p>
+                    <p>Click the button below to replace ALL existing content in the application.</p>
                     <button @click="replacePackage">Replace Package</button>
+                    <p>Click the button below to export your current package to the desktop.</p>
+                    <button @click="exportPackage">Export Package</button>
                 </div>
             </template>
             <template #footer>
@@ -31,9 +35,15 @@ Vue.component("vSettingsOverlay",{
     methods: {
         async addPackage() {
             await window.db.databaseAction(false);
+            window.location.reload();
+            
         },
         async replacePackage() {
             await window.db.databaseAction(true);
+            window.location.reload();
+        },
+        async exportPackage() {
+          await window.db.exportPackage();
         }
     }
 });

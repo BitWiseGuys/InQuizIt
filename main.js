@@ -71,6 +71,11 @@ ipcMain.handle('replaceDB', async (event, dbPath)=> {
   return res;
 });
 
+ipcMain.handle('exportDB', async (event)=> {
+  const res = await dbMngr.exportDatabase();
+  return res;
+});
+
 ipcMain.handle('databaseAction', async (event, bReplace) => {
   var result = await dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
 		properties: ["openFile"],
@@ -80,7 +85,7 @@ ipcMain.handle('databaseAction', async (event, bReplace) => {
 	});
 	if(!result.canceled && result.filePaths.length) {
 		var path = result.filePaths[0];
-    const database = dbMngr.getDBPath("InQuizIt.db");
+    //const database = dbMngr.getDBPath("InQuizIt.db");
     if(fs.existsSync(path)) {
       // if(!fs.existsSync(database))
       //   fs.copyFileSync(path, database);
